@@ -98,10 +98,33 @@ TimerHandle_t xTimerHandle = NULL;
 
 /* TODO:  Add any necessary local functions.
 */
+
+bool PutCharacter(const char character)
+{
+  
+    /* Check if buffer is empty for a new transmission */
+    if(PLIB_USART_TransmitterIsEmpty(USART_ID_1))
+    {
+        
+        /* Send character */
+        PLIB_USART_TransmitterByteSend(USART_ID_1, character);
+        
+        return true;
+  
+    }
+    else
+        return false;
+}
+
 void vCallbackFunction( TimerHandle_t pxTimer )
 {
+    if(PutCharacter('B'))
+    {
+         PLIB_PORTS_PinToggle(PORTS_ID_0, PORT_CHANNEL_C, PORTS_BIT_POS_1);
     // Toggle pin for visual assurance
-    PLIB_PORTS_PinToggle(PORTS_ID_0, PORT_CHANNEL_C, PORTS_BIT_POS_1);
+         
+   
+    }
     // Set up name
     char name[13] = "Caleb Stroud";
     //char temp = name[appData.position];
@@ -131,6 +154,7 @@ void vCallbackFunction( TimerHandle_t pxTimer )
 
 void APP_Initialize ( void )
 {
+       PLIB_USART_Enable(USART_ID_1);
     /* Place the App state machine in its initial state. */
     appData.state = APP_STATE_INIT;
     
