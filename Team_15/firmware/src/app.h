@@ -131,7 +131,9 @@ typedef struct
 */
 
 void vCallbackFunction( TimerHandle_t pxTimer );
-	
+
+bool PutCharacter(const char character);
+
 // *****************************************************************************
 // *****************************************************************************
 // Section: Application Initialization and State Machine Functions

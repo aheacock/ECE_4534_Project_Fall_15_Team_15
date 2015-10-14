@@ -54,6 +54,7 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 // *****************************************************************************
 
 #include "sensors.h"
+#include <stdlib.h> // For random
 
 // *****************************************************************************
 // *****************************************************************************
@@ -119,6 +120,9 @@ void SENSORS_Initialize ( void )
     /* TODO: Initialize your application's state machine and other
      * parameters.
      */
+    sensorsData.xFakeSensorDataQueue = xQueueCreate( 5, sizeof( long ) );
+    /* Enable the software interrupt and set its priority. */
+    //prvSetupSoftwareInterrupt();
 }
 
 
@@ -132,6 +136,38 @@ void SENSORS_Initialize ( void )
 
 void SENSORS_Tasks ( void )
 {
+    char *pcString;
+    long lValueToSend;
+    portBASE_TYPE xStatus;
+        
+    for( ; ; )
+    {
+        // Sensor outputs -0.3 to Vcc+0.33. Vcc should  be 5. So the range is 
+        // -0.3 to 5.3
+        lValueToSend = (rand()*53)/100 - 0.3;
+        
+        xStatus = xQueueSendToBack( sensorsData.xFakeSensorDataQueue, &lValueToSend, 0 );
+        if( xStatus == pdPASS )
+        {
+            // Successfully added data to queue
+            PLIB_PORTS_PinToggle(PORTS_ID_0, PORT_CHANNEL_C, PORTS_BIT_POS_1);
+        }
+        
+        /*
+         * 
+         * This code needs to go where sending data with wifly
+         * 
+         */
+        /* Block on the queue to wait for data to arrive. */
+        // --> xQueueReceive( sensorsData.xFakeSensorDataQueue, &pcString, portMAX_DELAY );
+        
+        /* Allow the other sender task to execute. taskYIELD() informs the
+        scheduler that a switch to another task should occur now rather than
+        keeping this task in the Running state until the end of the current time
+        slice. */
+        taskYIELD();
+    }
+    
     /* Check the application's current state. */
     switch ( sensorsData.state )
     {
