@@ -62,7 +62,10 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 
 #include <xc.h>
 #include <sys/attribs.h>
-#include "app.h"
+#include "coms.h"
+#include "findandfollow.h"
+#include "sensors.h"
+#include "motors.h"
 #include "system_definitions.h"
 
 // *****************************************************************************
@@ -70,7 +73,15 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 // Section: System Interrupt Vector Functions
 // *****************************************************************************
 // *****************************************************************************
- 
+void IntHandlerDrvAdc(void)
+{
+    /* Clear ADC Interrupt Flag */
+    PLIB_INT_SourceFlagClear(INT_ID_0, INT_SOURCE_ADC_1);
+}
+
+
+
+  
 /*******************************************************************************
  End of File
 */

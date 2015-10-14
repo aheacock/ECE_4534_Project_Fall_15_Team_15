@@ -54,7 +54,10 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 
 #include "system_config.h"
 #include "system_definitions.h"
-#include "app.h"
+#include "coms.h"
+#include "findandfollow.h"
+#include "sensors.h"
+#include "motors.h"
 
 
 // *****************************************************************************
@@ -64,7 +67,10 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 // *****************************************************************************
  
 static void _SYS_Tasks ( void );
-static void _APP_Tasks(void);
+static void _COMS_Tasks(void);
+static void _FINDANDFOLLOW_Tasks(void);
+static void _SENSORS_Tasks(void);
+static void _MOTORS_Tasks(void);
 
 
 // *****************************************************************************
@@ -88,9 +94,24 @@ void SYS_Tasks ( void )
                 "Sys Tasks",
                 1024, NULL, 1, NULL);
 
-    /* Create OS Thread for APP Tasks. */
-    xTaskCreate((TaskFunction_t) _APP_Tasks,
-                "APP Tasks",
+    /* Create OS Thread for COMS Tasks. */
+    xTaskCreate((TaskFunction_t) _COMS_Tasks,
+                "COMS Tasks",
+                1024, NULL, 1, NULL);
+
+    /* Create OS Thread for FINDANDFOLLOW Tasks. */
+    xTaskCreate((TaskFunction_t) _FINDANDFOLLOW_Tasks,
+                "FINDANDFOLLOW Tasks",
+                1024, NULL, 1, NULL);
+
+    /* Create OS Thread for SENSORS Tasks. */
+    xTaskCreate((TaskFunction_t) _SENSORS_Tasks,
+                "SENSORS Tasks",
+                1024, NULL, 1, NULL);
+
+    /* Create OS Thread for MOTORS Tasks. */
+    xTaskCreate((TaskFunction_t) _MOTORS_Tasks,
+                "MOTORS Tasks",
                 1024, NULL, 1, NULL);
 
     /**************
@@ -116,6 +137,9 @@ static void _SYS_Tasks ( void )
         SYS_DEVCON_Tasks(sysObj.sysDevcon);
 
         /* Maintain Device Drivers */
+    DRV_USART_TasksTransmit(sysObj.drvUsart0);
+    DRV_USART_TasksReceive(sysObj.drvUsart0);
+    DRV_USART_TasksError (sysObj.drvUsart0);
 
         /* Maintain Middleware */
 
@@ -127,17 +151,71 @@ static void _SYS_Tasks ( void )
 
 /*******************************************************************************
   Function:
-    void _APP_Tasks ( void )
+    void _COMS_Tasks ( void )
 
   Summary:
-    Maintains state machine of APP.
+    Maintains state machine of COMS.
 */
 
-static void _APP_Tasks(void)
+static void _COMS_Tasks(void)
 {
     while(1)
     {
-        APP_Tasks();
+        COMS_Tasks();
+        vTaskDelay(1000 / portTICK_PERIOD_MS);
+    }
+}
+
+
+/*******************************************************************************
+  Function:
+    void _FINDANDFOLLOW_Tasks ( void )
+
+  Summary:
+    Maintains state machine of FINDANDFOLLOW.
+*/
+
+static void _FINDANDFOLLOW_Tasks(void)
+{
+    while(1)
+    {
+        FINDANDFOLLOW_Tasks();
+        vTaskDelay(1000 / portTICK_PERIOD_MS);
+    }
+}
+
+
+/*******************************************************************************
+  Function:
+    void _SENSORS_Tasks ( void )
+
+  Summary:
+    Maintains state machine of SENSORS.
+*/
+
+static void _SENSORS_Tasks(void)
+{
+    while(1)
+    {
+        SENSORS_Tasks();
+        vTaskDelay(1000 / portTICK_PERIOD_MS);
+    }
+}
+
+
+/*******************************************************************************
+  Function:
+    void _MOTORS_Tasks ( void )
+
+  Summary:
+    Maintains state machine of MOTORS.
+*/
+
+static void _MOTORS_Tasks(void)
+{
+    while(1)
+    {
+        MOTORS_Tasks();
         vTaskDelay(1000 / portTICK_PERIOD_MS);
     }
 }
