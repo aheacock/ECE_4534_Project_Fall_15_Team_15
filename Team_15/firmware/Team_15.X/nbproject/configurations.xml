@@ -25,10 +25,6 @@
           </logicalFolder>
         </logicalFolder>
         <itemPath>../src/app.h</itemPath>
-        <itemPath>../src/app1.h</itemPath>
-        <itemPath>../src/app2.h</itemPath>
-        <itemPath>../src/app3.h</itemPath>
-        <itemPath>../src/app4.h</itemPath>
         <itemPath>../src/Coms.h</itemPath>
         <itemPath>../src/FindAndFollow.h</itemPath>
         <itemPath>../src/Sensors.h</itemPath>
@@ -122,10 +118,6 @@
         </logicalFolder>
         <itemPath>../src/app.c</itemPath>
         <itemPath>../src/main.c</itemPath>
-        <itemPath>../src/app1.c</itemPath>
-        <itemPath>../src/app2.c</itemPath>
-        <itemPath>../src/app3.c</itemPath>
-        <itemPath>../src/app4.c</itemPath>
         <itemPath>../src/Coms.c</itemPath>
         <itemPath>../src/FindAndFollow.c</itemPath>
         <itemPath>../src/Sensors.c</itemPath>

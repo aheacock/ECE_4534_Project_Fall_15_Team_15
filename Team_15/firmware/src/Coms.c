@@ -118,9 +118,14 @@ bool PutCharacter(const char character)
     /* Check if buffer is empty for a new transmission */
     if(PLIB_USART_TransmitterIsEmpty(USART_ID_1))
     {
-        
+         PLIB_USART_TransmitterByteSend(USART_ID_1, character);   
         /* Send character */
-        PLIB_USART_TransmitterByteSend(USART_ID_1, character);
+      
+        if(PLIB_USART_ReceiverDataIsAvailable(USART_ID_1))
+            {
+           char x=PLIB_USART_ReceiverByteReceive(USART_ID_1);
+           PLIB_USART_TransmitterByteSend(USART_ID_1, x);  
+            }
         
         return true;
   

@@ -98,23 +98,23 @@ TimerHandle_t xTimerHandle = NULL;
 
 /* TODO:  Add any necessary local functions.
 */
-
-bool PutCharacter(const char character)
-{
+/**/
+//bool PutCharacter(const char character)
+//{
   
     /* Check if buffer is empty for a new transmission */
-    if(PLIB_USART_TransmitterIsEmpty(USART_ID_1))
-    {
+//    if(PLIB_USART_TransmitterIsEmpty(USART_ID_1))
+  //  {
         
         /* Send character */
-        PLIB_USART_TransmitterByteSend(USART_ID_1, character);
+ //       PLIB_USART_TransmitterByteSend(USART_ID_1, character);
         
-        return true;
+   //     return true;
   
-    }
-    else
-        return false;
-}
+ //   }
+ //   else
+   //     return false;
+//}
 
 void vCallbackFunction( TimerHandle_t pxTimer )
 {
