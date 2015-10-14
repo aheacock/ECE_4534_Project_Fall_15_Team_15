@@ -88,6 +88,7 @@ typedef enum
 {
 	/* Application's state machine's initial state. */
 	COMS_STATE_INIT=0,
+    COMS_STATE_RUN
 
 	/* TODO: Define states used by the application state machine. */
 
