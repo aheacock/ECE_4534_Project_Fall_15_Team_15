@@ -111,6 +111,24 @@ COMS_DATA comsData;
     See prototype in coms.h.
  */
 
+
+bool PutCharacter(const char character)
+{
+  
+    /* Check if buffer is empty for a new transmission */
+    if(PLIB_USART_TransmitterIsEmpty(USART_ID_1))
+    {
+        
+        /* Send character */
+        PLIB_USART_TransmitterByteSend(USART_ID_1, character);
+        
+        return true;
+  
+    }
+    else
+        return false;
+}
+
 void COMS_Initialize ( void )
 {
     /* Place the App state machine in its initial state. */
@@ -138,15 +156,29 @@ void COMS_Tasks ( void )
         /* Application's initial state. */
         case COMS_STATE_INIT:
         {
+            PLIB_USART_Enable(USART_ID_1);
+            comsData.state = COMS_STATE_RUN;
             break;
         }
 
         /* TODO: implement your application state machine.*/
 
         /* The default state should never be executed. */
+        case COMS_STATE_RUN:
+        {
+            if(PutCharacter('B'))
+            {
+                 PLIB_PORTS_PinToggle(PORTS_ID_0, PORT_CHANNEL_C, PORTS_BIT_POS_1);
+            // Toggle pin for visual assurance
+
+
+            }
+            //PLIB_PORTS_PinToggle(PORTS_ID_0, PORT_CHANNEL_C, PORTS_BIT_POS_1);
+            /* TODO: Handle error in application's state machine. */
+            break;
+        }
         default:
         {
-            /* TODO: Handle error in application's state machine. */
             break;
         }
     }
