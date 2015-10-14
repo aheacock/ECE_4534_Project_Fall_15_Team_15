@@ -120,7 +120,7 @@ void SENSORS_Initialize ( void )
     /* TODO: Initialize your application's state machine and other
      * parameters.
      */
-    sensorsData.xFakeSensorDataQueue = xQueueCreate( 5, sizeof( long ) );
+    sensorsData.xFakeSensorDataQueue = xQueueCreate( 10, sizeof( long ) );
     /* Enable the software interrupt and set its priority. */
     //prvSetupSoftwareInterrupt();
 }
