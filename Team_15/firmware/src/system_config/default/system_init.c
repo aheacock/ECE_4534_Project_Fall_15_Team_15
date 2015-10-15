@@ -177,6 +177,8 @@ const SYS_DEVCON_INIT sysDevconInit =
 // *****************************************************************************
 // *****************************************************************************
 
+QueueHandle_t xFakeSensorDataQueue2;
+
 /*******************************************************************************
   Function:
     void SYS_Initialize ( SYS_INIT_DATA *data )
@@ -212,6 +214,8 @@ void SYS_Initialize ( void* data )
     FINDANDFOLLOW_Initialize();
     SENSORS_Initialize();
     MOTORS_Initialize();
+    
+    xFakeSensorDataQueue2 = xQueueCreate( 10, sizeof( char ) );
 }
 
 

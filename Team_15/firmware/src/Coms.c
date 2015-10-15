@@ -112,34 +112,96 @@ SENSORS_DATA sensorsData;
   Remarks:
     See prototype in coms.h.
  */
+ char *stringPointer="hello";
+ char *tempPointer = "buffalo";
+ 
+ void myPrintf(float fVal)
+{
+    char result[100];
+    int dVal, dec, i;
 
+    fVal += 0.005;   // added after a comment from Matt McNabb, see below.
+
+    dVal = fVal;
+    dec = (int)(fVal * 100) % 100;
+
+    memset(result, 0, 100);
+    result[0] = (dec % 10) + '0';
+    result[1] = (dec / 10) + '0';
+    result[2] = '.';
+
+    i = 3;
+    while (dVal > 0)
+    {
+        result[i] = (dVal % 10) + '0';
+        dVal /= 10;
+        i++;
+    }
+    tempPointer = stringPointer;
+    for (i=strlen(result)-1; i>=0; i--){
+        *stringPointer = result[i];
+        stringPointer++;
+    }
+}
+bool WriteString(void)
+{
+    if(stringPointer == '\0')
+    {
+        return true;
+    }
+
+    /* Write a character at a time, only if transmitter is empty */
+    //while (PLIB_USART_TransmitterIsEmpty(USART_ID_1))
+    while(*stringPointer != '\0')
+    {
+        /* Send character */
+        PLIB_USART_TransmitterByteSend(USART_ID_1, *stringPointer);
+
+        /* Increment to address of next character */
+        stringPointer++;
+
+        if(*stringPointer == '\0')
+        {
+            return true;
+        }
+    }
+    return false;
+}
 
 bool PutCharacter(const char character)
 {
     //char *pcString;
     char lValueToSend[10]={'a','b','c','d','e','f','g','h','i','j'};
     //unsigned long lo;
-    char lo;
+    char * lo;
     portBASE_TYPE xStatus;
+    
+    
+    
   
     /* Check if buffer is empty for a new transmission */
-    if(true)//(PLIB_USART_TransmitterIsEmpty(USART_ID_1))
+    if(PLIB_USART_TransmitterIsEmpty(USART_ID_1))
     {
        // PLIB_USART_TransmitterByteSend(USART_ID_1, character);   
         /* Send character */
         
         if(PLIB_USART_ReceiverDataIsAvailable(USART_ID_1))
             {           
-             char x=PLIB_USART_ReceiverByteReceive(USART_ID_1);
+               char x=PLIB_USART_ReceiverByteReceive(USART_ID_1);
                PLIB_USART_TransmitterByteSend(USART_ID_1, x);
-               PLIB_USART_TransmitterByteSend(USART_ID_1, '2');   
+             //  PLIB_USART_TransmitterByteSend(USART_ID_1, 's');   
             
                //xStatus = xQueueSendToBack( comsData.xFakeSensorDataQueue, &lValueToSend, 0 );
                //if(xQueueReceive( comsData.xFakeSensorDataQueue3, &lo, portMAX_DELAY))
                if(xQueueReceive( sensorsData.xFakeSensorDataQueue, &lo, portMAX_DELAY))
                {   
+                   stringPointer=lo;
                    //unsigned char * p =(unsigned char*)&lo;
-                  PLIB_USART_TransmitterByteSend(USART_ID_1, lo);   
+                 // PLIB_USART_TransmitterByteSend(USART_ID_1, lo);   
+//                   float thetest=42.4;
+//                   myPrintf(thetest);
+                   if(WriteString())
+                 //  PLIB_USART_TransmitterByteSend(USART_ID_1, 'x');     
                   // PLIB_USART_TransmitterByteSend(USART_ID_1, pcString[0]);
                   PLIB_PORTS_PinToggle(PORTS_ID_0, PORT_CHANNEL_C, PORTS_BIT_POS_1);
                }
@@ -152,7 +214,7 @@ bool PutCharacter(const char character)
         return true;
   
     }
-    else
+//    else
         return false;
 }
 
@@ -194,6 +256,8 @@ void COMS_Tasks ( void )
         /* The default state should never be executed. */
         case COMS_STATE_RUN:
         {
+//            float two = 42.4;
+//            myPrintf(two);
             char *pcString;
             unsigned long lValueToSend;
             portBASE_TYPE xStatus;

@@ -228,7 +228,7 @@ build/default/production/_ext/639803181/sys_clk_static.o:  \
  ../../../../../../../microchip/harmony/v1_06/third_party/rtos/FreeRTOS/Source/include/task.h  \
  ../../../../../../../microchip/harmony/v1_06/third_party/rtos/FreeRTOS/Source/include/list.h  \
  ../src/coms.h  \
-../src/findandfollow.h  \
-../src/sensors.h  \
  ../../../../../../../microchip/harmony/v1_06/third_party/rtos/FreeRTOS/Source/include/queue.h  \
- ../src/motors.h 
+ ../src/findandfollow.h  \
+../src/sensors.h  \
+../src/motors.h 

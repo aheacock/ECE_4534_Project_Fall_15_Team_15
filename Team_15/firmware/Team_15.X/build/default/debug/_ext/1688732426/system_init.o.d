@@ -1,11 +1,11 @@
-build/default/production/_ext/1360937237/app3.o:  \
-../src/app3.c  \
- ../src/app3.h  \
-../src/system_config/default/system_config.h  \
+build/default/debug/_ext/1688732426/system_init.o:  \
+ ../src/system_config/default/system_init.c  \
+ ../src/system_config/default/system_config.h  \
  ../src/system_config/default/system_definitions.h  \
  ../../../../../../../microchip/harmony/v1_06/framework/system/common/sys_common.h  \
  ../../../../../../../microchip/harmony/v1_06/framework/system/common/sys_module.h  \
  ../../../../../../../microchip/harmony/v1_06/framework/system/clk/sys_clk.h  \
+ ../src/system_config/default/system_config.h  \
  ../../../../../../../microchip/harmony/v1_06/framework/peripheral/osc/plib_osc.h  \
  ../../../../../../../microchip/harmony/v1_06/framework/peripheral/osc/processor/osc_processor.h  \
  ../../../../../../../microchip/harmony/v1_06/framework/peripheral/osc/processor/osc_p32xxxx.h  \
@@ -229,6 +229,8 @@ build/default/production/_ext/1360937237/app3.o:  \
  ../../../../../../../microchip/harmony/v1_06/third_party/rtos/FreeRTOS/Source/include/task.h  \
  ../../../../../../../microchip/harmony/v1_06/third_party/rtos/FreeRTOS/Source/include/list.h  \
  ../src/coms.h  \
-../src/findandfollow.h  \
+../src/system_config/default/system_definitions.h  \
+ ../../../../../../../microchip/harmony/v1_06/third_party/rtos/FreeRTOS/Source/include/queue.h  \
+ ../src/findandfollow.h  \
 ../src/sensors.h  \
 ../src/motors.h 

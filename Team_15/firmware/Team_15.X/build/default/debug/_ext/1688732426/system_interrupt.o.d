@@ -1,7 +1,7 @@
-build/default/production/_ext/1360937237/app4.o:  \
-../src/app4.c  \
- ../src/app4.h  \
-../src/system_config/default/system_config.h  \
+build/default/debug/_ext/1688732426/system_interrupt.o:  \
+ ../src/system_config/default/system_interrupt.c  \
+../src/coms.h  \
+ ../src/system_config/default/system_config.h  \
  ../src/system_config/default/system_definitions.h  \
  ../../../../../../../microchip/harmony/v1_06/framework/system/common/sys_common.h  \
  ../../../../../../../microchip/harmony/v1_06/framework/system/common/sys_module.h  \
@@ -228,7 +228,8 @@ build/default/production/_ext/1360937237/app4.o:  \
  ../../../../../../../microchip/harmony/v1_06/third_party/rtos/FreeRTOS/Source/include/mpu_wrappers.h  \
  ../../../../../../../microchip/harmony/v1_06/third_party/rtos/FreeRTOS/Source/include/task.h  \
  ../../../../../../../microchip/harmony/v1_06/third_party/rtos/FreeRTOS/Source/include/list.h  \
- ../src/coms.h  \
-../src/findandfollow.h  \
+ ../src/findandfollow.h  \
 ../src/sensors.h  \
-../src/motors.h 
+ ../../../../../../../microchip/harmony/v1_06/third_party/rtos/FreeRTOS/Source/include/queue.h  \
+ ../src/motors.h  \
+../src/system_config/default/system_definitions.h 

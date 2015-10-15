@@ -1,7 +1,7 @@
-build/default/production/_ext/1360937237/app1.o:  \
-../src/app1.c  \
- ../src/app1.h  \
-../src/system_config/default/system_config.h  \
+build/default/debug/_ext/1360937237/Coms.o:  \
+../src/Coms.c  \
+../src/coms.h  \
+ ../src/system_config/default/system_config.h  \
  ../src/system_config/default/system_definitions.h  \
  ../../../../../../../microchip/harmony/v1_06/framework/system/common/sys_common.h  \
  ../../../../../../../microchip/harmony/v1_06/framework/system/common/sys_module.h  \
@@ -231,4 +231,6 @@ build/default/production/_ext/1360937237/app1.o:  \
  ../src/coms.h  \
 ../src/findandfollow.h  \
 ../src/sensors.h  \
-../src/motors.h 
+ ../../../../../../../microchip/harmony/v1_06/third_party/rtos/FreeRTOS/Source/include/queue.h  \
+ ../src/motors.h  \
+../src/sensors.h 

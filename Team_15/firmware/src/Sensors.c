@@ -120,9 +120,10 @@ void SENSORS_Initialize ( void )
     /* TODO: Initialize your application's state machine and other
      * parameters.
      */
-    sensorsData.xFakeSensorDataQueue = xQueueCreate( 10, sizeof( char ) );
+    sensorsData.xFakeSensorDataQueue = xQueueCreate( 10, sizeof( float ) );
     /* Enable the software interrupt and set its priority. */
     //prvSetupSoftwareInterrupt();
+    sensorsData.index = 0;
 }
 
 
@@ -138,8 +139,9 @@ void SENSORS_Tasks ( void )
 {
     //long lValueToSend;
     portBASE_TYPE xStatus;
-    const char bob ='j';
-        
+    const char* data[] ={"1.91", "2.34", "3.54", "4.88", "1.03", "0.19"};
+   // int cycle = 0;   
+    
     
     /* Check the application's current state. */
     switch ( sensorsData.state )
@@ -152,8 +154,17 @@ void SENSORS_Tasks ( void )
         //lValueToSend =42; //= (rand()*53)/100 - 0.3;
         
         //xStatus = xQueueSendToBack( sensorsData.xFakeSensorDataQueue, &lValueToSend, 0 );
-       
-        xStatus = xQueueSend( sensorsData.xFakeSensorDataQueue, &bob, 0 );
+         
+        if(sensorsData.index < 6){
+            xStatus = xQueueSend( sensorsData.xFakeSensorDataQueue, &data[sensorsData.index], 0 );
+            sensorsData.index++;
+        }
+        else {
+            sensorsData.index = 0;
+        }
+      
+        
+        //xStatus = xQueueSend( sensorsData.xFakeSensorDataQueue, &data, 0 );
         //xStatus = xQueueSend( xFakeSensorDataQueue2, &bob, 0);
         if( xStatus == pdPASS )
         {
