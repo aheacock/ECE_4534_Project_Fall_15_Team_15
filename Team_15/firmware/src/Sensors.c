@@ -120,7 +120,7 @@ void SENSORS_Initialize ( void )
     /* TODO: Initialize your application's state machine and other
      * parameters.
      */
-    sensorsData.xFakeSensorDataQueue = xQueueCreate( 10, sizeof( long ) );
+    sensorsData.xFakeSensorDataQueue = xQueueCreate( 10, sizeof( char ) );
     /* Enable the software interrupt and set its priority. */
     //prvSetupSoftwareInterrupt();
 }
@@ -136,17 +136,25 @@ void SENSORS_Initialize ( void )
 
 void SENSORS_Tasks ( void )
 {
-    char *pcString;
-    long lValueToSend;
+    //long lValueToSend;
     portBASE_TYPE xStatus;
+    const char bob ='j';
         
-    for( ; ; )
+    
+    /* Check the application's current state. */
+    switch ( sensorsData.state )
     {
-        // Sensor outputs -0.3 to Vcc+0.33. Vcc should  be 5. So the range is 
+        /* Application's initial state. */
+        case SENSORS_STATE_INIT:
+        {
+                    // Sensor outputs -0.3 to Vcc+0.33. Vcc should  be 5. So the range is 
         // -0.3 to 5.3
-        lValueToSend = (rand()*53)/100 - 0.3;
+        //lValueToSend =42; //= (rand()*53)/100 - 0.3;
         
-        xStatus = xQueueSendToBack( sensorsData.xFakeSensorDataQueue, &lValueToSend, 0 );
+        //xStatus = xQueueSendToBack( sensorsData.xFakeSensorDataQueue, &lValueToSend, 0 );
+       
+        xStatus = xQueueSend( sensorsData.xFakeSensorDataQueue, &bob, 0 );
+        //xStatus = xQueueSend( xFakeSensorDataQueue2, &bob, 0);
         if( xStatus == pdPASS )
         {
             // Successfully added data to queue
@@ -165,15 +173,7 @@ void SENSORS_Tasks ( void )
         scheduler that a switch to another task should occur now rather than
         keeping this task in the Running state until the end of the current time
         slice. */
-        taskYIELD();
-    }
-    
-    /* Check the application's current state. */
-    switch ( sensorsData.state )
-    {
-        /* Application's initial state. */
-        case SENSORS_STATE_INIT:
-        {
+        //taskYIELD();
             break;
         }
 
