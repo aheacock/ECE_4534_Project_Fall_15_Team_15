@@ -54,6 +54,7 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 // *****************************************************************************
 
 #include "coms.h"
+#include "sensors.h"
 
 // *****************************************************************************
 // *****************************************************************************
@@ -77,6 +78,7 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 */
 
 COMS_DATA comsData;
+SENSORS_DATA sensorsData;
 
 // *****************************************************************************
 // *****************************************************************************
@@ -114,9 +116,14 @@ COMS_DATA comsData;
 
 bool PutCharacter(const char character)
 {
+    //char *pcString;
+    char lValueToSend[10]={'a','b','c','d','e','f','g','h','i','j'};
+    //unsigned long lo;
+    char lo;
+    portBASE_TYPE xStatus;
   
     /* Check if buffer is empty for a new transmission */
-    if(PLIB_USART_TransmitterIsEmpty(USART_ID_1))
+    if(true)//(PLIB_USART_TransmitterIsEmpty(USART_ID_1))
     {
        // PLIB_USART_TransmitterByteSend(USART_ID_1, character);   
         /* Send character */
@@ -124,11 +131,21 @@ bool PutCharacter(const char character)
         if(PLIB_USART_ReceiverDataIsAvailable(USART_ID_1))
             {           
              char x=PLIB_USART_ReceiverByteReceive(USART_ID_1);
+               PLIB_USART_TransmitterByteSend(USART_ID_1, x);
+               PLIB_USART_TransmitterByteSend(USART_ID_1, '2');   
             
-             {
-                PLIB_USART_TransmitterByteSend(USART_ID_1, x);
-                PLIB_PORTS_PinToggle(PORTS_ID_0, PORT_CHANNEL_C, PORTS_BIT_POS_1);
-             }
+               //xStatus = xQueueSendToBack( comsData.xFakeSensorDataQueue, &lValueToSend, 0 );
+               //if(xQueueReceive( comsData.xFakeSensorDataQueue3, &lo, portMAX_DELAY))
+               if(xQueueReceive( sensorsData.xFakeSensorDataQueue, &lo, portMAX_DELAY))
+               {   
+                   //unsigned char * p =(unsigned char*)&lo;
+                  PLIB_USART_TransmitterByteSend(USART_ID_1, lo);   
+                  // PLIB_USART_TransmitterByteSend(USART_ID_1, pcString[0]);
+                  PLIB_PORTS_PinToggle(PORTS_ID_0, PORT_CHANNEL_C, PORTS_BIT_POS_1);
+               }
+                
+               PLIB_USART_TransmitterByteSend(USART_ID_1, ' ');   
+             
             
             }
         
@@ -147,6 +164,7 @@ void COMS_Initialize ( void )
     /* TODO: Initialize your application's state machine and other
      * parameters.
      */
+    comsData.xFakeSensorDataQueue3 = xQueueCreate( 10, sizeof( char ) );
 }
 
 
@@ -176,6 +194,18 @@ void COMS_Tasks ( void )
         /* The default state should never be executed. */
         case COMS_STATE_RUN:
         {
+            char *pcString;
+            unsigned long lValueToSend;
+            portBASE_TYPE xStatus;
+            char bob ='a';
+            lValueToSend =42; //= (rand()*53)/100 - 0.3;
+            
+            xStatus = xQueueSend( comsData.xFakeSensorDataQueue3, &bob, 0 );
+            if( xStatus == pdPASS )
+            {
+                // Successfully added data to queue
+                PLIB_PORTS_PinToggle(PORTS_ID_0, PORT_CHANNEL_C, PORTS_BIT_POS_1);
+            }
             if(PutCharacter('B'))
             {
                
