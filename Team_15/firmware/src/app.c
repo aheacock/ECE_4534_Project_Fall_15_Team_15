@@ -118,9 +118,9 @@ TimerHandle_t xTimerHandle = NULL;
 
 void vCallbackFunction( TimerHandle_t pxTimer )
 {
-    if(PutCharacter('B'))
+   // if(PutCharacter('B'))
     {
-         PLIB_PORTS_PinToggle(PORTS_ID_0, PORT_CHANNEL_C, PORTS_BIT_POS_1);
+       //  PLIB_PORTS_PinToggle(PORTS_ID_0, PORT_CHANNEL_C, PORTS_BIT_POS_1);
     // Toggle pin for visual assurance
          
    

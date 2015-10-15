@@ -118,13 +118,18 @@ bool PutCharacter(const char character)
     /* Check if buffer is empty for a new transmission */
     if(PLIB_USART_TransmitterIsEmpty(USART_ID_1))
     {
-         PLIB_USART_TransmitterByteSend(USART_ID_1, character);   
+       // PLIB_USART_TransmitterByteSend(USART_ID_1, character);   
         /* Send character */
-      
+        
         if(PLIB_USART_ReceiverDataIsAvailable(USART_ID_1))
-            {
-           char x=PLIB_USART_ReceiverByteReceive(USART_ID_1);
-           PLIB_USART_TransmitterByteSend(USART_ID_1, x);  
+            {           
+             char x=PLIB_USART_ReceiverByteReceive(USART_ID_1);
+            
+             {
+                PLIB_USART_TransmitterByteSend(USART_ID_1, x);
+                PLIB_PORTS_PinToggle(PORTS_ID_0, PORT_CHANNEL_C, PORTS_BIT_POS_1);
+             }
+            
             }
         
         return true;
@@ -173,7 +178,7 @@ void COMS_Tasks ( void )
         {
             if(PutCharacter('B'))
             {
-                 PLIB_PORTS_PinToggle(PORTS_ID_0, PORT_CHANNEL_C, PORTS_BIT_POS_1);
+               
             // Toggle pin for visual assurance
 
 
