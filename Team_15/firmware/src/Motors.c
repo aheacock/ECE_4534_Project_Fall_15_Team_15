@@ -119,10 +119,20 @@ void MOTORS_Initialize ( void )
     /* TODO: Initialize your application's state machine and other
      * parameters.
      */
+    
+    motorsData.xMotorstoSensorsQueue = xQueueCreate( 10, sizeof( float ) );
+    /* Enable the software interrupt and set its priority. */
+    //prvSetupSoftwareInterrupt();
+    motorsData.index = 0;
 }
 
 
 /******************************************************************************
+ * 
+ *
+ * 
+ * 
+ * 
   Function:
     void MOTORS_Tasks ( void )
 
@@ -132,12 +142,25 @@ void MOTORS_Initialize ( void )
 
 void MOTORS_Tasks ( void )
 {
-    /* Check the application's current state. */
+    const char* data[] ={"1.91", "2.34", "3.54", "4.88", "1.03", "0.19"};
+    portBASE_TYPE xStatus;
+    
     switch ( motorsData.state )
     {
         /* Application's initial state. */
         case MOTORS_STATE_INIT:
         {
+              if(motorsData.index < 6)
+              {
+                xStatus = xQueueSend( motorsData.xMotorstoSensorsQueue, &data[motorsData.index], 0 );
+                motorsData.index++;
+              }
+              else 
+              {
+               motorsData.index = 0;
+              }
+            
+            
             break;
         }
 

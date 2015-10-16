@@ -58,6 +58,7 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 #include <stdlib.h>
 #include "system_config.h"
 #include "system_definitions.h"
+#include "queue.h"
 
 // DOM-IGNORE-BEGIN
 #ifdef __cplusplus  // Provide C++ Compatibility
@@ -84,11 +85,19 @@ extern "C" {
     determine the behavior of the application at various times.
 */
 
+    
+    
+    
+    
+    
+    
+    
 typedef enum
 {
 	/* Application's state machine's initial state. */
 	MOTORS_STATE_INIT=0,
-
+            //Set up queues 
+    
 	/* TODO: Define states used by the application state machine. */
 
 } MOTORS_STATES;
@@ -111,6 +120,8 @@ typedef struct
 {
     /* The application's current state */
     MOTORS_STATES state;
+    QueueHandle_t xMotorstoSensorsQueue;
+    int index;
 
     /* TODO: Define any additional data used by the application. */
 
