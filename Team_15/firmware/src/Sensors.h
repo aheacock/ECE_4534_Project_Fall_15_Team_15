@@ -59,6 +59,7 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 #include "system_config.h"
 #include "system_definitions.h"
 #include "queue.h"
+#include <stdlib.h> // For randomz
 
 // DOM-IGNORE-BEGIN
 #ifdef __cplusplus  // Provide C++ Compatibility
@@ -114,9 +115,12 @@ typedef struct
     SENSORS_STATES state;
 
     /* TODO: Define any additional data used by the application. */
-    QueueHandle_t xFakeSensorDataQueue;
+    //QueueHandle_t xFakeSensorDataQueue;
+    QueueHandle_t xSensorsToComsQueue;
+    QueueHandle_t xSensorsToFnFQueue;
     
     int index;
+    int index2;
 
 } SENSORS_DATA;
 

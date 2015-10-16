@@ -54,7 +54,6 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 // *****************************************************************************
 
 #include "sensors.h"
-#include <stdlib.h> // For random
 
 // *****************************************************************************
 // *****************************************************************************
@@ -120,10 +119,13 @@ void SENSORS_Initialize ( void )
     /* TODO: Initialize your application's state machine and other
      * parameters.
      */
-    sensorsData.xFakeSensorDataQueue = xQueueCreate( 10, sizeof( float ) );
+    //sensorsData.xFakeSensorDataQueue = xQueueCreate( 10, sizeof( float ) );
+    sensorsData.xSensorsToComsQueue = xQueueCreate( 10, sizeof( float ) );
+    sensorsData.xSensorsToFnFQueue = xQueueCreate( 10, sizeof( float ) );
     /* Enable the software interrupt and set its priority. */
     //prvSetupSoftwareInterrupt();
     sensorsData.index = 0;
+    sensorsData.index2 = 0;
 }
 
 
@@ -139,7 +141,8 @@ void SENSORS_Tasks ( void )
 {
     //long lValueToSend;
     portBASE_TYPE xStatus;
-    const char* data[] ={"1.91", "2.34", "3.54", "4.88", "1.03", "0.19"};
+    portBASE_TYPE xStatus2;
+    const char* data[] ={"1.914", "2.354", "3.534", "4.838", "1.023", "0.179"};
    // int cycle = 0;   
     
     
@@ -149,42 +152,52 @@ void SENSORS_Tasks ( void )
         /* Application's initial state. */
         case SENSORS_STATE_INIT:
         {
-                    // Sensor outputs -0.3 to Vcc+0.33. Vcc should  be 5. So the range is 
-        // -0.3 to 5.3
-        //lValueToSend =42; //= (rand()*53)/100 - 0.3;
-        
-        //xStatus = xQueueSendToBack( sensorsData.xFakeSensorDataQueue, &lValueToSend, 0 );
-         
-        if(sensorsData.index < 6){
-            xStatus = xQueueSend( sensorsData.xFakeSensorDataQueue, &data[sensorsData.index], 0 );
-            sensorsData.index++;
-        }
-        else {
-            sensorsData.index = 0;
-        }
-      
-        
-        //xStatus = xQueueSend( sensorsData.xFakeSensorDataQueue, &data, 0 );
-        //xStatus = xQueueSend( xFakeSensorDataQueue2, &bob, 0);
-        if( xStatus == pdPASS )
-        {
-            // Successfully added data to queue
-            PLIB_PORTS_PinToggle(PORTS_ID_0, PORT_CHANNEL_C, PORTS_BIT_POS_1);
-        }
-        
-        /*
-         * 
-         * This code needs to go where sending data with wifly
-         * 
-         */
-        /* Block on the queue to wait for data to arrive. */
-        // --> xQueueReceive( sensorsData.xFakeSensorDataQueue, &pcString, portMAX_DELAY );
-        
-        /* Allow the other sender task to execute. taskYIELD() informs the
-        scheduler that a switch to another task should occur now rather than
-        keeping this task in the Running state until the end of the current time
-        slice. */
-        //taskYIELD();
+            if(sensorsData.index < 6){
+                xStatus = xQueueSend( sensorsData.xSensorsToComsQueue, &data[sensorsData.index], 0 );
+                sensorsData.index++;
+            }
+            else {
+                sensorsData.index = 0;
+            }
+
+
+            //xStatus = xQueueSend( sensorsData.xFakeSensorDataQueue, &data, 0 );
+            //xStatus = xQueueSend( xFakeSensorDataQueue2, &bob, 0);
+            if( xStatus == pdPASS )
+            {
+                // Successfully added data to queue
+                PLIB_PORTS_PinToggle(PORTS_ID_0, PORT_CHANNEL_C, PORTS_BIT_POS_1);
+            }
+
+            /*
+             * 
+             * This code needs to go where sending data with wifly
+             * 
+             */
+            /* Block on the queue to wait for data to arrive. */
+            // --> xQueueReceive( sensorsData.xFakeSensorDataQueue, &pcString, portMAX_DELAY );
+
+            /* Allow the other sender task to execute. taskYIELD() informs the
+            scheduler that a switch to another task should occur now rather than
+            keeping this task in the Running state until the end of the current time
+            slice. */
+            //taskYIELD();
+            
+            
+            // Second queue. Fill with fake data
+            if(sensorsData.index2 < 6){
+                xStatus2 = xQueueSend( sensorsData.xSensorsToFnFQueue, &data[sensorsData.index2], 0 );
+                sensorsData.index2++;
+            }
+            else {
+                sensorsData.index2 = 0;
+            }
+
+            if( xStatus2 == pdPASS )
+            {
+                // Successfully added data to queue
+                PLIB_PORTS_PinToggle(PORTS_ID_0, PORT_CHANNEL_C, PORTS_BIT_POS_1);
+            }
             break;
         }
 

@@ -193,8 +193,9 @@ bool PutCharacter(const char character)
             
                //xStatus = xQueueSendToBack( comsData.xFakeSensorDataQueue, &lValueToSend, 0 );
                //if(xQueueReceive( comsData.xFakeSensorDataQueue3, &lo, portMAX_DELAY))
-               if(xQueueReceive( sensorsData.xFakeSensorDataQueue, &lo, portMAX_DELAY))
+               if(xQueueReceive( sensorsData.xSensorsToComsQueue, &lo, portMAX_DELAY))
                {   
+                   PLIB_USART_TransmitterByteSend(USART_ID_1, '2');   
                    stringPointer=lo;
                    //unsigned char * p =(unsigned char*)&lo;
                  // PLIB_USART_TransmitterByteSend(USART_ID_1, lo);   
@@ -204,9 +205,10 @@ bool PutCharacter(const char character)
                  //  PLIB_USART_TransmitterByteSend(USART_ID_1, 'x');     
                   // PLIB_USART_TransmitterByteSend(USART_ID_1, pcString[0]);
                   PLIB_PORTS_PinToggle(PORTS_ID_0, PORT_CHANNEL_C, PORTS_BIT_POS_1);
+                  PLIB_USART_TransmitterByteSend(USART_ID_1, '3');   
                }
                 
-               PLIB_USART_TransmitterByteSend(USART_ID_1, ' ');   
+               PLIB_USART_TransmitterByteSend(USART_ID_1, 'k');   
              
             
             }
@@ -226,7 +228,8 @@ void COMS_Initialize ( void )
     /* TODO: Initialize your application's state machine and other
      * parameters.
      */
-    comsData.xFakeSensorDataQueue3 = xQueueCreate( 10, sizeof( char ) );
+    //comsData.xFakeSensorDataQueue3 = xQueueCreate( 10, sizeof( char ) );
+    comsData.xComsToFnFQueue = xQueueCreate( 10, sizeof( char ) );
 }
 
 
@@ -256,6 +259,7 @@ void COMS_Tasks ( void )
         /* The default state should never be executed. */
         case COMS_STATE_RUN:
         {
+            /*
 //            float two = 42.4;
 //            myPrintf(two);
             char *pcString;
@@ -270,6 +274,7 @@ void COMS_Tasks ( void )
                 // Successfully added data to queue
                 PLIB_PORTS_PinToggle(PORTS_ID_0, PORT_CHANNEL_C, PORTS_BIT_POS_1);
             }
+            */
             if(PutCharacter('B'))
             {
                
