@@ -119,6 +119,10 @@ void FINDANDFOLLOW_Initialize ( void )
     /* TODO: Initialize your application's state machine and other
      * parameters.
      */
+    findandfollowData.xFnFToMotorsQueue = xQueueCreate( 10, sizeof( char ) );
+    findandfollowData.xFnFToComsQueue = xQueueCreate( 10, sizeof( char ) );
+    
+    findandfollowData.index = 0;
 }
 
 
@@ -132,12 +136,32 @@ void FINDANDFOLLOW_Initialize ( void )
 
 void FINDANDFOLLOW_Tasks ( void )
 {
+    portBASE_TYPE xStatus;
+    const char* data[] ={"1.91", "2.34", "3.54", "4.88", "1.03", "0.19"};
     /* Check the application's current state. */
     switch ( findandfollowData.state )
     {
         /* Application's initial state. */
         case FINDANDFOLLOW_STATE_INIT:
         {
+            //xStatus = xQueueSendToBack( sensorsData.xFakeSensorDataQueue, &lValueToSend, 0 );
+
+            if(findandfollowData.index < 6){
+                xStatus = xQueueSend( findandfollowData.xFnFToMotorsQueue, &data[findandfollowData.index], 0 );
+                findandfollowData.index++;
+            }
+            else {
+                findandfollowData.index = 0;
+            }
+
+
+            //xStatus = xQueueSend( sensorsData.xFakeSensorDataQueue, &data, 0 );
+            //xStatus = xQueueSend( xFakeSensorDataQueue2, &bob, 0);
+            if( xStatus == pdPASS )
+            {
+                // Successfully added data to queue
+                PLIB_PORTS_PinToggle(PORTS_ID_0, PORT_CHANNEL_C, PORTS_BIT_POS_1);
+            }
             break;
         }
 

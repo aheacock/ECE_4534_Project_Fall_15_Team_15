@@ -116,7 +116,8 @@ typedef struct
     COMS_STATES state;
 
     /* TODO: Define any additional data used by the application. */
-    QueueHandle_t xFakeSensorDataQueue3;
+    //QueueHandle_t xFakeSensorDataQueue3;
+    QueueHandle_t xComsToFnFQueue;
     
 } COMS_DATA;
 
