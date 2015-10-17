@@ -120,12 +120,14 @@ typedef struct
 {
     /* The application's current state */
     MOTORS_STATES state;
-    QueueHandle_t xMotorstoSensorsQueue;
-    int index;
 
     /* TODO: Define any additional data used by the application. */
-
-
+    QueueHandle_t xMotorsToSensorsQueue;    // For error checking
+    QueueHandle_t xMotorsToFnFQueue;    // For ACK messages
+    
+    int index;
+    int index2;
+    
 } MOTORS_DATA;
 
 

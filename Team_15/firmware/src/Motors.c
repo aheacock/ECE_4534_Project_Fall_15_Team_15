@@ -120,7 +120,9 @@ void MOTORS_Initialize ( void )
      * parameters.
      */
     
-    motorsData.xMotorstoSensorsQueue = xQueueCreate( 10, sizeof( float ) );
+    motorsData.xMotorsToSensorsQueue = xQueueCreate( 10, sizeof( float ) );
+    motorsData.xMotorsToFnFQueue = xQueueCreate( 10, sizeof( float ) );
+    
     /* Enable the software interrupt and set its priority. */
     //prvSetupSoftwareInterrupt();
     motorsData.index = 0;
@@ -152,12 +154,24 @@ void MOTORS_Tasks ( void )
         {
               if(motorsData.index < 6)
               {
-                xStatus = xQueueSend( motorsData.xMotorstoSensorsQueue, &data[motorsData.index], 0 );
+                xStatus = xQueueSend( motorsData.xMotorsToSensorsQueue, &data[motorsData.index], 0 );
                 motorsData.index++;
               }
               else 
               {
                motorsData.index = 0;
+              }
+              
+              
+              // Second queue. Fill with fake data
+              if(motorsData.index2 < 6)
+              {
+                xStatus = xQueueSend( motorsData.xMotorsToFnFQueue, &data[motorsData.index2], 0 );
+                motorsData.index2++;
+              }
+              else 
+              {
+               motorsData.index2 = 0;
               }
             
             

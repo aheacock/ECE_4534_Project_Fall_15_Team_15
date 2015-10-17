@@ -118,9 +118,11 @@ typedef struct
     //QueueHandle_t xFakeSensorDataQueue;
     QueueHandle_t xSensorsToComsQueue;
     QueueHandle_t xSensorsToFnFQueue;
+    QueueHandle_t xSensorsToMotorsQueue;    // For ACK messages
     
     int index;
     int index2;
+    int index3;
 
 } SENSORS_DATA;
 

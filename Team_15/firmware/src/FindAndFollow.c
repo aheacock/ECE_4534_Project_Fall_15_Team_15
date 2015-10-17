@@ -119,8 +119,9 @@ void FINDANDFOLLOW_Initialize ( void )
     /* TODO: Initialize your application's state machine and other
      * parameters.
      */
-    findandfollowData.xFnFToMotorsQueue = xQueueCreate( 10, sizeof( char ) );
-    findandfollowData.xFnFToComsQueue = xQueueCreate( 10, sizeof( char ) );
+    findandfollowData.xFnFToMotorsQueue = xQueueCreate( 10, sizeof( float ) );
+    findandfollowData.xFnFToComsQueue = xQueueCreate( 10, sizeof( float ) );
+    findandfollowData.xFnFToSensorsQueue = xQueueCreate( 10, sizeof( float ) );
     
     findandfollowData.index = 0;
 }
@@ -153,15 +154,27 @@ void FINDANDFOLLOW_Tasks ( void )
             else {
                 findandfollowData.index = 0;
             }
-
-
-            //xStatus = xQueueSend( sensorsData.xFakeSensorDataQueue, &data, 0 );
-            //xStatus = xQueueSend( xFakeSensorDataQueue2, &bob, 0);
-            if( xStatus == pdPASS )
-            {
-                // Successfully added data to queue
-                PLIB_PORTS_PinToggle(PORTS_ID_0, PORT_CHANNEL_C, PORTS_BIT_POS_1);
+            
+            
+            // Second queue. Fill with fake data
+            if(findandfollowData.index2 < 6){
+                xStatus = xQueueSend( findandfollowData.xFnFToComsQueue, &data[findandfollowData.index2], 0 );
+                findandfollowData.index2++;
             }
+            else {
+                findandfollowData.index2 = 0;
+            }
+            
+            
+            // Third queue. Fill with fake data
+            if(findandfollowData.index3 < 6){
+                xStatus = xQueueSend( findandfollowData.xFnFToSensorsQueue, &data[findandfollowData.index3], 0 );
+                findandfollowData.index3++;
+            }
+            else {
+                findandfollowData.index3 = 0;
+            }
+
             break;
         }
 

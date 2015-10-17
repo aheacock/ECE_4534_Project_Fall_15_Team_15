@@ -229,7 +229,8 @@ void COMS_Initialize ( void )
      * parameters.
      */
     //comsData.xFakeSensorDataQueue3 = xQueueCreate( 10, sizeof( char ) );
-    comsData.xComsToFnFQueue = xQueueCreate( 10, sizeof( char ) );
+    comsData.xComsToFnFQueue = xQueueCreate( 10, sizeof( float ) );
+    comsData.xComsToSensorsQueue = xQueueCreate( 10, sizeof( float ) );
 }
 
 

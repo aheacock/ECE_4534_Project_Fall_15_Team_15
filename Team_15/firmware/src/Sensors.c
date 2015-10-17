@@ -122,6 +122,7 @@ void SENSORS_Initialize ( void )
     //sensorsData.xFakeSensorDataQueue = xQueueCreate( 10, sizeof( float ) );
     sensorsData.xSensorsToComsQueue = xQueueCreate( 10, sizeof( float ) );
     sensorsData.xSensorsToFnFQueue = xQueueCreate( 10, sizeof( float ) );
+    sensorsData.xSensorsToMotorsQueue = xQueueCreate( 10, sizeof( float ) );
     /* Enable the software interrupt and set its priority. */
     //prvSetupSoftwareInterrupt();
     sensorsData.index = 0;
@@ -163,11 +164,11 @@ void SENSORS_Tasks ( void )
 
             //xStatus = xQueueSend( sensorsData.xFakeSensorDataQueue, &data, 0 );
             //xStatus = xQueueSend( xFakeSensorDataQueue2, &bob, 0);
-            if( xStatus == pdPASS )
-            {
-                // Successfully added data to queue
-                PLIB_PORTS_PinToggle(PORTS_ID_0, PORT_CHANNEL_C, PORTS_BIT_POS_1);
-            }
+//            if( xStatus == pdPASS )
+//            {
+//                // Successfully added data to queue
+//                PLIB_PORTS_PinToggle(PORTS_ID_0, PORT_CHANNEL_C, PORTS_BIT_POS_1);
+//            }
 
             /*
              * 
@@ -192,12 +193,18 @@ void SENSORS_Tasks ( void )
             else {
                 sensorsData.index2 = 0;
             }
-
-            if( xStatus2 == pdPASS )
-            {
-                // Successfully added data to queue
-                PLIB_PORTS_PinToggle(PORTS_ID_0, PORT_CHANNEL_C, PORTS_BIT_POS_1);
+            
+            
+            
+            // Third queue. Fill with fake data
+            if(sensorsData.index3 < 6){
+                xStatus2 = xQueueSend( sensorsData.xSensorsToMotorsQueue, &data[sensorsData.index3], 0 );
+                sensorsData.index3++;
             }
+            else {
+                sensorsData.index3 = 0;
+            }
+
             break;
         }
 

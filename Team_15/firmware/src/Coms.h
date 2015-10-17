@@ -118,6 +118,10 @@ typedef struct
     /* TODO: Define any additional data used by the application. */
     //QueueHandle_t xFakeSensorDataQueue3;
     QueueHandle_t xComsToFnFQueue;
+    QueueHandle_t xComsToSensorsQueue;   // For ACK messages
+    
+    int index;
+    int index2;
     
 } COMS_DATA;
 

@@ -116,8 +116,12 @@ typedef struct
     /* TODO: Define any additional data used by the application. */
     QueueHandle_t xFnFToMotorsQueue;
     QueueHandle_t xFnFToComsQueue;
+    QueueHandle_t xFnFToSensorsQueue;   // For ACK messages
     
     int index;
+    int index2;
+    int index3;
+    
 } FINDANDFOLLOW_DATA;
 
 
