@@ -120,7 +120,7 @@ void SENSORS_Initialize ( void )
      * parameters.
      */
     //sensorsData.xFakeSensorDataQueue = xQueueCreate( 10, sizeof( float ) );
-    sensorsData.xSensorsToComsQueue = xQueueCreate( 10, sizeof( float ) );
+    sensorsData.xSensorsToComsQueue = xQueueCreate( 10, 21);//sizeof( float ) );
     sensorsData.xSensorsToFnFQueue = xQueueCreate( 10, sizeof( float ) );
     sensorsData.xSensorsToMotorsQueue = xQueueCreate( 10, sizeof( float ) );
     /* Enable the software interrupt and set its priority. */
@@ -143,18 +143,49 @@ void SENSORS_Tasks ( void )
     //long lValueToSend;
     portBASE_TYPE xStatus;
     portBASE_TYPE xStatus2;
-    const char* data[] ={"1.914", "2.354", "3.534", "4.838", "1.023", "0.179"};
-   // int cycle = 0;   
-    
-    
+    char* data[] ={"1.914", "2.354", "3.534", "4.838", "1.023", "0.179"};
+    //char* data = "9.874";
+   // int cycle = 0;
+    //char* ello = "hello";
+    char ello[21] = "llllllllllllllllllll";
+    //const char* wkki = "gwkki";
+    char wkki[10] = "{\"S ns,23}";
+    char wkki2[10] = "{BSens,34}";
+    char dest[30];
+    char* pntr = "hello";
+    int i;
+    int ii = 0;
+    //*
+    for (i=0;i<10;i++)
+    {
+        //des   t[i]=data[1][i];
+        //*(ello+i) = *(wkki+i);
+        ello[i] = wkki2[i];
+        
+    }
+    //*
+    for (i=10;i<20;i++)
+    {
+        //dest[i]=data[1][i];
+        //*(ello+i) = *(wkki+i);
+        ello[i] = wkki[ii];
+        ii++;        
+    }
+    //*/
+    pntr = ello;
+    //pntr = dest;
     /* Check the application's current state. */
     switch ( sensorsData.state )
     {
         /* Application's initial state. */
         case SENSORS_STATE_INIT:
         {
+            //strcpy(dest, "yas");
+            //strcat(dest, ello);
+            
             if(sensorsData.index < 6){
-                xStatus = xQueueSend( sensorsData.xSensorsToComsQueue, &data[sensorsData.index], 0 );
+                //xStatus = xQueueSend( sensorsData.xSensorsToComsQueue, &data[sensorsData.index], 0 );
+                xStatus = xQueueSend( sensorsData.xSensorsToComsQueue, &ello, 0 );
                 sensorsData.index++;
             }
             else {

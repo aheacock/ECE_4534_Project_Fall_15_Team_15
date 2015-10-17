@@ -151,20 +151,24 @@ bool WriteString(void)
     }
 
     /* Write a character at a time, only if transmitter is empty */
-    //while (PLIB_USART_TransmitterIsEmpty(USART_ID_1))
+    
     while(*stringPointer != '\0')
     {
         /* Send character */
-        PLIB_USART_TransmitterByteSend(USART_ID_1, *stringPointer);
+        while (PLIB_USART_TransmitterIsEmpty(USART_ID_1))
+        {
+            PLIB_USART_TransmitterByteSend(USART_ID_1, *stringPointer);
 
         /* Increment to address of next character */
-        stringPointer++;
-
-        if(*stringPointer == '\0')
-        {
-            return true;
+            stringPointer++;
+        
+            if(*stringPointer == '\0')
+            {
+                return true;
+            }
         }
     }
+        
     return false;
 }
 
@@ -173,9 +177,10 @@ bool PutCharacter(const char character)
     //char *pcString;
     char lValueToSend[10]={'a','b','c','d','e','f','g','h','i','j'};
     //unsigned long lo;
-    char * lo;
+    //char * lo;
+    char lo[21];
     portBASE_TYPE xStatus;
-    
+    int i;
     
     
   
@@ -205,6 +210,7 @@ bool PutCharacter(const char character)
                  //  PLIB_USART_TransmitterByteSend(USART_ID_1, 'x');     
                   // PLIB_USART_TransmitterByteSend(USART_ID_1, pcString[0]);
                   PLIB_PORTS_PinToggle(PORTS_ID_0, PORT_CHANNEL_C, PORTS_BIT_POS_1);
+                   for(i=0;i<99999;i++){}
                   PLIB_USART_TransmitterByteSend(USART_ID_1, '3');   
                }
                 
