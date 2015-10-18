@@ -275,3 +275,67 @@ void concatenate6(char dest[21], char type[2], char typeNum[3], char one[2], cha
     
     dest[41] = '\0';
 }
+
+//returns false if the 2 char code is not a valid packet type
+//Also has the Case statement for sorting packets by type
+int validpacket(char* packettocheck)
+{
+    int x;
+    switch(packettocheck[0])
+    {
+            case 'E':
+                switch(packettocheck[1])
+                {
+                         case 'S':
+                             x=1;
+                                break;
+                         case 'M':
+                             x=1;
+                                break;
+                         case 'C':
+                             x=1;
+                                break;
+                         case 'F':
+                             x=1;
+                                break;
+                    default:
+                        x=0;
+                                break;
+                }
+                
+            case 'S':
+                x=1;
+                break;
+                
+            case 'M':
+                x=1;
+                break;
+                
+            case 'C':
+                x=1;
+                break;
+                
+            case 'F':
+                x=1;
+                break;
+                
+                default: 
+                   x=0;
+                   break;
+    }
+ return x;                       
+}
+//returns true or false on whether the packet is a error packet
+int iserrorpacket(char* packettocheck)
+{
+    int x;
+    if(packettocheck[0]=='E')
+    {
+        x = 1;
+    }
+    else
+    {
+         x = 0;
+    }
+    return x;
+}
