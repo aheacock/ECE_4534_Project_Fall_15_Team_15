@@ -120,7 +120,7 @@ void FINDANDFOLLOW_Initialize ( void )
      * parameters.
      */
     findandfollowData.xFnFToMotorsQueue = xQueueCreate( 10, sizeof( float ) );
-    findandfollowData.xFnFToComsQueue = xQueueCreate( 10, sizeof( float ) );
+    findandfollowData.xFnFToComsQueue = xQueueCreate( 10, 45);
     findandfollowData.xFnFToSensorsQueue = xQueueCreate( 10, sizeof( float ) );
     
     findandfollowData.index = 0;
@@ -137,6 +137,46 @@ void FINDANDFOLLOW_Initialize ( void )
 
 void FINDANDFOLLOW_Tasks ( void )
 {
+    
+    //FindandFollow:<4f>RF:<string>,LF:<string>,CF:<string>
+   
+    
+    char ello[40] = "FindandFollow:__,RF:333,LF:333,CF:333";
+  //  const char* wkki = "gwkki";
+    char errorcode[3] ="a12";
+    char RF[3]="234";
+    char LF[3]="234";
+    char CF[3]="234";
+   
+
+    int i;
+   
+    //add error code
+    for (i=14;i<16;i++)
+    {
+        ello[i] = errorcode[i-14];
+        
+    }
+    //Add RF data
+    for (i=20;i<23;i++)
+    {
+        ello[i] = RF[i-20];
+        i++;        
+    }
+        //Add LF data
+    for (i=27;i<31;i++)
+    {
+        ello[i] = LF[i-27];
+        i++;        
+    }
+            //Add CF data
+    for (i=35;i<37;i++)
+    {
+        ello[i] = CF[i-35];
+        i++;        
+    }
+    
+   // &ello
     portBASE_TYPE xStatus;
     const char* data[] ={"1.91", "2.34", "3.54", "4.88", "1.03", "0.19"};
     /* Check the application's current state. */
@@ -158,7 +198,7 @@ void FINDANDFOLLOW_Tasks ( void )
             
             // Second queue. Fill with fake data
             if(findandfollowData.index2 < 6){
-                xStatus = xQueueSend( findandfollowData.xFnFToComsQueue, &data[findandfollowData.index2], 0 );
+                xStatus = xQueueSend( findandfollowData.xFnFToComsQueue, &ello, 0 );
                 findandfollowData.index2++;
             }
             else {
