@@ -199,8 +199,8 @@ bool PutCharacter(const char character)
             
                //xStatus = xQueueSendToBack( comsData.xFakeSensorDataQueue, &lValueToSend, 0 );
                //if(xQueueReceive( comsData.xFakeSensorDataQueue3, &lo, portMAX_DELAY))
-              // if(xQueueReceive( sensorsData.xSensorsToComsQueue, &lo, portMAX_DELAY)) working one
-               if(xQueueReceive( findandfollowData.xFnFToComsQueue, &lo, portMAX_DELAY))
+               if(xQueueReceive( sensorsData.xSensorsToComsQueue, &lo, portMAX_DELAY)) // working one
+               //if(xQueueReceive( findandfollowData.xFnFToComsQueue, &lo, portMAX_DELAY))
                {   
                    
                    PLIB_USART_TransmitterByteSend(USART_ID_1, '2');   
