@@ -76,9 +76,10 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
     
     Application strings and buffers are be defined outside this structure.
 */
-
+FINDANDFOLLOW_DATA findandfollowData;
 COMS_DATA comsData;
 SENSORS_DATA sensorsData;
+MOTORS_DATA motorsData;
 
 // *****************************************************************************
 // *****************************************************************************
@@ -198,8 +199,10 @@ bool PutCharacter(const char character)
             
                //xStatus = xQueueSendToBack( comsData.xFakeSensorDataQueue, &lValueToSend, 0 );
                //if(xQueueReceive( comsData.xFakeSensorDataQueue3, &lo, portMAX_DELAY))
-               if(xQueueReceive( sensorsData.xSensorsToComsQueue, &lo, portMAX_DELAY))
+              // if(xQueueReceive( sensorsData.xSensorsToComsQueue, &lo, portMAX_DELAY)) working one
+               if(xQueueReceive( findandfollowData.xFnFToComsQueue, &lo, portMAX_DELAY))
                {   
+                   
                    PLIB_USART_TransmitterByteSend(USART_ID_1, '2');   
                    stringPointer=lo;
                    //unsigned char * p =(unsigned char*)&lo;
