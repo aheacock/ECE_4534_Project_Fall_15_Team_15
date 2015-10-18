@@ -54,6 +54,7 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 // *****************************************************************************
 
 #include "sensors.h"
+#include "PacketManip.h"
 
 // *****************************************************************************
 // *****************************************************************************
@@ -135,8 +136,8 @@ void SENSORS_Initialize ( void )
     void SENSORS_Tasks ( void )
 
   Remarks:
-    See prototype in sensors.h.
- */
+    See prototype in sensors.h. 
+*/
 
 void SENSORS_Tasks ( void )
 {
@@ -151,11 +152,11 @@ void SENSORS_Tasks ( void )
     //const char* wkki = "gwkki";
     char wkki[10] = "{\"S ns,23}";
     char wkki2[10] = "{BSens,34}";
-    char dest[30];
-    char* pntr = "hello";
-    int i;
-    int ii = 0;
-    //*
+    //char dest[30];
+    //char* pntr = "hello";
+    //int i;
+    //int ii = 0;
+    /*
     for (i=0;i<10;i++)
     {
         //des   t[i]=data[1][i];
@@ -172,8 +173,18 @@ void SENSORS_Tasks ( void )
         ii++;        
     }
     //*/
-    pntr = ello;
+    //pntr = ello;
     //pntr = dest;
+    
+    //concatenate(wkki, wkki2, ello);
+    char t[2] = "MT";
+    char t2[3] = "220";
+    char a[2] = "DA";
+    char a2[3] = "978";
+    char b[2] = "NU";
+    char b2[3] = "001";    
+    concatenate3(wkki, t, t2, a, a2, b, "222");
+    
     /* Check the application's current state. */
     switch ( sensorsData.state )
     {
@@ -185,7 +196,7 @@ void SENSORS_Tasks ( void )
             
             if(sensorsData.index < 6){
                 //xStatus = xQueueSend( sensorsData.xSensorsToComsQueue, &data[sensorsData.index], 0 );
-                xStatus = xQueueSend( sensorsData.xSensorsToComsQueue, &ello, 0 );
+                xStatus = xQueueSend( sensorsData.xSensorsToComsQueue, &wkki, 0 );
                 sensorsData.index++;
             }
             else {
