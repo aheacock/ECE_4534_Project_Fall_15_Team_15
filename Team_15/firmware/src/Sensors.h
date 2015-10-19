@@ -124,7 +124,8 @@ typedef struct
     int index;
     int index2;
     int index3;
-
+   int NUMBEROFPACKETSPLACEDINTHEQ;
+      int NUMBEROFPACKETSDROPPEDBEFOREQ;
 } SENSORS_DATA;
 
 

@@ -219,7 +219,7 @@ int TalkToFindAndFollow()
 int TalkToSensors()
 {
     int x = 0;
-    char lo[21];
+    char lo[51];
     if(xQueueReceive( sensorsData.xSensorsToComsQueue, &lo, 0)) // working one
     {   
         stringPointer=lo;
