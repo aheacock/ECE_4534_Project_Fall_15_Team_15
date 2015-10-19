@@ -173,6 +173,32 @@ bool WriteString(void)
     return false;
 }
 
+
+int TalktoFindandFollow()
+{
+    int x;
+     char lo[31];
+    if(xQueueReceive( findandfollowData.xFnFToComsQueue, &lo, portMAX_DELAY))
+         {   
+                   PLIB_USART_TransmitterByteSend(USART_ID_1, 'F');   
+                   stringPointer=lo;
+                   if(WriteString())
+                   {
+                       x= 1;
+                   }
+                   else 
+                   {
+                       x= 0;
+                   }
+         }
+    else
+    {
+        x= 0;
+    }
+     return x;
+}
+
+
 bool PutCharacter(const char character)
 {
     //char *pcString;
@@ -191,10 +217,11 @@ bool PutCharacter(const char character)
        // PLIB_USART_TransmitterByteSend(USART_ID_1, character);   
         /* Send character */
         
-        if(PLIB_USART_ReceiverDataIsAvailable(USART_ID_1))
-            {           
-               char x=PLIB_USART_ReceiverByteReceive(USART_ID_1);
-               PLIB_USART_TransmitterByteSend(USART_ID_1, x);
+       //a if(PLIB_USART_ReceiverDataIsAvailable(USART_ID_1))
+            {     
+             
+         // a     char x=PLIB_USART_ReceiverByteReceive(USART_ID_1);
+           //a    PLIB_USART_TransmitterByteSend(USART_ID_1, x);
              //  PLIB_USART_TransmitterByteSend(USART_ID_1, 's');   
             
                //xStatus = xQueueSendToBack( comsData.xFakeSensorDataQueue, &lValueToSend, 0 );
@@ -209,7 +236,8 @@ bool PutCharacter(const char character)
                  // PLIB_USART_TransmitterByteSend(USART_ID_1, lo);   
 //                   float thetest=42.4;
 //                   myPrintf(thetest);
-                   if(WriteString())
+       if(WriteString())
+                  TalktoFindandFollow();
                  //  PLIB_USART_TransmitterByteSend(USART_ID_1, 'x');     
                   // PLIB_USART_TransmitterByteSend(USART_ID_1, pcString[0]);
                   PLIB_PORTS_PinToggle(PORTS_ID_0, PORT_CHANNEL_C, PORTS_BIT_POS_1);
@@ -269,25 +297,12 @@ void COMS_Tasks ( void )
         /* The default state should never be executed. */
         case COMS_STATE_RUN:
         {
-            /*
-//            float two = 42.4;
-//            myPrintf(two);
-            char *pcString;
-            unsigned long lValueToSend;
-            portBASE_TYPE xStatus;
-            char bob ='a';
-            lValueToSend =42; //= (rand()*53)/100 - 0.3;
-            
-            xStatus = xQueueSend( comsData.xFakeSensorDataQueue3, &bob, 0 );
-            if( xStatus == pdPASS )
-            {
-                // Successfully added data to queue
-                PLIB_PORTS_PinToggle(PORTS_ID_0, PORT_CHANNEL_C, PORTS_BIT_POS_1);
-            }
-            */
+
+       
+                    
             if(PutCharacter('B'))
             {
-               
+                
             // Toggle pin for visual assurance
 
 

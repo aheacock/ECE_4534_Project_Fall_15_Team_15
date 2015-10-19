@@ -120,7 +120,7 @@ void FINDANDFOLLOW_Initialize ( void )
      * parameters.
      */
     findandfollowData.xFnFToMotorsQueue = xQueueCreate( 10, sizeof( float ) );
-    findandfollowData.xFnFToComsQueue = xQueueCreate( 10, 45);
+    findandfollowData.xFnFToComsQueue = xQueueCreate( 15, 45);
     findandfollowData.xFnFToSensorsQueue = xQueueCreate( 10, sizeof( float ) );
     
     findandfollowData.index = 0;
@@ -197,13 +197,13 @@ void FINDANDFOLLOW_Tasks ( void )
             
             
             // Second queue. Fill with fake data
-            if(findandfollowData.index2 < 6){
+           // if(findandfollowData.index2 < 6){
                 xStatus = xQueueSend( findandfollowData.xFnFToComsQueue, &ello, 0 );
-                findandfollowData.index2++;
-            }
-            else {
-                findandfollowData.index2 = 0;
-            }
+             //   findandfollowData.index2++;
+            //}
+            //else {
+             //   findandfollowData.index2 = 0;
+            //}
             
             
             // Third queue. Fill with fake data

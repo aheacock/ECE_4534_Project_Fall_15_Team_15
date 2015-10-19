@@ -29,6 +29,7 @@
         <itemPath>../src/FindAndFollow.h</itemPath>
         <itemPath>../src/Sensors.h</itemPath>
         <itemPath>../src/Motors.h</itemPath>
+        <itemPath>../src/PacketManip.h</itemPath>
       </logicalFolder>
       <logicalFolder name="f1" displayName="framework" projectFiles="true">
         <logicalFolder name="f1" displayName="driver" projectFiles="true">
@@ -122,6 +123,7 @@
         <itemPath>../src/FindAndFollow.c</itemPath>
         <itemPath>../src/Sensors.c</itemPath>
         <itemPath>../src/Motors.c</itemPath>
+        <itemPath>../src/PacketManip.c</itemPath>
       </logicalFolder>
       <logicalFolder name="f1" displayName="framework" projectFiles="true">
         <logicalFolder name="f1" displayName="driver" projectFiles="true">

@@ -150,7 +150,7 @@ void SENSORS_Tasks ( void )
     //char* ello = "hello";
     char ello[21] = "llllllllllllllllllll";
     //const char* wkki = "gwkki";
-    char wkki[10] = "{\"S ns,23}";
+    char wkki[30] = "{\"S ns,23}";
     char wkki2[10] = "{BSens,34}";
     //char dest[30];
     //char* pntr = "hello";
@@ -183,8 +183,20 @@ void SENSORS_Tasks ( void )
     char a2[3] = "978";
     char b[2] = "NU";
     char b2[3] = "001";    
-    concatenate3(wkki, t, t2, a, a2, b, "222");
     
+    concatenate3(wkki, t, t2, a, a2, b, "222");
+    wkki[0]='1';
+    int x;
+    if(validpacket(wkki))
+    {
+        wkki[0]='E';
+    }
+    else
+    {
+          wkki[0]='A';
+    }
+ 
+           
     /* Check the application's current state. */
     switch ( sensorsData.state )
     {
