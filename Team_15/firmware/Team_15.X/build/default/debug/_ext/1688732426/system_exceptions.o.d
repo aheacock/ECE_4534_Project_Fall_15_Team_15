@@ -1,4 +1,4 @@
-build/default/production/_ext/1688732426/system_exceptions.o:  \
+build/default/debug/_ext/1688732426/system_exceptions.o:  \
  ../src/system_config/default/system_exceptions.c  \
  ../src/system_config/default/system_config.h  \
  ../src/system_config/default/system_definitions.h  \

@@ -233,4 +233,5 @@ build/default/production/_ext/1360937237/Motors.o:  \
  ../src/findandfollow.h  \
 ../src/PacketManip.h  \
 ../src/sensors.h  \
- ../src/motors.h 
+ ../src/Coms.h  \
+../src/motors.h 

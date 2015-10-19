@@ -341,24 +341,30 @@ int isErrorPacket(char* packettocheck)
 }
 
 // Parses the last part of the packet to get the sequence number
-int getSequenceNumber(char* packettodostuff)
+// Returns int and changes dest
+int getSequenceNumber(char dest[3], char* packettodostuff)
 {
     int i=0;
     int j=0;
+    int k=0;
     int r;
     char temp[3];
     while (packettodostuff[i] != '\0')
     {
         i=i+1;
     }
-    
-    for (j=38; j<41; j++)
+    i = i-3;
+    for (j=0; j<3; j++)
     {
-        temp[j] = packettodostuff[i];
+        temp[k] = packettodostuff[i];
         i=i+1;
+        k=k+1;
     }
+    dest[0] = temp[0];
+    dest[1] = temp[1];
+    dest[2] = temp[2];
     
-    r = atoi("99");
+    r = atoi(temp);
     return r;
 }
 

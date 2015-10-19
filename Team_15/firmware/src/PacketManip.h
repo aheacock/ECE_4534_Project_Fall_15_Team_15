@@ -46,7 +46,7 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 #ifndef _COMS_H
 #define _COMS_H
 
-#define LENGTH_PACKET_MAX 45 /// Why can't other files see this???????????????????????????
+#define LENGTH_PACKET_MAX 42 /// Why can't other files see this???????????????????????????
 
 // *****************************************************************************
 // *****************************************************************************
@@ -203,7 +203,7 @@ void concatenate6(char dest[21], char type[2], char typeNum[3], char one[2], cha
 int isValidPacket(char* packettocheck);
 int isErrorPacket(char* packettocheck);
 
-int getSequenceNumber(char* packettodostuff);
+int getSequenceNumber(char dest[3], char* packettodostuff);
 
 #endif /* _COMS_H */
 

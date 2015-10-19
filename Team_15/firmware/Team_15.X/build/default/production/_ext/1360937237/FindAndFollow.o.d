@@ -232,5 +232,6 @@ build/default/production/_ext/1360937237/FindAndFollow.o:  \
  ../../../../../../../microchip/harmony/v1_06/third_party/rtos/FreeRTOS/Source/include/queue.h  \
  ../src/findandfollow.h  \
 ../src/sensors.h  \
-../src/motors.h  \
- ../src/PacketManip.h 
+../src/PacketManip.h  \
+ ../src/Coms.h  \
+../src/motors.h 

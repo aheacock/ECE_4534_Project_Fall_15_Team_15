@@ -233,6 +233,7 @@ build/default/production/_ext/1360937237/app.o:  \
  ../src/findandfollow.h  \
 ../src/PacketManip.h  \
 ../src/sensors.h  \
- ../src/motors.h  \
+ ../src/Coms.h  \
+../src/motors.h  \
  ../../../../../../../microchip/harmony/v1_06/third_party/rtos/FreeRTOS/Source/include/timers.h  \
  ../../../../../../../microchip/harmony/v1_06/third_party/rtos/FreeRTOS/Source/include/task.h 

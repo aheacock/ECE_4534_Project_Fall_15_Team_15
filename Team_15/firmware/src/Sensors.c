@@ -54,7 +54,6 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 // *****************************************************************************
 
 #include "sensors.h"
-#include "PacketManip.h"
 
 // *****************************************************************************
 // *****************************************************************************
@@ -78,6 +77,7 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 */
 
 SENSORS_DATA sensorsData;
+COMS_DATA comsData;
 
 // *****************************************************************************
 // *****************************************************************************
@@ -160,6 +160,7 @@ void SENSORS_Tasks ( void )
         case SENSORS_STATE_INIT:
         {
            char ello[42];
+           char lo[51];
                 
            //Grabs data from the 4 sensors
                 int RS = 266;
@@ -176,10 +177,10 @@ void SENSORS_Tasks ( void )
                 snprintf(RS_c, 4,"%d", RS);
                 snprintf(LS_c, 4,"%d", LS);
                 snprintf(FS_c, 4,"%d", FS);
-                 snprintf(BS_c, 4,"%d", BS);
+                snprintf(BS_c, 4,"%d", BS);
                 
-                snprintf(NumofPackets, 4,"%d",sensorsData.NUMBEROFPACKETSPLACEDINTHEQ);
-               concatenate6(ello,"FF","___","RS",RS_c,"LS",LS_c,"FS","FFF","BS",BS_c,"NP", NumofPackets);
+                snprintf(NumofPackets, 4,"%03d",sensorsData.NUMBEROFPACKETSPLACEDINTHEQ);
+               concatenate6(ello,"SR","___","RS",RS_c,"LS",LS_c,"FS","FFF","BS",BS_c,"NP", NumofPackets);
                if(isValidPacket(ello))
                {
             
@@ -219,6 +220,12 @@ void SENSORS_Tasks ( void )
           
           //      xStatus2 = xQueueSend( sensorsData.xSensorsToMotorsQueue, &data[sensorsData.index3], 0 );
           
+                // Receive data from coms and forward back
+                if(xQueueReceive( comsData.xComsToSensorsQueue, &lo, 0))
+                {
+                    xQueueSend( sensorsData.xSensorsToComsQueue, &lo, 0 );
+                }
+               
             break;
         }
 

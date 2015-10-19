@@ -232,4 +232,5 @@ build/default/production/_ext/639803181/sys_clk_static.o:  \
  ../src/findandfollow.h  \
 ../src/PacketManip.h  \
 ../src/sensors.h  \
- ../src/motors.h 
+ ../src/Coms.h  \
+../src/motors.h 

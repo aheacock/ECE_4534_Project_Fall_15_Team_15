@@ -205,19 +205,30 @@ bool WriteString(void)
 int TalkToFindAndFollow()
 {
     int x = 0;
-//<<<<<<< HEAD
 //    char lo[42];
-//=======
     char lo[51];
-//>>>>>>> b3987044d2f84df6388e1c3a1e3cd4ea6b756f1b
+    char dest[3];
+    char dest2[3];
+    char temp[21];
     if(xQueueReceive( findandfollowData.xFnFToComsQueue, &lo, 0))
-    { 
+    {
+        comsData.NumPacketsRecvFromFnFQ += 1;
         stringPointer=lo;
         if(WriteString())
         {
-            x= getSequenceNumber(lo);
+            x= getSequenceNumber(dest, &lo);
         }
     }
+    
+    // Ack
+    intTo3Char(dest2, comsData.NumPacketsPutInFnFQ);
+    concatenate3(temp, "AM", "000", "AN", dest, "NU", dest2);
+    if (xQueueSend( comsData.xComsToFnFQueue, temp, 0))
+    {
+        comsData.NumPacketsPutInFnFQ += 1;
+    }
+    stringPointer = temp;
+    WriteString();
     return x;
 }
 
@@ -225,14 +236,29 @@ int TalkToSensors()
 {
     int x = 0;
     char lo[51];
+    char dest[3];
+    char dest2[3];
+    char temp[21];
     if(xQueueReceive( sensorsData.xSensorsToComsQueue, &lo, 0)) // working one
-    {   
+    {
+        comsData.NumPacketsRecvFromSensorsQ += 1;
         stringPointer=lo;
         if(WriteString())
         {
-            x= getSequenceNumber(lo);
+            x= getSequenceNumber(dest, &lo);
         }
     }
+    
+    // Ack
+    //getSequenceNumber(dest,&lo);
+    intTo3Char(dest2, comsData.NumPacketsPutInSensorsQ);
+    concatenate3(temp, "AM", "000", "AN", dest, "NU", dest2);
+    if (xQueueSend( comsData.xComsToSensorsQueue, temp, 0))
+    {
+        comsData.NumPacketsPutInSensorsQ += 1;
+    }
+    stringPointer = temp;
+    WriteString();
     return x;
 }
 
@@ -309,6 +335,11 @@ void COMS_Initialize ( void )
     //comsData.xFakeSensorDataQueue3 = xQueueCreate( 10, sizeof( char ) );
     comsData.xComsToFnFQueue = xQueueCreate( 10, LENGTH_PACKET_MAX );
     comsData.xComsToSensorsQueue = xQueueCreate( 10, LENGTH_PACKET_MAX );
+    
+    comsData.NumPacketsPutInFnFQ = 0;
+    comsData.NumPacketsPutInSensorsQ = 0;
+    comsData.NumPacketsRecvFromFnFQ = 0;
+    comsData.NumPacketsRecvFromSensorsQ = 0;
 }
 
 
@@ -343,10 +374,6 @@ void COMS_Tasks ( void )
         case COMS_STATE_RUN:
         {
             ackFF = TalkToFindAndFollow();
-            intTo3Char(dest, ackFF);
-            concatenate3(temp, "AM", "000", "AN", dest, "NU", "001");
-            stringPointer = temp;
-            WriteString();
             
             ackSR = TalkToSensors();
             

@@ -61,6 +61,8 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 #include "queue.h"
 #include <stdlib.h> // For randomz
 #include <string.h>
+#include "PacketManip.h"
+#include "Coms.h"
 
 // DOM-IGNORE-BEGIN
 #ifdef __cplusplus  // Provide C++ Compatibility
@@ -124,8 +126,8 @@ typedef struct
     int index;
     int index2;
     int index3;
-   int NUMBEROFPACKETSPLACEDINTHEQ;
-      int NUMBEROFPACKETSDROPPEDBEFOREQ;
+    int NUMBEROFPACKETSPLACEDINTHEQ;
+    int NUMBEROFPACKETSDROPPEDBEFOREQ;
 } SENSORS_DATA;
 
 

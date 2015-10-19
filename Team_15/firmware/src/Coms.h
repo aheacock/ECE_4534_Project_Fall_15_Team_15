@@ -46,7 +46,7 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 #ifndef _COMS_H
 #define _COMS_H
 
-#define LENGTH_PACKET_MAX 45
+#define LENGTH_PACKET_MAX 42
 
 // *****************************************************************************
 // *****************************************************************************
@@ -124,6 +124,11 @@ typedef struct
     
     int index;
     int index2;
+    
+    int NumPacketsPutInFnFQ;
+    int NumPacketsPutInSensorsQ;
+    int NumPacketsRecvFromFnFQ;
+    int NumPacketsRecvFromSensorsQ;
     
 } COMS_DATA;
 

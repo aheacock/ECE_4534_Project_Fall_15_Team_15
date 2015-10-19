@@ -1,5 +1,5 @@
-build/default/production/_ext/1688732426/system_exceptions.o:  \
- ../src/system_config/default/system_exceptions.c  \
+build/default/debug/_ext/1688732426/system_init.o:  \
+ ../src/system_config/default/system_init.c  \
  ../src/system_config/default/system_config.h  \
  ../src/system_config/default/system_definitions.h  \
  ../../../../../../../microchip/harmony/v1_06/framework/system/common/sys_common.h  \
@@ -235,5 +235,4 @@ build/default/production/_ext/1688732426/system_exceptions.o:  \
 ../src/PacketManip.h  \
 ../src/sensors.h  \
  ../src/Coms.h  \
-../src/motors.h  \
- ../../../../../../../microchip/harmony/v1_06/framework/system/debug/sys_debug.h 
+../src/motors.h 
