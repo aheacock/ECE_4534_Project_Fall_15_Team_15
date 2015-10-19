@@ -59,6 +59,8 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 #include "system_config.h"
 #include "system_definitions.h"
 #include "queue.h"
+#include <stdio.h>
+#include "PacketManip.h"
 
 // DOM-IGNORE-BEGIN
 #ifdef __cplusplus  // Provide C++ Compatibility
@@ -117,7 +119,8 @@ typedef struct
     QueueHandle_t xFnFToMotorsQueue;
     QueueHandle_t xFnFToComsQueue;
     QueueHandle_t xFnFToSensorsQueue;   // For ACK messages
-    
+      int NUMBEROFPACKETSPLACEDINTHEQ;
+      int NUMBEROFPACKETSDROPPEDBEFOREQ;
     int index;
     int index2;
     int index3;

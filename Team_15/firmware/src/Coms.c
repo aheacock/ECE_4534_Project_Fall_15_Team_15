@@ -204,7 +204,7 @@ bool WriteString(void)
 int TalkToFindAndFollow()
 {
     int x = 0;
-    char lo[40];
+    char lo[51];
     if(xQueueReceive( findandfollowData.xFnFToComsQueue, &lo, 0))
     { 
         stringPointer=lo;
