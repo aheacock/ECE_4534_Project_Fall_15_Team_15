@@ -77,6 +77,7 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 */
 
 FINDANDFOLLOW_DATA findandfollowData;
+MOTORS_DATA motorsData;
 
 // *****************************************************************************
 // *****************************************************************************
@@ -122,9 +123,40 @@ void FINDANDFOLLOW_Initialize ( void )
     findandfollowData.xFnFToMotorsQueue = xQueueCreate( 10, sizeof( float ) );
     findandfollowData.xFnFToComsQueue = xQueueCreate( 15, 50);
     findandfollowData.xFnFToSensorsQueue = xQueueCreate( 10, sizeof( float ) );
-    
+       findandfollowData.xFnFToMotors = xQueueCreate( 15, 50);
     findandfollowData.index = 0;
 }
+
+
+int recievefrommotors()
+{
+    
+    int x = 0;
+    char lo[42];
+    if(xQueueReceive(motorsData.xMotorsToFnFQueue, &lo, 0)) // working one
+    {   
+      //  stringPointer=lo;
+        
+        if(isValidPacket(lo))
+        {
+                  if(xQueueSend( findandfollowData.xFnFToComsQueue, &lo, 2 ))
+                {
+                    findandfollowData.NUMBEROFPACKETSPLACEDINTHEQ=findandfollowData.NUMBEROFPACKETSPLACEDINTHEQ+1;
+                }
+                else 
+                {
+                   findandfollowData.NUMBEROFPACKETSDROPPEDBEFOREQ =findandfollowData.NUMBEROFPACKETSDROPPEDBEFOREQ+1;
+                }
+        }
+        else 
+        {
+            lo[0]='6';
+        }    
+    }
+    return x;
+}
+
+
 
 
 /******************************************************************************
@@ -178,14 +210,14 @@ void FINDANDFOLLOW_Tasks ( void )
               
                
                             
-
+                 recievefrommotors();
              
                 //xStatus = xQueueSend( findandfollowData.xFnFToMotorsQueue, &data[findandfollowData.index], 0 );
-                if(xQueueSend( findandfollowData.xFnFToComsQueue, &ello, 2 ))
+          //      if(xQueueSend( findandfollowData.xFnFToComsQueue, &ello, 2 ))
                 {
                     findandfollowData.NUMBEROFPACKETSPLACEDINTHEQ=findandfollowData.NUMBEROFPACKETSPLACEDINTHEQ+1;
                 }
-                else 
+           //     else 
                 {
                    findandfollowData.NUMBEROFPACKETSDROPPEDBEFOREQ =findandfollowData.NUMBEROFPACKETSDROPPEDBEFOREQ+1;
                 }

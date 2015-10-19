@@ -123,8 +123,9 @@ typedef struct
 
     /* TODO: Define any additional data used by the application. */
     QueueHandle_t xMotorsToSensorsQueue;    // For error checking
-    QueueHandle_t xMotorsToFnFQueue;    // For ACK messages
-    
+    QueueHandle_t xMotorsToFnFQueue;    // For ACK messages  
+     int NUMBEROFPACKETSPLACEDINTHEQ;
+     int NUMBEROFPACKETSDROPPEDBEFOREQ;   
     int index;
     int index2;
     

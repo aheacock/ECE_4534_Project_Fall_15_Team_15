@@ -110,6 +110,7 @@ typedef enum
     Application strings and buffers are be defined outside this structure.
  */
 
+
 typedef struct
 {
     /* The application's current state */
@@ -119,6 +120,7 @@ typedef struct
     QueueHandle_t xFnFToMotorsQueue;
     QueueHandle_t xFnFToComsQueue;
     QueueHandle_t xFnFToSensorsQueue;   // For ACK messages
+    QueueHandle_t xFnFToMotors;
       int NUMBEROFPACKETSPLACEDINTHEQ;
       int NUMBEROFPACKETSDROPPEDBEFOREQ;
     int index;
@@ -126,8 +128,6 @@ typedef struct
     int index3;
     
 } FINDANDFOLLOW_DATA;
-
-
 // *****************************************************************************
 // *****************************************************************************
 // Section: Application Callback Routines

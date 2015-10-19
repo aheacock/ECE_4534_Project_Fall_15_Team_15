@@ -77,6 +77,7 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 */
 
 MOTORS_DATA motorsData;
+FINDANDFOLLOW_DATA findandfollowData;
 
 // *****************************************************************************
 // *****************************************************************************
@@ -111,17 +112,39 @@ MOTORS_DATA motorsData;
     See prototype in motors.h.
  */
 
+
+int TalkToFnF()
+{
+    
+    int x = 0;
+    char lo[51];
+    if(xQueueReceive(findandfollowData.xFnFToMotors, &lo, 0)) // working one
+    {   
+      //  stringPointer=lo;
+        if(isValidPacket(lo))
+        {
+            lo[0]='A';
+        }
+        else 
+        {
+            lo[0]='6';
+        }    
+    }
+    return x;
+}
 void MOTORS_Initialize ( void )
 {
     /* Place the App state machine in its initial state. */
     motorsData.state = MOTORS_STATE_INIT;
+      motorsData.NUMBEROFPACKETSPLACEDINTHEQ=0;
+      motorsData.NUMBEROFPACKETSDROPPEDBEFOREQ=0;
     
     /* TODO: Initialize your application's state machine and other
      * parameters.
      */
     
-    motorsData.xMotorsToSensorsQueue = xQueueCreate( 10, sizeof( float ) );
-    motorsData.xMotorsToFnFQueue = xQueueCreate( 10, sizeof( float ) );
+    motorsData.xMotorsToSensorsQueue = xQueueCreate( 10, 51 );
+    motorsData.xMotorsToFnFQueue = xQueueCreate( 10, 51 );
     
     /* Enable the software interrupt and set its priority. */
     //prvSetupSoftwareInterrupt();
@@ -144,35 +167,71 @@ void MOTORS_Initialize ( void )
 
 void MOTORS_Tasks ( void )
 {
-    const char* data[] ={"1.91", "2.34", "3.54", "4.88", "1.03", "0.19"};
-    portBASE_TYPE xStatus;
-    
     switch ( motorsData.state )
     {
         /* Application's initial state. */
         case MOTORS_STATE_INIT:
         {
-              if(motorsData.index < 6)
-              {
-                xStatus = xQueueSend( motorsData.xMotorsToSensorsQueue, &data[motorsData.index], 0 );
-                motorsData.index++;
-              }
-              else 
-              {
-               motorsData.index = 0;
-              }
+            
+             char ello[42];
+                
+           //Grabs data from the 4 sensors
+                int RS = 777;
+                int LS = 777;
+                int FS = 777;
+                int BS = 777;
+                
+               char RS_c[3];
+               char LS_c[3];
+               char FS_c[3];
+               char BS_c[3];
+               char NumofPackets[3];
+                
+                snprintf(RS_c, 4,"%d", RS);
+                snprintf(LS_c, 4,"%d", LS);
+                snprintf(FS_c, 4,"%d", FS);
+                 snprintf(BS_c, 4,"%d", BS);
+                 
+           
+               snprintf(NumofPackets, 4,"%d",motorsData.NUMBEROFPACKETSPLACEDINTHEQ);
+               concatenate6(ello,"MP","___","RS",RS_c,"LS",LS_c,"FS","FFF","BS",BS_c,"NP", NumofPackets);
+               if(isValidPacket(ello))
+               {
+            
+                    if( xQueueSend( motorsData.xMotorsToFnFQueue, &ello, 0 ))
+                    {
+                        motorsData.NUMBEROFPACKETSPLACEDINTHEQ=motorsData.NUMBEROFPACKETSPLACEDINTHEQ+1;
+                    }
+                    else 
+                    {
+                        motorsData.NUMBEROFPACKETSDROPPEDBEFOREQ=motorsData.NUMBEROFPACKETSDROPPEDBEFOREQ+1;
+                    }
+               }
+               else
+               {
+                   int i=0;
+                   for(i=0; i<42; i++)
+                    ello[i]='9';
+                        // malformed packet exception
+                    if( xQueueSend( motorsData.xMotorsToFnFQueue, &ello, 0 ))
+                        {
+                         motorsData.NUMBEROFPACKETSPLACEDINTHEQ=motorsData.NUMBEROFPACKETSPLACEDINTHEQ+1;
+                        }
+                    else 
+                        {
+                          motorsData.NUMBEROFPACKETSDROPPEDBEFOREQ=motorsData.NUMBEROFPACKETSDROPPEDBEFOREQ+1;
+                        }
+               
+               }
+                 
+            //    xStatus = xQueueSend( motorsData.xMotorsToSensorsQueue, &data[motorsData.index], 0 );
+             
               
               
               // Second queue. Fill with fake data
-              if(motorsData.index2 < 6)
-              {
-                xStatus = xQueueSend( motorsData.xMotorsToFnFQueue, &data[motorsData.index2], 0 );
-                motorsData.index2++;
-              }
-              else 
-              {
-               motorsData.index2 = 0;
-              }
+            
+            //    xStatus = xQueueSend( motorsData.xMotorsToFnFQueue, &data[motorsData.index2], 0 );
+             
             
             
             break;
