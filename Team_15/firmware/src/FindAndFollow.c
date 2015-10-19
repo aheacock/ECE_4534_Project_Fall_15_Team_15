@@ -120,7 +120,7 @@ void FINDANDFOLLOW_Initialize ( void )
      * parameters.
      */
     findandfollowData.xFnFToMotorsQueue = xQueueCreate( 10, sizeof( float ) );
-    findandfollowData.xFnFToComsQueue = xQueueCreate( 15, 45);
+    findandfollowData.xFnFToComsQueue = xQueueCreate( 15, 40);
     findandfollowData.xFnFToSensorsQueue = xQueueCreate( 10, sizeof( float ) );
     
     findandfollowData.index = 0;

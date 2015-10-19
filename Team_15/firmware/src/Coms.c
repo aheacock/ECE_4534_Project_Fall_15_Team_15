@@ -146,12 +146,25 @@ MOTORS_DATA motorsData;
 }
 bool WriteString(void)
 {
+    int notSent = 1;
+    bool ret;
+    
     if(stringPointer == '\0')
     {
         return true;
     }
-
+    
     /* Write a character at a time, only if transmitter is empty */
+    
+    // Send beginning of "JSON" packet
+    while(notSent == 1)
+    {
+        if (PLIB_USART_TransmitterIsEmpty(USART_ID_1))
+        {
+            PLIB_USART_TransmitterByteSend(USART_ID_1, '{');
+            notSent = 0;    // { was sent
+        }
+    }
     
     while(*stringPointer != '\0')
     {
@@ -165,49 +178,69 @@ bool WriteString(void)
         
             if(*stringPointer == '\0')
             {
-                return true;
+                ret = true;
             }
         }
     }
-        
-    return false;
+    
+    // Sending ending packet
+    notSent = 1;
+    while(notSent == 1)
+    {
+        if (PLIB_USART_TransmitterIsEmpty(USART_ID_1))
+        {
+            //PLIB_USART_TransmitterByteSend(USART_ID_1, '}');
+            PLIB_USART_TransmitterByteSend(USART_ID_1, '}');
+            notSent = 0;    // } was sent
+        }
+    }
+    if (ret == true)
+        return true;
+    else
+        return false;
 }
 
 
-int TalktoFindandFollow()
+int TalkToFindAndFollow()
 {
-    int x;
-     char lo[31];
-    if(xQueueReceive( findandfollowData.xFnFToComsQueue, &lo, portMAX_DELAY))
-         {   
-                   PLIB_USART_TransmitterByteSend(USART_ID_1, 'F');   
-                   stringPointer=lo;
-                   if(WriteString())
-                   {
-                       x= 1;
-                   }
-                   else 
-                   {
-                       x= 0;
-                   }
-         }
-    else
-    {
-        x= 0;
+    int x = 0;
+    char lo[40];
+    if(xQueueReceive( findandfollowData.xFnFToComsQueue, &lo, 0))
+    { 
+        stringPointer=lo;
+        if(WriteString())
+        {
+            x= 1;
+        }
     }
-     return x;
+    return x;
+}
+
+int TalkToSensors()
+{
+    int x = 0;
+    char lo[21];
+    if(xQueueReceive( sensorsData.xSensorsToComsQueue, &lo, 0)) // working one
+    {   
+        stringPointer=lo;
+        if(WriteString())
+        {
+            x= 1;
+        }
+    }
+    return x;
 }
 
 
 bool PutCharacter(const char character)
 {
     //char *pcString;
-    char lValueToSend[10]={'a','b','c','d','e','f','g','h','i','j'};
+    //char lValueToSend[10]={'a','b','c','d','e','f','g','h','i','j'};
     //unsigned long lo;
     //char * lo;
-    char lo[21];
-    portBASE_TYPE xStatus;
-    int i;
+    //char lo[21];
+    //portBASE_TYPE xStatus;
+    //int i;
     
     
   
@@ -226,26 +259,29 @@ bool PutCharacter(const char character)
             
                //xStatus = xQueueSendToBack( comsData.xFakeSensorDataQueue, &lValueToSend, 0 );
                //if(xQueueReceive( comsData.xFakeSensorDataQueue3, &lo, portMAX_DELAY))
-               if(xQueueReceive( sensorsData.xSensorsToComsQueue, &lo, portMAX_DELAY)) // working one
+               //a if(xQueueReceive( sensorsData.xSensorsToComsQueue, &lo, portMAX_DELAY)) // working one
                //if(xQueueReceive( findandfollowData.xFnFToComsQueue, &lo, portMAX_DELAY))
                {   
                    
-                   PLIB_USART_TransmitterByteSend(USART_ID_1, '2');   
-                   stringPointer=lo;
+                   //PLIB_USART_TransmitterByteSend(USART_ID_1, '2');   
+                   //a stringPointer=lo;
                    //unsigned char * p =(unsigned char*)&lo;
                  // PLIB_USART_TransmitterByteSend(USART_ID_1, lo);   
 //                   float thetest=42.4;
 //                   myPrintf(thetest);
-       if(WriteString())
-                  TalktoFindandFollow();
+       //if(WriteString())
+                  TalkToFindAndFollow();
+                  PLIB_USART_TransmitterByteSend(USART_ID_1, ' ');
+                  TalkToSensors();
+                  
                  //  PLIB_USART_TransmitterByteSend(USART_ID_1, 'x');     
                   // PLIB_USART_TransmitterByteSend(USART_ID_1, pcString[0]);
-                  PLIB_PORTS_PinToggle(PORTS_ID_0, PORT_CHANNEL_C, PORTS_BIT_POS_1);
-                   for(i=0;i<99999;i++){}
-                  PLIB_USART_TransmitterByteSend(USART_ID_1, '3');   
+                  //PLIB_PORTS_PinToggle(PORTS_ID_0, PORT_CHANNEL_C, PORTS_BIT_POS_1);
+                  //for(i=0;i<99999;i++){}
+                  //PLIB_USART_TransmitterByteSend(USART_ID_1, '3');
                }
                 
-               PLIB_USART_TransmitterByteSend(USART_ID_1, 'k');   
+               //PLIB_USART_TransmitterByteSend(USART_ID_1, 'k');   
              
             
             }
@@ -254,7 +290,7 @@ bool PutCharacter(const char character)
   
     }
 //    else
-        return false;
+    return false;
 }
 
 void COMS_Initialize ( void )
@@ -297,16 +333,10 @@ void COMS_Tasks ( void )
         /* The default state should never be executed. */
         case COMS_STATE_RUN:
         {
-
-       
-                    
-            if(PutCharacter('B'))
-            {
-                
+            TalkToFindAndFollow();
+            TalkToSensors();
+            
             // Toggle pin for visual assurance
-
-
-            }
             //PLIB_PORTS_PinToggle(PORTS_ID_0, PORT_CHANNEL_C, PORTS_BIT_POS_1);
             /* TODO: Handle error in application's state machine. */
             break;

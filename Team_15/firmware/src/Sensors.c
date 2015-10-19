@@ -187,7 +187,7 @@ void SENSORS_Tasks ( void )
     concatenate3(wkki, t, t2, a, a2, b, "222");
     wkki[0]='1';
     int x;
-    if(validpacket(wkki))
+    if(isValidPacket(wkki))
     {
         wkki[0]='E';
     }

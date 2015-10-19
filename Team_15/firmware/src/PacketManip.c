@@ -117,7 +117,7 @@ void concatenate3(char dest[21], char type[2], char typeNum[3], char one[2], cha
     */
 }
 
-void concatenate5(char dest[21], char type[2], char typeNum[3], char one[2], char oneNum[3], char two[2], char twoNum[3], char thr[2], char thrNum[3], char fou[2], char fouNum[3])
+void concatenate5(char dest[35], char type[2], char typeNum[3], char one[2], char oneNum[3], char two[2], char twoNum[3], char thr[2], char thrNum[3], char fou[2], char fouNum[3])
 {
     int i = 0;
     
@@ -190,7 +190,7 @@ void concatenate5(char dest[21], char type[2], char typeNum[3], char one[2], cha
     dest[34] = '\0';
 }
 
-void concatenate6(char dest[21], char type[2], char typeNum[3], char one[2], char oneNum[3], char two[2], char twoNum[3], char thr[2], char thrNum[3], char fou[2], char fouNum[3], char fiv[2], char fivNum[3])
+void concatenate6(char dest[42], char type[2], char typeNum[3], char one[2], char oneNum[3], char two[2], char twoNum[3], char thr[2], char thrNum[3], char fou[2], char fouNum[3], char fiv[2], char fivNum[3])
 {
     int i = 0;
     
@@ -278,7 +278,7 @@ void concatenate6(char dest[21], char type[2], char typeNum[3], char one[2], cha
 
 //returns false if the 2 char code is not a valid packet type
 //Also has the Case statement for sorting packets by type
-int validpacket(char* packettocheck)
+int isValidPacket(char* packettocheck)
 {
     int x;
     switch(packettocheck[0])
@@ -326,7 +326,7 @@ int validpacket(char* packettocheck)
  return x;                       
 }
 //returns true or false on whether the packet is a error packet
-int iserrorpacket(char* packettocheck)
+int isErrorPacket(char* packettocheck)
 {
     int x;
     if(packettocheck[0]=='E')

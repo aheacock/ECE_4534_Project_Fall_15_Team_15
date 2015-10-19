@@ -97,6 +97,20 @@ typedef struct
 
 // *****************************************************************************
 // *****************************************************************************
+// Section: Definitions
+// *****************************************************************************
+// *****************************************************************************
+/* These are packet length definitions that should be used for queue
+ * declarations, etc.
+*/
+#define PACKET_LENGTH3      21
+#define PACKET_LENGTH5      35
+#define PACKET_LENGTH6      42
+#define PACKET_LENGTH_MAX   126 // 42*3??
+
+
+// *****************************************************************************
+// *****************************************************************************
 // Section: Application Callback Routines
 // *****************************************************************************
 // *****************************************************************************
@@ -182,6 +196,8 @@ void concatenate3(char dest[21], char type[2], char typeNum[3], char one[2], cha
 void concatenate5(char dest[21], char type[2], char typeNum[3], char one[2], char oneNum[3], char two[2], char twoNum[3], char thr[2], char thrNum[3], char fou[2], char fouNum[3]);
 void concatenate6(char dest[21], char type[2], char typeNum[3], char one[2], char oneNum[3], char two[2], char twoNum[3], char thr[2], char thrNum[3], char fou[2], char fouNum[3], char fiv[2], char fivNum[3]);
 
+int isValidPacket(char* packettocheck);
+int isErrorPacket(char* packettocheck);
 
 #endif /* _COMS_H */
 
