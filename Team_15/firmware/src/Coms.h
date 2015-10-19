@@ -46,6 +46,8 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 #ifndef _COMS_H
 #define _COMS_H
 
+#define LENGTH_PACKET_MAX 45
+
 // *****************************************************************************
 // *****************************************************************************
 // Section: Included Files

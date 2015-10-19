@@ -80,6 +80,7 @@ FINDANDFOLLOW_DATA findandfollowData;
 COMS_DATA comsData;
 SENSORS_DATA sensorsData;
 MOTORS_DATA motorsData;
+//extern 
 
 // *****************************************************************************
 // *****************************************************************************
@@ -204,13 +205,13 @@ bool WriteString(void)
 int TalkToFindAndFollow()
 {
     int x = 0;
-    char lo[40];
+    char lo[42];
     if(xQueueReceive( findandfollowData.xFnFToComsQueue, &lo, 0))
     { 
         stringPointer=lo;
         if(WriteString())
         {
-            x= 1;
+            x= getSequenceNumber(lo);
         }
     }
     return x;
@@ -225,7 +226,7 @@ int TalkToSensors()
         stringPointer=lo;
         if(WriteString())
         {
-            x= 1;
+            x= getSequenceNumber(lo);
         }
     }
     return x;
@@ -302,8 +303,8 @@ void COMS_Initialize ( void )
      * parameters.
      */
     //comsData.xFakeSensorDataQueue3 = xQueueCreate( 10, sizeof( char ) );
-    comsData.xComsToFnFQueue = xQueueCreate( 10, sizeof( float ) );
-    comsData.xComsToSensorsQueue = xQueueCreate( 10, sizeof( float ) );
+    comsData.xComsToFnFQueue = xQueueCreate( 10, LENGTH_PACKET_MAX );
+    comsData.xComsToSensorsQueue = xQueueCreate( 10, LENGTH_PACKET_MAX );
 }
 
 
@@ -317,6 +318,10 @@ void COMS_Initialize ( void )
 
 void COMS_Tasks ( void )
 {
+    int ackFF;
+    int ackSR;
+    char dest[3];
+    char temp[21];
     /* Check the application's current state. */
     switch ( comsData.state )
     {
@@ -333,8 +338,13 @@ void COMS_Tasks ( void )
         /* The default state should never be executed. */
         case COMS_STATE_RUN:
         {
-            TalkToFindAndFollow();
-            TalkToSensors();
+            ackFF = TalkToFindAndFollow();
+            intTo3Char(dest, ackFF);
+            concatenate3(temp, "AM", "000", "AN", dest, "NU", "001");
+            stringPointer = temp;
+            WriteString();
+            
+            ackSR = TalkToSensors();
             
             // Toggle pin for visual assurance
             //PLIB_PORTS_PinToggle(PORTS_ID_0, PORT_CHANNEL_C, PORTS_BIT_POS_1);

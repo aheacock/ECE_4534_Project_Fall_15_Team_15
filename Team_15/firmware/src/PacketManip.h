@@ -46,6 +46,8 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 #ifndef _COMS_H
 #define _COMS_H
 
+#define LENGTH_PACKET_MAX 45 /// Why can't other files see this???????????????????????????
+
 // *****************************************************************************
 // *****************************************************************************
 // Section: Included Files
@@ -55,7 +57,7 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 #include <stdint.h>
 #include <stdbool.h>
 #include <stddef.h>
-#include <stdlib.h>
+#include <stdlib.h>         // Also has atoi()
 #include "system_config.h"
 #include "system_definitions.h"
 #include "queue.h"
@@ -94,7 +96,6 @@ typedef struct
     
 } PACKETMANIP_DATA;
 
-
 // *****************************************************************************
 // *****************************************************************************
 // Section: Definitions
@@ -103,10 +104,13 @@ typedef struct
 /* These are packet length definitions that should be used for queue
  * declarations, etc.
 */
-#define PACKET_LENGTH3      21
-#define PACKET_LENGTH5      35
-#define PACKET_LENGTH6      42
-#define PACKET_LENGTH_MAX   126 // 42*3??
+typedef struct
+{
+    const int PACKET_LENGTH3;
+    const int PACKET_LENGTH5;
+    const int PACKET_LENGTH6;
+    const int PACKET_LENGTH_MAX; // 42*3??
+} PACKETMANIP_LEN;
 
 
 // *****************************************************************************
@@ -198,6 +202,8 @@ void concatenate6(char dest[21], char type[2], char typeNum[3], char one[2], cha
 
 int isValidPacket(char* packettocheck);
 int isErrorPacket(char* packettocheck);
+
+int getSequenceNumber(char* packettodostuff);
 
 #endif /* _COMS_H */
 

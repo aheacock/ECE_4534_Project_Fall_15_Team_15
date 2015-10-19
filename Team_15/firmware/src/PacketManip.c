@@ -44,7 +44,7 @@
 // *****************************************************************************
 // *****************************************************************************
 
-
+//PACKETMANIP_DATA packetmanipData;
 
 // *****************************************************************************
 // *****************************************************************************
@@ -338,4 +338,31 @@ int isErrorPacket(char* packettocheck)
          x = 0;
     }
     return x;
+}
+
+// Parses the last part of the packet to get the sequence number
+int getSequenceNumber(char* packettodostuff)
+{
+    int i=0;
+    int j=0;
+    int r;
+    char temp[3];
+    while (packettodostuff[i] != '\0')
+    {
+        i=i+1;
+    }
+    
+    for (j=38; j<41; j++)
+    {
+        temp[j] = packettodostuff[i];
+        i=i+1;
+    }
+    
+    r = atoi("99");
+    return r;
+}
+
+void intTo3Char(char dest[3], int data)
+{
+    snprintf(dest, 4, "%03d", data);
 }
