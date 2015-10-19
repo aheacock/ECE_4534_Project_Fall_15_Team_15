@@ -236,41 +236,41 @@ void concatenate6(char dest[42], char type[2], char typeNum[3], char one[2], cha
     dest[i] = ',';
     i++;
     
-    for (i=22;i<24;i++)
+    for (i=21;i<23;i++)
     {
-        dest[i] = thr[i-22];        
+        dest[i] = thr[i-21];        
     }
     dest[i] = ':';
     i++;
-    for (i=25;i<28;i++)
+    for (i=24;i<27;i++)
     {
-        dest[i] = thrNum[i-25];
+        dest[i] = thrNum[i-24];
     }
     dest[i] = ',';
     i++;
     
-    for (i=29;i<31;i++)
+    for (i=28;i<30;i++)
     {
-        dest[i] = fou[i-29];        
+        dest[i] = fou[i-28];        
     }
     dest[i] = ':';
     i++;
-    for (i=32;i<34;i++)
+    for (i=31;i<34;i++)
     {
-        dest[i] = fouNum[i-32];
+        dest[i] = fouNum[i-31];
     }
     dest[i] = ',';
     i++;
     
     for (i=35;i<37;i++)
     {
-        dest[i] = fou[i-35];        
+        dest[i] = fiv[i-35];        
     }
     dest[i] = ':';
     i++;
     for (i=38;i<41;i++)
     {
-        dest[i] = fouNum[i-38];
+        dest[i] = fivNum[i-38];
     }
     
     dest[41] = '\0';

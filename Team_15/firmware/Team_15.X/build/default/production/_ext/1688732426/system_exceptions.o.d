@@ -232,6 +232,7 @@ build/default/production/_ext/1688732426/system_exceptions.o:  \
 ../src/system_config/default/system_definitions.h  \
  ../../../../../../../microchip/harmony/v1_06/third_party/rtos/FreeRTOS/Source/include/queue.h  \
  ../src/findandfollow.h  \
+../src/PacketManip.h  \
 ../src/sensors.h  \
-../src/motors.h  \
+ ../src/motors.h  \
  ../../../../../../../microchip/harmony/v1_06/framework/system/debug/sys_debug.h 

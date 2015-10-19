@@ -231,6 +231,7 @@ build/default/production/_ext/1360937237/Coms.o:  \
  ../src/coms.h  \
 ../src/findandfollow.h  \
  ../../../../../../../microchip/harmony/v1_06/third_party/rtos/FreeRTOS/Source/include/queue.h  \
- ../src/sensors.h  \
+ ../src/PacketManip.h  \
+../src/sensors.h  \
 ../src/motors.h  \
 ../src/sensors.h 

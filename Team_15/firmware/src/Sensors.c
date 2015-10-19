@@ -121,9 +121,9 @@ void SENSORS_Initialize ( void )
      * parameters.
      */
     //sensorsData.xFakeSensorDataQueue = xQueueCreate( 10, sizeof( float ) );
-    sensorsData.xSensorsToComsQueue = xQueueCreate( 10, 21);//sizeof( float ) );
-    sensorsData.xSensorsToFnFQueue = xQueueCreate( 10, sizeof( float ) );
-    sensorsData.xSensorsToMotorsQueue = xQueueCreate( 10, sizeof( float ) );
+    sensorsData.xSensorsToComsQueue = xQueueCreate( 10, 51);//sizeof( float ) );
+    sensorsData.xSensorsToFnFQueue = xQueueCreate( 10, 51 );
+    sensorsData.xSensorsToMotorsQueue = xQueueCreate( 10, 51 );
     /* Enable the software interrupt and set its priority. */
     //prvSetupSoftwareInterrupt();
     sensorsData.index = 0;
@@ -141,60 +141,16 @@ void SENSORS_Initialize ( void )
 
 void SENSORS_Tasks ( void )
 {
-    //long lValueToSend;
-    portBASE_TYPE xStatus;
-    portBASE_TYPE xStatus2;
-    char* data[] ={"1.914", "2.354", "3.534", "4.838", "1.023", "0.179"};
-    //char* data = "9.874";
-   // int cycle = 0;
-    //char* ello = "hello";
-    char ello[21] = "llllllllllllllllllll";
-    //const char* wkki = "gwkki";
-    char wkki[30] = "{\"S ns,23}";
-    char wkki2[10] = "{BSens,34}";
-    //char dest[30];
-    //char* pntr = "hello";
-    //int i;
-    //int ii = 0;
-    /*
-    for (i=0;i<10;i++)
-    {
-        //des   t[i]=data[1][i];
-        //*(ello+i) = *(wkki+i);
-        ello[i] = wkki2[i];
-        
-    }
-    //*
-    for (i=10;i<20;i++)
-    {
-        //dest[i]=data[1][i];
-        //*(ello+i) = *(wkki+i);
-        ello[i] = wkki[ii];
-        ii++;        
-    }
-    //*/
-    //pntr = ello;
-    //pntr = dest;
+  
+   // char t[2] = "MT";
+   // char t2[3] = "220";
+   // char a[2] = "DA";
+   // char a2[3] = "978";
+   // char b[2] = "NU";
+   // char b2[3] = "001";    
     
-    //concatenate(wkki, wkki2, ello);
-    char t[2] = "MT";
-    char t2[3] = "220";
-    char a[2] = "DA";
-    char a2[3] = "978";
-    char b[2] = "NU";
-    char b2[3] = "001";    
-    
-    concatenate3(wkki, t, t2, a, a2, b, "222");
-    wkki[0]='1';
-    int x;
-    if(isValidPacket(wkki))
-    {
-        wkki[0]='E';
-    }
-    else
-    {
-          wkki[0]='A';
-    }
+   // concatenate3(wkki, t, t2, a, a2, b, "222");
+
  
            
     /* Check the application's current state. */
@@ -203,62 +159,66 @@ void SENSORS_Tasks ( void )
         /* Application's initial state. */
         case SENSORS_STATE_INIT:
         {
-            //strcpy(dest, "yas");
-            //strcat(dest, ello);
+           char ello[42];
+                
+           //Grabs data from the 4 sensors
+                int RS = 266;
+                int LS = 167;
+                int FS = 168;
+                int BS = 123;
+                
+               char RS_c[3];
+               char LS_c[3];
+               char FS_c[3];
+               char BS_c[3];
+               char NumofPackets[3];
+                
+                snprintf(RS_c, 4,"%d", RS);
+                snprintf(LS_c, 4,"%d", LS);
+                snprintf(FS_c, 4,"%d", FS);
+                 snprintf(BS_c, 4,"%d", BS);
+                
+                snprintf(NumofPackets, 4,"%d",sensorsData.NUMBEROFPACKETSPLACEDINTHEQ);
+               concatenate6(ello,"FF","___","RS",RS_c,"LS",LS_c,"FS","FFF","BS",BS_c,"NP", NumofPackets);
+               if(isValidPacket(ello))
+               {
             
-            if(sensorsData.index < 6){
-                //xStatus = xQueueSend( sensorsData.xSensorsToComsQueue, &data[sensorsData.index], 0 );
-                xStatus = xQueueSend( sensorsData.xSensorsToComsQueue, &wkki, 0 );
-                sensorsData.index++;
-            }
-            else {
-                sensorsData.index = 0;
-            }
+                    if(xQueueSend( sensorsData.xSensorsToComsQueue, &ello, 0 ))
+                    {
+                        sensorsData.NUMBEROFPACKETSPLACEDINTHEQ=sensorsData.NUMBEROFPACKETSPLACEDINTHEQ+1;
+                    }
+                    else 
+                    {
+                        sensorsData.NUMBEROFPACKETSDROPPEDBEFOREQ=sensorsData.NUMBEROFPACKETSDROPPEDBEFOREQ+1;
+                    }
+               }
+               else
+               {
+                   int i=0;
+                   for(i=0; i<42; i++)
+                    ello[i]='9';
+                        // malformed packet exception
+                    if(xQueueSend( sensorsData.xSensorsToComsQueue, &ello, 0 ))
+                        {
+                         sensorsData.NUMBEROFPACKETSPLACEDINTHEQ=sensorsData.NUMBEROFPACKETSPLACEDINTHEQ+1;
+                        }
+                    else 
+                        {
+                          sensorsData.NUMBEROFPACKETSDROPPEDBEFOREQ=sensorsData.NUMBEROFPACKETSDROPPEDBEFOREQ+1;
+                        }
+               
+               }
 
-
-            //xStatus = xQueueSend( sensorsData.xFakeSensorDataQueue, &data, 0 );
-            //xStatus = xQueueSend( xFakeSensorDataQueue2, &bob, 0);
-//            if( xStatus == pdPASS )
-//            {
-//                // Successfully added data to queue
-//                PLIB_PORTS_PinToggle(PORTS_ID_0, PORT_CHANNEL_C, PORTS_BIT_POS_1);
-//            }
-
-            /*
-             * 
-             * This code needs to go where sending data with wifly
-             * 
-             */
-            /* Block on the queue to wait for data to arrive. */
-            // --> xQueueReceive( sensorsData.xFakeSensorDataQueue, &pcString, portMAX_DELAY );
-
-            /* Allow the other sender task to execute. taskYIELD() informs the
-            scheduler that a switch to another task should occur now rather than
-            keeping this task in the Running state until the end of the current time
-            slice. */
-            //taskYIELD();
-            
-            
             // Second queue. Fill with fake data
-            if(sensorsData.index2 < 6){
-                xStatus2 = xQueueSend( sensorsData.xSensorsToFnFQueue, &data[sensorsData.index2], 0 );
-                sensorsData.index2++;
-            }
-            else {
-                sensorsData.index2 = 0;
-            }
+        
+        //        xStatus2 = xQueueSend( sensorsData.xSensorsToFnFQueue, &data[sensorsData.index2], 0 );
             
             
             
             // Third queue. Fill with fake data
-            if(sensorsData.index3 < 6){
-                xStatus2 = xQueueSend( sensorsData.xSensorsToMotorsQueue, &data[sensorsData.index3], 0 );
-                sensorsData.index3++;
-            }
-            else {
-                sensorsData.index3 = 0;
-            }
-
+          
+          //      xStatus2 = xQueueSend( sensorsData.xSensorsToMotorsQueue, &data[sensorsData.index3], 0 );
+          
             break;
         }
 
