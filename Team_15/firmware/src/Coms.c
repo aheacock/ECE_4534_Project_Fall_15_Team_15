@@ -205,7 +205,11 @@ bool WriteString(void)
 int TalkToFindAndFollow()
 {
     int x = 0;
-    char lo[42];
+//<<<<<<< HEAD
+//    char lo[42];
+//=======
+    char lo[51];
+//>>>>>>> b3987044d2f84df6388e1c3a1e3cd4ea6b756f1b
     if(xQueueReceive( findandfollowData.xFnFToComsQueue, &lo, 0))
     { 
         stringPointer=lo;
@@ -220,7 +224,7 @@ int TalkToFindAndFollow()
 int TalkToSensors()
 {
     int x = 0;
-    char lo[21];
+    char lo[51];
     if(xQueueReceive( sensorsData.xSensorsToComsQueue, &lo, 0)) // working one
     {   
         stringPointer=lo;
