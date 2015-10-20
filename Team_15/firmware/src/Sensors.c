@@ -180,7 +180,7 @@ void SENSORS_Tasks ( void )
                 snprintf(BS_c, 4,"%d", BS);
                 
                 snprintf(NumofPackets, 4,"%03d",sensorsData.NUMBEROFPACKETSPLACEDINTHEQ);
-               concatenate6(ello,"SR","___","RS",RS_c,"LS",LS_c,"FS","FFF","BS",BS_c,"NP", NumofPackets);
+               concatenate6(ello,"SR","___","RS",RS_c,"LS",LS_c,"FS","FFF","BS",BS_c,"NS", NumofPackets);
                if(isValidPacket(ello))
                {
             

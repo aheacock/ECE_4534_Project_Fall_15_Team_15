@@ -120,10 +120,10 @@ void FINDANDFOLLOW_Initialize ( void )
     /* TODO: Initialize your application's state machine and other
      * parameters.
      */
-    findandfollowData.xFnFToMotorsQueue = xQueueCreate( 10, sizeof( float ) );
-    findandfollowData.xFnFToComsQueue = xQueueCreate( 15, 50);
-    findandfollowData.xFnFToSensorsQueue = xQueueCreate( 10, sizeof( float ) );
-       findandfollowData.xFnFToMotors = xQueueCreate( 15, 50);
+    findandfollowData.xFnFToMotorsQueue = xQueueCreate( 15, 42);
+    findandfollowData.xFnFToComsQueue = xQueueCreate( 15, 42);
+    findandfollowData.xFnFToSensorsQueue = xQueueCreate( 15, 42);
+       findandfollowData.xFnFToMotors = xQueueCreate( 15, 42);
     findandfollowData.index = 0;
 }
 
@@ -139,7 +139,7 @@ int recievefrommotors()
         
         if(isValidPacket(lo))
         {
-                  if(xQueueSend( findandfollowData.xFnFToComsQueue, &lo, 2 ))
+                if(xQueueSend( findandfollowData.xFnFToComsQueue, &lo, 0 ))
                 {
                     findandfollowData.NUMBEROFPACKETSPLACEDINTHEQ=findandfollowData.NUMBEROFPACKETSPLACEDINTHEQ+1;
                 }
@@ -148,9 +148,9 @@ int recievefrommotors()
                    findandfollowData.NUMBEROFPACKETSDROPPEDBEFOREQ =findandfollowData.NUMBEROFPACKETSDROPPEDBEFOREQ+1;
                 }
         }
-        else 
+     //   else 
         {
-            lo[0]='6';
+         //   lo[0]='6';
         }    
     }
     return x;
@@ -204,26 +204,24 @@ void FINDANDFOLLOW_Tasks ( void )
                 snprintf(LF_c, 4,"%d", LF);
                 snprintf(CF_c, 4,"%d", CF);
                 snprintf(NumofPackets, 4,"%d",findandfollowData.NUMBEROFPACKETSPLACEDINTHEQ);
+               if(uxQueueSpacesAvailable(findandfollowData.xFnFToComsQueue)==15)
+                { 
+                    recievefrommotors();
+          
                  
                 // concatenate6(, , , , , , , , ,, , char fiv[2], char fivNum[3])              
-               concatenate6(ello,"FF","___","RF",RF_c,"LF",LF_c,"CF",CF_c,"NM",NumofPackets,"FF", "XXX");
-              
-               
-                            
-                 recievefrommotors();
-             
+               concatenate6(ello,"FF","___","RF",RF_c,"LF",LF_c,"CF",CF_c,"NF",NumofPackets,"FF", "XXX");   
                 //xStatus = xQueueSend( findandfollowData.xFnFToMotorsQueue, &data[findandfollowData.index], 0 );
-          //      if(xQueueSend( findandfollowData.xFnFToComsQueue, &ello, 2 ))
+             if(xQueueSend( findandfollowData.xFnFToComsQueue, &ello, 0 ))
                 {
                     findandfollowData.NUMBEROFPACKETSPLACEDINTHEQ=findandfollowData.NUMBEROFPACKETSPLACEDINTHEQ+1;
                 }
-           //     else 
+               else 
                 {
                    findandfollowData.NUMBEROFPACKETSDROPPEDBEFOREQ =findandfollowData.NUMBEROFPACKETSDROPPEDBEFOREQ+1;
                 }
-          
-            
-            
+           
+                }
             // Third queue. Fill with fake data
            
            //     xStatus = xQueueSend( findandfollowData.xFnFToSensorsQueue, &data[findandfollowData.index3], 0 );
