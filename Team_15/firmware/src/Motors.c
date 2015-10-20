@@ -144,7 +144,7 @@ void MOTORS_Initialize ( void )
      */
     
     motorsData.xMotorsToSensorsQueue = xQueueCreate( 10, 51 );
-    motorsData.xMotorsToFnFQueue = xQueueCreate( 10, 51 );
+    motorsData.xMotorsToFnFQueue = xQueueCreate( 20, 51 );
     
     /* Enable the software interrupt and set its priority. */
     //prvSetupSoftwareInterrupt();
@@ -194,17 +194,32 @@ void MOTORS_Tasks ( void )
                  
            
                snprintf(NumofPackets, 4,"%d",motorsData.NUMBEROFPACKETSPLACEDINTHEQ);
-               concatenate6(ello,"MP","___","RS",RS_c,"LS",LS_c,"FS","FFF","BS",BS_c,"NP", NumofPackets);
+               concatenate6(ello,"MR","___","QW",RS_c,"QE",LS_c,"QT","QQQ","QY",BS_c,"NM", NumofPackets);
                if(isValidPacket(ello))
                {
             
                     if( xQueueSend( motorsData.xMotorsToFnFQueue, &ello, 0 ))
                     {
                         motorsData.NUMBEROFPACKETSPLACEDINTHEQ=motorsData.NUMBEROFPACKETSPLACEDINTHEQ+1;
+                      
+                        
+                        {
+                       
+                        }
                     }
                     else 
                     {
                         motorsData.NUMBEROFPACKETSDROPPEDBEFOREQ=motorsData.NUMBEROFPACKETSDROPPEDBEFOREQ+1;
+                    }
+                   // int in=0;
+                 //       while(in<500)
+             //  {       in++;
+               //         }
+                    if(((motorsData.NUMBEROFPACKETSPLACEDINTHEQ)%5)==0)
+                    {
+                        concatenate6(ello,"EM","XXX","XX",RS_c,"XX",LS_c,"XX","XXX","XX",BS_c,"XX", NumofPackets);
+                  //      xQueueSend( motorsData.xMotorsToFnFQueue, &ello, 0 );
+                        
                     }
                }
                else
@@ -221,7 +236,7 @@ void MOTORS_Tasks ( void )
                         {
                           motorsData.NUMBEROFPACKETSDROPPEDBEFOREQ=motorsData.NUMBEROFPACKETSDROPPEDBEFOREQ+1;
                         }
-               
+                
                }
                  
             //    xStatus = xQueueSend( motorsData.xMotorsToSensorsQueue, &data[motorsData.index], 0 );
