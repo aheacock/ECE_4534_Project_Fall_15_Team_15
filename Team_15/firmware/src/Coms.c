@@ -205,6 +205,7 @@ bool WriteString(void)
 int TalkToFindAndFollow()
 {
     int x = 0;
+    int valid = 0;
 //    char lo[42];
     char lo[51];
     char dest[3];
@@ -212,20 +213,38 @@ int TalkToFindAndFollow()
     char temp[21];
     if(xQueueReceive( findandfollowData.xFnFToComsQueue, &lo, 0))
     {
-        comsData.NumPacketsRecvFromFnFQ += 1;
-        stringPointer=lo;
-        if(WriteString())
+        if (comsData.NumPacketsRecvFromFnFQ == 999)
+            comsData.NumPacketsRecvFromFnFQ = 0;
+        else
+            comsData.NumPacketsRecvFromFnFQ += 1;
+        valid = isValidPacket(&lo);
+        if (valid == 0)
         {
-            x= getSequenceNumber(dest, &lo);
+            stringPointer=lo;
+            if(WriteString())
+            {
+                x = getSequenceNumber(dest, &lo);
+            }
+        }
+        else
+        {
+            //intTo3Char(stringPointer, valid);
+            if (comsData.NumBadPacketsRecvFromFnFQ == 999)
+                comsData.NumBadPacketsRecvFromFnFQ = 0;
+            else
+                comsData.NumBadPacketsRecvFromFnFQ += 1;
         }
     }
     
-    // Ack
+    // Ack here????????????
     intTo3Char(dest2, comsData.NumPacketsPutInFnFQ);
-    concatenate3(temp, "AM", "000", "AN", dest, "NU", dest2);
+    concatenate3(temp, "AF", "000", "AN", dest, "NU", dest2);
     if (xQueueSend( comsData.xComsToFnFQueue, temp, 0))
     {
-        comsData.NumPacketsPutInFnFQ += 1;
+        if (comsData.NumPacketsPutInFnFQ == 999)
+            comsData.NumPacketsPutInFnFQ = 0;
+        else
+            comsData.NumPacketsPutInFnFQ += 1;
     }
     stringPointer = temp;
     WriteString();
@@ -235,27 +254,46 @@ int TalkToFindAndFollow()
 int TalkToSensors()
 {
     int x = 0;
+    int valid = 0;
     char lo[51];
     char dest[3];
     char dest2[3];
     char temp[21];
     if(xQueueReceive( sensorsData.xSensorsToComsQueue, &lo, 0)) // working one
     {
-        comsData.NumPacketsRecvFromSensorsQ += 1;
-        stringPointer=lo;
-        if(WriteString())
+        if (comsData.NumPacketsRecvFromSensorsQ == 999)
+            comsData.NumPacketsRecvFromSensorsQ = 0;
+        else
+            comsData.NumPacketsRecvFromSensorsQ += 1;
+        valid = isValidPacket(&lo);
+        if (valid == 0)
         {
-            x= getSequenceNumber(dest, &lo);
+            stringPointer=lo;
+            if(WriteString())
+            {
+                x = getSequenceNumber(dest, &lo);
+            }
+        }
+        else
+        {
+            //intTo3Char(stringPointer, valid);
+            if (comsData.NumBadPacketsRecvFromSensorsQ == 999)
+                comsData.NumBadPacketsRecvFromSensorsQ = 0;
+            else
+                comsData.NumBadPacketsRecvFromSensorsQ += 1;
         }
     }
     
     // Ack
     //getSequenceNumber(dest,&lo);
     intTo3Char(dest2, comsData.NumPacketsPutInSensorsQ);
-    concatenate3(temp, "AM", "000", "AN", dest, "NU", dest2);
+    concatenate3(temp, "AS", "000", "AN", dest, "NU", dest2);
     if (xQueueSend( comsData.xComsToSensorsQueue, temp, 0))
     {
-        comsData.NumPacketsPutInSensorsQ += 1;
+        if (comsData.NumPacketsPutInSensorsQ == 999)
+            comsData.NumPacketsPutInSensorsQ = 0;
+        else
+            comsData.NumPacketsPutInSensorsQ += 1;
     }
     stringPointer = temp;
     WriteString();
@@ -340,6 +378,8 @@ void COMS_Initialize ( void )
     comsData.NumPacketsPutInSensorsQ = 0;
     comsData.NumPacketsRecvFromFnFQ = 0;
     comsData.NumPacketsRecvFromSensorsQ = 0;
+    comsData.NumBadPacketsRecvFromFnFQ = 0;
+    comsData.NumBadPacketsRecvFromSensorsQ = 0;;
 }
 
 
@@ -373,7 +413,7 @@ void COMS_Tasks ( void )
         /* The default state should never be executed. */
         case COMS_STATE_RUN:
         {
-            ackFF = TalkToFindAndFollow();
+            //ackFF = TalkToFindAndFollow();
             
             ackSR = TalkToSensors();
             

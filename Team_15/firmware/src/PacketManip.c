@@ -276,54 +276,180 @@ void concatenate6(char dest[42], char type[2], char typeNum[3], char one[2], cha
     dest[41] = '\0';
 }
 
-//returns false if the 2 char code is not a valid packet type
-//Also has the Case statement for sorting packets by type
+/*******************************************************************************
+  Function:
+    
+
+  Summary:
+     
+
+  Description:
+    Returns false if the packet:
+       - Is not the correct length
+       - Does not fit the below format (where N is a number and C is a char)
+            CC:NNN,CC:NNN,CC:NNN,CC:NNN,CC:NNN,CC:NNN
+            CC:NNN,CC:NNN,CC:NNN,CC:NNN,CC:NNN
+            CC:NNN,CC:NNN,CC:NNN
+       - The characters do not fit the bellow formats
+            Error Packets
+            ES:000,RM:000,NS:000,NR:000,NU:001
+            EC:000,RM:000,NS:000,NR:000,NU:001
+            EM:000,RM:000,NS:000,NR:000,NU:001
+            EF:000,RM:000,NS:000,NR:000,NU:001
+
+            Data Packet
+            SR:111,RS:000,LS:000,FS:000,BS:000,NU:001
+            CM:000,ME:000,NU:001
+            MR:111,DA:000,NU:001
+            FF:111,RF:000,LF:004,CF:001,NU:001
+
+            ACK Packets
+            AS:111,AN:008,NU:001
+            AC:000,AN:008,NU:001
+            AM:111,AN:008,NU:001
+            AF:111,AN:008,NU:001
+
+  Precondition:
+    
+
+  Parameters:
+    None.
+
+  Returns:
+    Error code:
+        0:
+        1: 
+        2: 
+
+  Example:
+    <code>
+    
+    </code>
+
+  Remarks:
+    
+*/
 int isValidPacket(char* packettocheck)
 {
+    int len = 0;
+    while (packettocheck[len] != '\0')
+    {
+        len += 1;
+    }
+    //return len;
+    //if (len == 41)// && len != 34 && len != 20)
+    {
+        // Bad length
+      //  return 1;
+    }
     int x;
+    if (len == 20)
+    {
+        if (packettocheck[2] != ':' || packettocheck[6] != ','
+                || packettocheck[9] != ':' || packettocheck[13] != ','
+                || packettocheck[16] != ':')
+            // Invalid delimeters
+            return 2;
+        if (isalpha(packettocheck[0]) == 0 || isalpha(packettocheck[1]) == 0 ||
+                isdigit(packettocheck[3]) == 0 || isdigit(packettocheck[4]) == 0 ||
+                isdigit(packettocheck[5]) == 0 ||
+                isalpha(packettocheck[7]) == 0 || isalpha(packettocheck[8]) == 0 ||
+                isdigit(packettocheck[10]) == 0 || isdigit(packettocheck[11]) == 0 ||
+                isdigit(packettocheck[12]) == 0 ||
+                isalpha(packettocheck[14]) == 0 || isalpha(packettocheck[15]) == 0 ||
+                isdigit(packettocheck[17]) == 0 || isdigit(packettocheck[18]) == 0 ||
+                isdigit(packettocheck[19]) == 0 )
+            // Alpha/digit in wrong place
+            return 3;
+    }
+    else if (len == 34)
+    {
+        if (packettocheck[2] != ':' || packettocheck[6] != ','
+                || packettocheck[9] != ':' || packettocheck[13] != ','
+                || packettocheck[16] != ':' || packettocheck[20] != ','
+                || packettocheck[23] != ':' || packettocheck[27] != ','
+                || packettocheck[30] != ':' )
+            // Invalid delimeters
+            return 2;
+        if (isalpha(packettocheck[0]) == 0 || isalpha(packettocheck[1]) == 0 ||
+                isdigit(packettocheck[3]) == 0 || isdigit(packettocheck[4]) == 0 ||
+                isdigit(packettocheck[5]) == 0 ||
+                isalpha(packettocheck[7]) == 0 || isalpha(packettocheck[8]) == 0 ||
+                isdigit(packettocheck[10]) == 0 || isdigit(packettocheck[11]) == 0 ||
+                isdigit(packettocheck[12]) == 0 ||
+                isalpha(packettocheck[14]) == 0 || isalpha(packettocheck[15]) == 0 ||
+                isdigit(packettocheck[17]) == 0 || isdigit(packettocheck[18]) == 0 ||
+                isdigit(packettocheck[19]) == 0 ||
+                isalpha(packettocheck[21]) == 0 || isalpha(packettocheck[22]) == 0 ||
+                isdigit(packettocheck[24]) == 0 || isdigit(packettocheck[25]) == 0 ||
+                isdigit(packettocheck[26]) == 0 ||
+                isalpha(packettocheck[28]) == 0 || isalpha(packettocheck[29]) == 0 ||
+                isdigit(packettocheck[31]) == 0 || isdigit(packettocheck[32]) == 0 ||
+                isdigit(packettocheck[33]) == 0 )
+            // Alpha/digit in wrong place
+            return 3;
+    }
+    else if (len == 41)
+    {
+        if (packettocheck[2] != ':' || packettocheck[6] != ','
+                || packettocheck[9] != ':' || packettocheck[13] != ','
+                || packettocheck[16] != ':' || packettocheck[20] != ','
+                || packettocheck[23] != ':' || packettocheck[27] != ','
+                || packettocheck[30] != ':' || packettocheck[27] != ','
+                || packettocheck[30] != ':' || packettocheck[27] != ',')
+            // Invalid delimeters
+            return 2;
+        if (isalpha(packettocheck[0]) == 0 || isalpha(packettocheck[1]) == 0 ||
+                isdigit(packettocheck[3]) == 0 || isdigit(packettocheck[4]) == 0 ||
+                isdigit(packettocheck[5]) == 0 ||
+                isalpha(packettocheck[7]) == 0 || isalpha(packettocheck[8]) == 0 ||
+                isdigit(packettocheck[10]) == 0 || isdigit(packettocheck[11]) == 0 ||
+                isdigit(packettocheck[12]) == 0 ||
+                isalpha(packettocheck[14]) == 0 || isalpha(packettocheck[15]) == 0 ||
+                isdigit(packettocheck[17]) == 0 || isdigit(packettocheck[18]) == 0 ||
+                isdigit(packettocheck[19]) == 0 ||
+                isalpha(packettocheck[21]) == 0 || isalpha(packettocheck[22]) == 0 ||
+                isdigit(packettocheck[24]) == 0 || isdigit(packettocheck[25]) == 0 ||
+                isdigit(packettocheck[26]) == 0 ||
+                isalpha(packettocheck[28]) == 0 || isalpha(packettocheck[29]) == 0 ||
+                isdigit(packettocheck[31]) == 0 || isdigit(packettocheck[32]) == 0 ||
+                isdigit(packettocheck[33]) == 0 ||
+                isalpha(packettocheck[35]) == 0 || isalpha(packettocheck[36]) == 0 ||
+                isdigit(packettocheck[38]) == 0 || isdigit(packettocheck[39]) == 0 ||
+                isdigit(packettocheck[40]) == 0 )
+            // Alpha/digit in wrong place
+            return 3;
+    }
     switch(packettocheck[0])
     {
-            case 'E':
-                switch(packettocheck[1])
-                {
-                         case 'S':
-                             x=1;
-                                break;
-                         case 'M':
-                             x=1;
-                                break;
-                         case 'C':
-                             x=1;
-                                break;
-                         case 'F':
-                             x=1;
-                                break;
-                    default:
-                        x=0;
-                                break;
-                }
-                
-            case 'S':
-                x=1;
-                break;
-                
-            case 'M':
-                x=1;
-                break;
-                
-            case 'C':
-                x=1;
-                break;
-                
-            case 'F':
-                x=1;
-                break;
-                
-                default: 
-                   x=0;
-                   break;
+        case 'E':
+            switch(packettocheck[1])
+            {
+                case 'S':
+                    x=0; break;
+                case 'C':
+                    x=0; break;
+                case 'M':
+                    x=0; break;
+                case 'F':
+                    x=0; break;
+                default:
+                    x=4; break;
+            }
+            break;
+        case 'S':
+            x=0; break;
+        case 'M':
+            x=0; break;
+        case 'C':
+            x=0; break;
+        case 'F':
+            x=0; break;
+        default: 
+            x=4; break;
     }
- return x;                       
+    // If 4, invalid starter flag
+    return x;                       
 }
 //returns true or false on whether the packet is a error packet
 int isErrorPacket(char* packettocheck)

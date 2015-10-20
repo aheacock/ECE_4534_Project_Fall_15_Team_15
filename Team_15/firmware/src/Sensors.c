@@ -180,8 +180,8 @@ void SENSORS_Tasks ( void )
                 snprintf(BS_c, 4,"%d", BS);
                 
                 snprintf(NumofPackets, 4,"%03d",sensorsData.NUMBEROFPACKETSPLACEDINTHEQ);
-               concatenate6(ello,"SR","___","RS",RS_c,"LS",LS_c,"FS","FFF","BS",BS_c,"NP", NumofPackets);
-               if(isValidPacket(ello))
+               concatenate6(ello,"SR","000","RS",RS_c,"LS",LS_c,"FS","000","BS",BS_c,"NP", NumofPackets);
+               //if(isValidPacket(ello))
                {
             
                     if(xQueueSend( sensorsData.xSensorsToComsQueue, &ello, 0 ))
@@ -193,9 +193,9 @@ void SENSORS_Tasks ( void )
                         sensorsData.NUMBEROFPACKETSDROPPEDBEFOREQ=sensorsData.NUMBEROFPACKETSDROPPEDBEFOREQ+1;
                     }
                }
-               else
+               //else
                {
-                   int i=0;
+                /*   int i=0;
                    for(i=0; i<42; i++)
                     ello[i]='9';
                         // malformed packet exception
@@ -207,7 +207,7 @@ void SENSORS_Tasks ( void )
                         {
                           sensorsData.NUMBEROFPACKETSDROPPEDBEFOREQ=sensorsData.NUMBEROFPACKETSDROPPEDBEFOREQ+1;
                         }
-               
+               */
                }
 
             // Second queue. Fill with fake data

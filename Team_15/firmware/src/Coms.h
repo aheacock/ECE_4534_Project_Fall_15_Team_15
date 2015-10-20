@@ -129,6 +129,8 @@ typedef struct
     int NumPacketsPutInSensorsQ;
     int NumPacketsRecvFromFnFQ;
     int NumPacketsRecvFromSensorsQ;
+    int NumBadPacketsRecvFromFnFQ;
+    int NumBadPacketsRecvFromSensorsQ;
     
 } COMS_DATA;
 
