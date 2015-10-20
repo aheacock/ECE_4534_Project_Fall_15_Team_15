@@ -5,12 +5,11 @@ from PyQt4 import QtCore, QtGui
 import serial
 import time
 import thread, threading, Queue
-import json
+import simplejson as json
 import collections
 
-ser = serial.Serial(port='/dev/ttyUSB4', baudrate=57600)
+ser = serial.Serial(port='/dev/ttyUSB0', baudrate=57600)
 
-running = True
 theQueue = Queue.Queue(10)
 stopQueue = Queue.Queue(10)
 serThread = None
@@ -40,7 +39,6 @@ def updateThread(threadName, ui):
   print "in update thread"
   while stopQueue.empty:
     string = theQueue.get()
-    # ui.sensorDataLabel.setText(string)
     dic = parseStr(string)
     if dic:
       if 'FF' in dic.keys():
@@ -49,43 +47,35 @@ def updateThread(threadName, ui):
         ui.MR_pacs += 1
       if 'AM' in dic.keys():
         ui.Ack_pacs += 1
+        print str(ui.Ack_pacs)
       if 'SR' in dic.keys():
         ui.SR_pacs += 1
       if 'EM' in dic.keys():
         ui.EM_pacs += 1
       internalDic.update(dic)
       displayString = ""
-      try:
+      if all(x in internalDic.keys() for x in ['RF', 'LF', 'CF', 'NF']):
         FF_str = "Find and Follow - RF: " + internalDic["RF"] + " LF: " + internalDic["LF"] + " CF: " + internalDic["CF"] + " NF: " + internalDic["NF"] + "\n"
-        displayString = displayString + FF_str #+ "Total Find and Follow Packets: " + str(ff_pacs ) + "\n"
-      except:
-        print "key error"
-      try:
+        displayString = displayString + FF_str
+      if all(x in internalDic.keys() for x in ['AM', 'AN', 'NU']):
         Ack_str = "Ack             - AM: " + internalDic["AM"] + " AN: " + internalDic["AN"] + " NU: " + internalDic["NU"] + "\n"
-        displayString = displayString + Ack_str #+ "Total Ack Packets:             " + str(Ack_pacs) + "\n"
-      except:
-        print "key error"
-      try:
+        displayString = displayString + Ack_str
+      if all(x in internalDic.keys() for x in ['SR', 'RS', 'LS', 'FS', 'BS', 'NS']):
         SR_str = "Sensor          - SR: " + internalDic["SR"] + " RS: " + internalDic["RS"] + " LS: " + internalDic["LS"] + " FS: " + internalDic["FS"] + " BS: " + internalDic["BS"] + " NS: " + internalDic["NS"] + "\n"
-        displayString = displayString + SR_str #+ "Total Sensor Packets:          " + str(SR_pacs ) + "\n"
-      except:
-        print "key error"
-      try:
+        displayString = displayString + SR_str
+      if all(x in internalDic.keys() for x in ['MR', 'QW', 'QE', 'QT', 'QY', 'NM']):
         MR_str = "Motor           - MR: " + internalDic["MR"] + " QW: " + internalDic["QW"] + " QE: " + internalDic["QE"] + " QT: " + internalDic["QT"] + " QY: " + internalDic["QY"] + " NM: " + internalDic["NM"] + "\n"
-        displayString = displayString + MR_str #+ "Total Motor Packets:           " + str(MR_pacs ) + "\n"
-      except:
-        print "key error"
-      try:
+        displayString = displayString + MR_str
+      if all(x in internalDic.keys() for x in ['EM', 'XX']):
         EM_str = "Motor Error     - EM: " + internalDic["EM"] + " XX: " + internalDic["XX"] + "\n"
-        displayString = displayString + EM_str #+ "Total Motor Error Packets:     " + str(EM_pacs ) + "\n"
-      except:
-        print "key error"
+        displayString = displayString + EM_str
       ui.sensorDataLabel.setText(displayString)
       totalPacsStr = "Total Find and Follow Packets: " + str(ui.ff_pacs ) + "\n" \
                    + "Total Ack Packets:             " + str(ui.Ack_pacs) + "\n" \
                    + "Total Sensor Packets:          " + str(ui.SR_pacs ) + "\n" \
                    + "Total Motor Packets:           " + str(ui.MR_pacs ) + "\n" \
                    + "Total Motor Error Packets:     " + str(ui.EM_pacs )
+
       ui.errorDataLabel.setText(totalPacsStr)
 
 def convert(data):
@@ -99,25 +89,21 @@ def convert(data):
     return data
  
 def parseStr(tstStr):
-  # print tstStr
+  testDict = {}
   theStr = QtCore.QString(tstStr)
-  theList = theStr.split('}')
-  theList.replaceInStrings(':', '": "')
-  theList.replaceInStrings('{', '{"')
-  theList.replaceInStrings(',', '", "')
-  list2 = []
-  for i in theList:
-    j = i.append('"}]')
-    list2.append(str(j.prepend('[')))
-  for i in list2:
-    if '{' in i:
-      if '}' in i:
-        print i
-        try:
-          testDict = json.loads(i)[0]
-        except:
-          return None
-        return convert(testDict)
+  theStr.replace(':', '": "')
+  theStr.replace('{', '{"')
+  theStr.replace(',', '", "')
+  theStr.replace('}', '"}')
+  if '{' in theStr:
+    if '}' in theStr:
+      print theStr
+      try:
+        testDict = json.loads(str(theStr))
+      except:
+        print "failed to convert to JSON"
+        return None
+      return convert(testDict)
   return None
     
 
@@ -130,7 +116,6 @@ class DataDisplay(QtGui.QWidget):
       thread.start_new_thread(updateThread, ("Update_Thread", self) )
     except:
       print "unable to start update thread"
-      running = False
       self.close()
     self.initUI()
     self.count = 0
@@ -141,10 +126,10 @@ class DataDisplay(QtGui.QWidget):
 
   def initUI(self):
     self.sensorDataLabel = QtGui.QLabel('', self)
-    self.sensorDataLabel.setStyleSheet(" font-size: 16px; qproperty-alignment: AlignJustify; font-family: Courier New;")
+    # self.sensorDataLabel.setStyleSheet(" font-size: 16px; qproperty-alignment: AlignJustify; font-family: Courier New;")
 
     self.errorDataLabel = QtGui.QLabel('', self)
-    self.errorDataLabel.setStyleSheet(" font-size: 16px; qproperty-alignment: AlignJustify; font-family: Courier New;")
+    # self.errorDataLabel.setStyleSheet(" font-size: 16px; qproperty-alignment: AlignJustify; font-family: Courier New;")
 
     errorRequestBtn = QtGui.QPushButton('Request Error Data', self)
     errorRequestBtn.clicked.connect(self.requestErrorData)
@@ -169,9 +154,7 @@ class DataDisplay(QtGui.QWidget):
 
   def requestErrorData(self):
     # ser.write('error_request')
-    self.count += 1
     # self.sensorDataLabel.setText('btnPressed' + str(self.count))
-    ser.write('btnPressed' + str(self.count))
     self.ff_pacs = 0
     self.Ack_pacs = 0
     self.SR_pacs = 0
@@ -182,7 +165,6 @@ class DataDisplay(QtGui.QWidget):
     reply=QtGui.QMessageBox.question(self,'Message',"Are you sure to quit?",QtGui.QMessageBox.Yes,QtGui.QMessageBox.No)
     if reply==QtGui.QMessageBox.Yes:
       stopQueue.put("stop")
-
       event.accept()
     else:
        event.ignore()
