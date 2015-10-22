@@ -128,6 +128,7 @@ typedef struct
      int NUMBEROFPACKETSDROPPEDBEFOREQ;   
     int index;
     int index2;
+    int packetsrecievedinFindandFollow;
     
 } MOTORS_DATA;
 

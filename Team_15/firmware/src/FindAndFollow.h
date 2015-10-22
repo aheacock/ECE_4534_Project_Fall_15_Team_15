@@ -126,7 +126,8 @@ typedef struct
     int index;
     int index2;
     int index3;
-    
+    int packetsrecievedinComs;
+    int numdropped;
 } FINDANDFOLLOW_DATA;
 // *****************************************************************************
 // *****************************************************************************
