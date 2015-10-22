@@ -413,7 +413,7 @@ void COMS_Tasks ( void )
         /* The default state should never be executed. */
         case COMS_STATE_RUN:
         {
-            //ackFF = TalkToFindAndFollow();
+            ackFF = TalkToFindAndFollow();
             
             ackSR = TalkToSensors();
             

@@ -73,12 +73,59 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 // Section: System Interrupt Vector Functions
 // *****************************************************************************
 // *****************************************************************************
+extern SENSORS_DATA sensorsData;
+
 void IntHandlerDrvAdc(void)
 {
+//    if(true == DRV_ADC_SamplesAvailable())
+//    {
+//        sensorsData.xAxis = DRV_ADC_SamplesRead(6);
+//    }
+//    if(true == DRV_ADC_SamplesAvailable())
+//    {
+//        sensorsData.yAxis = DRV_ADC_SamplesRead(7);
+//    }
+//    if(true == DRV_ADC_SamplesAvailable())
+//    {
+//        sensorsData.zAxis = DRV_ADC_SamplesRead(8);
+//    }
+    if(DRV_ADC_SamplesAvailable())
+    {
+        sensorsData.tempSensor = DRV_ADC_SamplesRead(0);
+    }    
+
+    sensorsData.dataReady = true;
     /* Clear ADC Interrupt Flag */
     PLIB_INT_SourceFlagClear(INT_ID_0, INT_SOURCE_ADC_1);
 }
 
+void __ISR(_TIMER_3_VECTOR, ipl1AUTO) _IntHandlerDrvTmrInstance0(void)
+{
+
+    PLIB_INT_SourceFlagClear(INT_ID_0,INT_SOURCE_TIMER_3);
+    sensorsData.tick = 1;
+
+}
+
+//void __ISR(_UART2_TX_VECTOR, ipl1AUTO) _IntHandlerDrvUsartTransmitInstance0(void)
+//{
+//
+//    DRV_USART_TasksTransmit(sysObj.drvUsart0);
+//    DRV_USART_TasksError(sysObj.drvUsart0);
+//}
+//void __ISR(_UART2_RX_VECTOR, ipl1AUTO) _IntHandlerDrvUsartReceiveInstance0(void)
+//{
+//
+//    DRV_USART_TasksReceive(sysObj.drvUsart0);
+//    DRV_USART_TasksError(sysObj.drvUsart0);
+//
+//}
+//void __ISR(_UART2_FAULT_VECTOR, ipl1AUTO) _IntHandlerDrvUsartErrorInstance0(void)
+//{
+//
+//    SYS_ASSERT(false, "USART Driver Instance 0 Error");
+//
+//}
 
 
 

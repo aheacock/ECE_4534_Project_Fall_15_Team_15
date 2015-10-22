@@ -15,16 +15,16 @@
         <Path>Header Files/FreeRTOS</Path>
       </File>
       <File>
-        <Name>projdefs.h</Name>
-        <Path>Header Files/FreeRTOS</Path>
+        <Name>sys_common.h</Name>
+        <Path>Header Files/framework/system/common</Path>
       </File>
       <File>
         <Name>list.c</Name>
         <Path>Source Files/FreeRTOS</Path>
       </File>
       <File>
-        <Name>sys_common.h</Name>
-        <Path>Header Files/framework/system/common</Path>
+        <Name>projdefs.h</Name>
+        <Path>Header Files/FreeRTOS</Path>
       </File>
       <File>
         <Name>portable.h</Name>
@@ -39,20 +39,20 @@
         <Path>Source Files/framework/system/ports/src</Path>
       </File>
       <File>
-        <Name>ISR_Support.h</Name>
-        <Path>Header Files/FreeRTOS/portable/MPLAB/PIC32MX</Path>
-      </File>
-      <File>
-        <Name>port.c</Name>
-        <Path>Source Files/FreeRTOS/portable/MPLAB/PIC32MX</Path>
+        <Name>drv_usart.c</Name>
+        <Path>Source Files/framework/driver/usart/src/dynamic</Path>
       </File>
       <File>
         <Name>tasks.c</Name>
         <Path>Source Files/FreeRTOS</Path>
       </File>
       <File>
-        <Name>drv_usart.c</Name>
-        <Path>Source Files/framework/driver/usart/src/dynamic</Path>
+        <Name>port.c</Name>
+        <Path>Source Files/FreeRTOS/portable/MPLAB/PIC32MX</Path>
+      </File>
+      <File>
+        <Name>ISR_Support.h</Name>
+        <Path>Header Files/FreeRTOS/portable/MPLAB/PIC32MX</Path>
       </File>
       <File>
         <Name>event_groups.c</Name>
@@ -143,12 +143,12 @@
         <Path>Source Files/FreeRTOS/portable/MemMang</Path>
       </File>
       <File>
-        <Name>FreeRTOS.h</Name>
-        <Path>Header Files/FreeRTOS</Path>
-      </File>
-      <File>
         <Name>sys_int_pic32.c</Name>
         <Path>Source Files/framework/system/int/src</Path>
+      </File>
+      <File>
+        <Name>FreeRTOS.h</Name>
+        <Path>Header Files/FreeRTOS</Path>
       </File>
       <File>
         <Name>sys_devcon_pic32mx.c</Name>
@@ -176,7 +176,7 @@
       <Template>
         <Name>drv_adc_static.c</Name>
         <Path>Source Files/app/system_config/default/framework/driver/adc/src</Path>
-        <Checksum>E666C140DAD40D27A90DAE3D5949DDCF</Checksum>
+        <Checksum>D3E01C3A48C64E3053217DF5427C34C9</Checksum>
       </Template>
       <Template>
         <Name>system_config.h</Name>
@@ -223,7 +223,7 @@
       <Template>
         <Name>drv_adc_static.h</Name>
         <Path>Header Files/app/system_config/default/framework/driver/adc</Path>
-        <Checksum>FC2821C153608C0712C5B5E2D4732121</Checksum>
+        <Checksum>DA228C4429B405DC81984D73AB97988D</Checksum>
       </Template>
       <Template>
         <Name>FindAndFollow.h</Name>
@@ -234,13 +234,13 @@
         <Path>Source Files/app</Path>
       </Template>
       <Template>
+        <Name>Motors.h</Name>
+        <Path>Header Files/app</Path>
+      </Template>
+      <Template>
         <Name>FreeRTOSConfig.h</Name>
         <Path>Header Files/app/system_config/default</Path>
         <Checksum>D18CC47DF45E3B9FC30DE3D1ACFA2CE2</Checksum>
-      </Template>
-      <Template>
-        <Name>Motors.h</Name>
-        <Path>Header Files/app</Path>
       </Template>
       <Template>
         <Name>Sensors.h</Name>
