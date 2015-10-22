@@ -112,7 +112,23 @@ FINDANDFOLLOW_DATA findandfollowData;
     See prototype in motors.h.
  */
 
-
+int recieveAKKK()
+{
+    int x=0;
+     char lo[42];
+    if(xQueueReceive(findandfollowData.xFnFToMotors, &lo, 0)) // working one
+    {   
+       if (lo[0]='A')
+           motorsData.packetsrecievedinFindandFollow++;
+        x=1;
+    }
+    else
+    {
+        x=0;
+    }
+     
+     return 0;
+}
 int TalkToFnF()
 {
     
@@ -138,13 +154,14 @@ void MOTORS_Initialize ( void )
     motorsData.state = MOTORS_STATE_INIT;
       motorsData.NUMBEROFPACKETSPLACEDINTHEQ=0;
       motorsData.NUMBEROFPACKETSDROPPEDBEFOREQ=0;
+      motorsData.packetsrecievedinFindandFollow=0;
     
     /* TODO: Initialize your application's state machine and other
      * parameters.
      */
     
-    motorsData.xMotorsToSensorsQueue = xQueueCreate( 10, 51 );
-    motorsData.xMotorsToFnFQueue = xQueueCreate( 20, 51 );
+    motorsData.xMotorsToSensorsQueue = xQueueCreate( 15, 51 );
+    motorsData.xMotorsToFnFQueue = xQueueCreate( 15, 51 );
     
     /* Enable the software interrupt and set its priority. */
     //prvSetupSoftwareInterrupt();
@@ -195,30 +212,41 @@ void MOTORS_Tasks ( void )
            
                snprintf(NumofPackets, 4,"%d",motorsData.NUMBEROFPACKETSPLACEDINTHEQ);
                concatenate6(ello,"MR","___","QW",RS_c,"QE",LS_c,"QT","QQQ","QY",BS_c,"NM", NumofPackets);
+              
+               
+         if(uxQueueSpacesAvailable(motorsData.xMotorsToFnFQueue)==15)
+            { 
                if(isValidPacket(ello))
                {
             
                     if( xQueueSend( motorsData.xMotorsToFnFQueue, &ello, 0 ))
                     {
                         motorsData.NUMBEROFPACKETSPLACEDINTHEQ=motorsData.NUMBEROFPACKETSPLACEDINTHEQ+1;
-                      
-                        
-                        {
-                       
-                        }
                     }
                     else 
                     {
                         motorsData.NUMBEROFPACKETSDROPPEDBEFOREQ=motorsData.NUMBEROFPACKETSDROPPEDBEFOREQ+1;
                     }
-                   // int in=0;
-                 //       while(in<500)
-             //  {       in++;
-               //         }
+   
+                    
                     if(((motorsData.NUMBEROFPACKETSPLACEDINTHEQ)%5)==0)
                     {
-                        concatenate6(ello,"EM","XXX","XX",RS_c,"XX",LS_c,"XX","XXX","XX",BS_c,"XX", NumofPackets);
-                  //      xQueueSend( motorsData.xMotorsToFnFQueue, &ello, 0 );
+                        
+                        char RF_c[3];
+                        char PP[3];
+                       int numpacketsdropped = motorsData.packetsrecievedinFindandFollow-motorsData.NUMBEROFPACKETSPLACEDINTHEQ;
+                        snprintf(RF_c, 4,"%03d",findandfollowData.numdropped);
+                        
+                        char NumofPackets[3];
+                        snprintf(PP, 4,"%03d",motorsData.packetsrecievedinFindandFollow);
+                        snprintf(NumofPackets, 4,"%d",motorsData.NUMBEROFPACKETSPLACEDINTHEQ);
+        
+                        concatenate6(ello,"EM","XXX","XX",RS_c,"XX",LS_c,"Xd",RF_c,"XX",PP,"NP", NumofPackets);
+                      if(xQueueSend( motorsData.xMotorsToFnFQueue, &ello, 0 ))
+                      {
+                             motorsData.NUMBEROFPACKETSPLACEDINTHEQ=motorsData.NUMBEROFPACKETSPLACEDINTHEQ+1;
+                      }
+                       
                         
                     }
                }
@@ -238,7 +266,7 @@ void MOTORS_Tasks ( void )
                         }
                 
                }
-                 
+         } 
             //    xStatus = xQueueSend( motorsData.xMotorsToSensorsQueue, &data[motorsData.index], 0 );
              
               
