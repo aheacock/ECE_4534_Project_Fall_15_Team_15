@@ -15,16 +15,16 @@
         <Path>Header Files/FreeRTOS</Path>
       </File>
       <File>
-        <Name>sys_common.h</Name>
-        <Path>Header Files/framework/system/common</Path>
+        <Name>projdefs.h</Name>
+        <Path>Header Files/FreeRTOS</Path>
       </File>
       <File>
         <Name>list.c</Name>
         <Path>Source Files/FreeRTOS</Path>
       </File>
       <File>
-        <Name>projdefs.h</Name>
-        <Path>Header Files/FreeRTOS</Path>
+        <Name>sys_common.h</Name>
+        <Path>Header Files/framework/system/common</Path>
       </File>
       <File>
         <Name>portable.h</Name>
@@ -39,20 +39,20 @@
         <Path>Source Files/framework/system/ports/src</Path>
       </File>
       <File>
-        <Name>drv_usart.c</Name>
-        <Path>Source Files/framework/driver/usart/src/dynamic</Path>
-      </File>
-      <File>
-        <Name>tasks.c</Name>
-        <Path>Source Files/FreeRTOS</Path>
+        <Name>ISR_Support.h</Name>
+        <Path>Header Files/FreeRTOS/portable/MPLAB/PIC32MX</Path>
       </File>
       <File>
         <Name>port.c</Name>
         <Path>Source Files/FreeRTOS/portable/MPLAB/PIC32MX</Path>
       </File>
       <File>
-        <Name>ISR_Support.h</Name>
-        <Path>Header Files/FreeRTOS/portable/MPLAB/PIC32MX</Path>
+        <Name>tasks.c</Name>
+        <Path>Source Files/FreeRTOS</Path>
+      </File>
+      <File>
+        <Name>drv_usart.c</Name>
+        <Path>Source Files/framework/driver/usart/src/dynamic</Path>
       </File>
       <File>
         <Name>event_groups.c</Name>
@@ -73,6 +73,10 @@
       <File>
         <Name>croutine.h</Name>
         <Path>Header Files/FreeRTOS</Path>
+      </File>
+      <File>
+        <Name>sys_reset.c</Name>
+        <Path>Source Files/framework/system/reset/src</Path>
       </File>
       <File>
         <Name>drv_usart_buffer_queue.c</Name>
@@ -143,12 +147,12 @@
         <Path>Source Files/FreeRTOS/portable/MemMang</Path>
       </File>
       <File>
-        <Name>sys_int_pic32.c</Name>
-        <Path>Source Files/framework/system/int/src</Path>
-      </File>
-      <File>
         <Name>FreeRTOS.h</Name>
         <Path>Header Files/FreeRTOS</Path>
+      </File>
+      <File>
+        <Name>sys_int_pic32.c</Name>
+        <Path>Source Files/framework/system/int/src</Path>
       </File>
       <File>
         <Name>sys_devcon_pic32mx.c</Name>
@@ -157,6 +161,10 @@
       <File>
         <Name>timers.c</Name>
         <Path>Source Files/FreeRTOS</Path>
+      </File>
+      <File>
+        <Name>sys_reset.h</Name>
+        <Path>Header Files/framework/system/reset</Path>
       </File>
       <File>
         <Name>StackMacros.h</Name>
@@ -176,16 +184,12 @@
       <Template>
         <Name>drv_adc_static.c</Name>
         <Path>Source Files/app/system_config/default/framework/driver/adc/src</Path>
-        <Checksum>D3E01C3A48C64E3053217DF5427C34C9</Checksum>
+        <Checksum>38B58DBDD86E4752E5A698FC63F2133F</Checksum>
       </Template>
       <Template>
         <Name>system_config.h</Name>
         <Path>Header Files/app/system_config/default</Path>
-        <Checksum>7EFD9661341A52D34BE1320C86BBE867</Checksum>
-      </Template>
-      <Template>
-        <Name>Coms.h</Name>
-        <Path>Header Files/app</Path>
+        <Checksum>A1201169836A1F982912F6729EA26F16</Checksum>
       </Template>
       <Template>
         <Name>rtos_hooks.c</Name>
@@ -193,19 +197,9 @@
         <Checksum>FA52743264536E5207D2ADBE57B48D05</Checksum>
       </Template>
       <Template>
-        <Name>system_interrupt.c</Name>
-        <Path>Source Files/app/system_config/default</Path>
-        <Checksum>A222F829945DB3D2F9098FBF241A5183</Checksum>
-      </Template>
-      <Template>
         <Name>sys_ports_static.c</Name>
         <Path>Source Files/app/system_config/default/framework/system/ports/src</Path>
-        <Checksum>FB4B5C284DB8E00623B4DFDDC672F3D8</Checksum>
-      </Template>
-      <Template>
-        <Name>sys_clk_static.h</Name>
-        <Path>Header Files/app/system_config/default/framework/system/clk</Path>
-        <Checksum>999179DADE9ECD59953526F5E9F83ACC</Checksum>
+        <Checksum>DAD83841B052F3779FBAA88134F858D5</Checksum>
       </Template>
       <Template>
         <Name>Sensors.c</Name>
@@ -216,18 +210,9 @@
         <Path>Source Files/app</Path>
       </Template>
       <Template>
-        <Name>system_tasks.c</Name>
-        <Path>Source Files/app/system_config/default</Path>
-        <Checksum>CF938986D5FA0936D76FED514ED45B5D</Checksum>
-      </Template>
-      <Template>
         <Name>drv_adc_static.h</Name>
         <Path>Header Files/app/system_config/default/framework/driver/adc</Path>
         <Checksum>DA228C4429B405DC81984D73AB97988D</Checksum>
-      </Template>
-      <Template>
-        <Name>FindAndFollow.h</Name>
-        <Path>Header Files/app</Path>
       </Template>
       <Template>
         <Name>Motors.c</Name>
@@ -238,23 +223,66 @@
         <Path>Header Files/app</Path>
       </Template>
       <Template>
-        <Name>FreeRTOSConfig.h</Name>
-        <Path>Header Files/app/system_config/default</Path>
-        <Checksum>D18CC47DF45E3B9FC30DE3D1ACFA2CE2</Checksum>
-      </Template>
-      <Template>
         <Name>Sensors.h</Name>
         <Path>Header Files/app</Path>
       </Template>
       <Template>
         <Name>system_init.c</Name>
         <Path>Source Files/app/system_config/default</Path>
-        <Checksum>64D7836F69E9CEC53D6CAD376FFDD1AA</Checksum>
+        <Checksum>E819FD3258F926CCA54133DF01318829</Checksum>
+      </Template>
+      <Template>
+        <Name>drv_tmr_static.h</Name>
+        <Path>Header Files/app/system_config/default/framework/driver/tmr</Path>
+        <Checksum>1EEAFE0A143AFA7C44B680539F52062B</Checksum>
+      </Template>
+      <Template>
+        <Name>Coms.h</Name>
+        <Path>Header Files/app</Path>
+      </Template>
+      <Template>
+        <Name>system_interrupt.c</Name>
+        <Path>Source Files/app/system_config/default</Path>
+        <Checksum>1A2DF1B63D1B82185995EFF22E9445D3</Checksum>
+      </Template>
+      <Template>
+        <Name>sys_clk_static.h</Name>
+        <Path>Header Files/app/system_config/default/framework/system/clk</Path>
+        <Checksum>999179DADE9ECD59953526F5E9F83ACC</Checksum>
+      </Template>
+      <Template>
+        <Name>drv_oc_static.c</Name>
+        <Path>Source Files/app/system_config/default/framework/driver/oc/src</Path>
+        <Checksum>84BB6F10954B8590BDEED0366F8BD5E3</Checksum>
+      </Template>
+      <Template>
+        <Name>system_tasks.c</Name>
+        <Path>Source Files/app/system_config/default</Path>
+        <Checksum>CF938986D5FA0936D76FED514ED45B5D</Checksum>
+      </Template>
+      <Template>
+        <Name>drv_tmr_static.c</Name>
+        <Path>Source Files/app/system_config/default/framework/driver/tmr/src</Path>
+        <Checksum>15A53CCA506FC307496F22F44F76AD36</Checksum>
+      </Template>
+      <Template>
+        <Name>drv_oc_static.h</Name>
+        <Path>Header Files/app/system_config/default/framework/driver/oc</Path>
+        <Checksum>30853D3035027DABD2A7C0A53DD06E62</Checksum>
+      </Template>
+      <Template>
+        <Name>FindAndFollow.h</Name>
+        <Path>Header Files/app</Path>
+      </Template>
+      <Template>
+        <Name>FreeRTOSConfig.h</Name>
+        <Path>Header Files/app/system_config/default</Path>
+        <Checksum>D18CC47DF45E3B9FC30DE3D1ACFA2CE2</Checksum>
       </Template>
       <Template>
         <Name>system_interrupt_a.S</Name>
         <Path>Source Files/app/system_config/default</Path>
-        <Checksum>1FE3DD166C570675544FFC12C2218B47</Checksum>
+        <Checksum>3FF4EB487BFAB5B8B9BD28C763B56986</Checksum>
       </Template>
       <Template>
         <Name>Coms.c</Name>
@@ -268,7 +296,7 @@
       <Template>
         <Name>system_definitions.h</Name>
         <Path>Header Files/app/system_config/default</Path>
-        <Checksum>B89F8D402D4FC8ADC49A06399A3DEAC9</Checksum>
+        <Checksum>26E5E674F9FEF8861CE8F38FC82B0B44</Checksum>
       </Template>
     </Templates>
     <CompilerItems>

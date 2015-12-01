@@ -4,12 +4,13 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/C:/Users/Martian/MPLABXProjects/ECE_4534_Project_Fall_15_Team_15/Team_15/firmware/src/Sensors.h</file>
-            <file>file:/C:/Users/Martian/MPLABXProjects/ECE_4534_Project_Fall_15_Team_15/Team_15/firmware/src/system_config/default/system_interrupt.c</file>
-            <file>file:/C:/Users/Martian/MPLABXProjects/ECE_4534_Project_Fall_15_Team_15/Team_15/firmware/src/system_config/default/system_init.c</file>
-            <file>file:/C:/Users/Martian/MPLABXProjects/ECE_4534_Project_Fall_15_Team_15/Team_15/firmware/src/Sensors.c</file>
+            <file>file:/C:/Users/Martian/MPLABXProjects/ECE_4534_Project_Fall_15_Team_15/Team_15/firmware/src/app.c</file>
             <file>file:/C:/Users/Martian/MPLABXProjects/ECE_4534_Project_Fall_15_Team_15/Team_15/firmware/src/system_config/default/system_tasks.c</file>
-            <file>file:/C:/Users/Martian/MPLABXProjects/ECE_4534_Project_Fall_15_Team_15/Team_15/firmware/src/system_config/default/framework/driver/adc/src/drv_adc_static.c</file>
+            <file>file:/C:/Users/Martian/MPLABXProjects/ECE_4534_Project_Fall_15_Team_15/Team_15/firmware/src/system_config/default/system_definitions.h</file>
+            <file>file:/C:/Users/Martian/MPLABXProjects/ECE_4534_Project_Fall_15_Team_15/Team_15/firmware/src/system_config/default/framework/driver/tmr/src/drv_tmr_static.c</file>
             <file>file:/C:/Users/Martian/MPLABXProjects/ECE_4534_Project_Fall_15_Team_15/Team_15/firmware/src/Coms.h</file>
+            <file>file:/C:/Users/Martian/MPLABXProjects/ECE_4534_Project_Fall_15_Team_15/Team_15/firmware/src/FindAndFollow.c</file>
+            <file>file:/C:/Users/Martian/MPLABXProjects/ECE_4534_Project_Fall_15_Team_15/Team_15/firmware/src/Motors.c</file>
             <file>file:/C:/Users/Martian/MPLABXProjects/ECE_4534_Project_Fall_15_Team_15/Team_15/firmware/src/Coms.c</file>
         </group>
     </open-files>

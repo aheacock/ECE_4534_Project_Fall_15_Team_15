@@ -203,7 +203,6 @@ void concatenate6(char dest[21], char type[2], char typeNum[3], char one[2], cha
 
 int isValidPacket(char* packettocheck);
 int isErrorPacket(char* packettocheck);
-int isAckPacket(char* packettocheck);
 
 int getSequenceNumber(char dest[3], char* packettodostuff);
 

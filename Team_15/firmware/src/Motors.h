@@ -59,6 +59,7 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 #include "system_config.h"
 #include "system_definitions.h"
 #include "queue.h"
+#include "peripheral/oc/plib_oc.h"
 
 // DOM-IGNORE-BEGIN
 #ifdef __cplusplus  // Provide C++ Compatibility
@@ -124,11 +125,25 @@ typedef struct
     /* TODO: Define any additional data used by the application. */
     QueueHandle_t xMotorsToSensorsQueue;    // For error checking
     QueueHandle_t xMotorsToFnFQueue;    // For ACK messages  
-     int NUMBEROFPACKETSPLACEDINTHEQ;
-     int NUMBEROFPACKETSDROPPEDBEFOREQ;   
+    int NUMBEROFPACKETSPLACEDINTHEQ;
+    int NUMBEROFPACKETSDROPPEDBEFOREQ;   
     int index;
-    int index2;
+    //int index2;
     int packetsrecievedinFindandFollow;
+    
+    // For sending
+    char nextPacketToSend[21];
+    int shouldSendNow;
+    
+    // Counters for quadrature encoder
+    int motor1Counter;
+    int motor2Counter;
+    
+    // Testing vars
+    char listOfCommands[31][42];
+    int indexCom;
+    
+    int moveForwardNext ;
     
 } MOTORS_DATA;
 
@@ -226,4 +241,3 @@ void MOTORS_Tasks( void );
 /*******************************************************************************
  End of File
  */
-

@@ -235,10 +235,11 @@ int TalkToFindAndFollow()
                 comsData.NumBadPacketsRecvFromFnFQ += 1;
         }
     }
-    
+  /*  ack breaks the system idk why?
     // Ack here????????????
     intTo3Char(dest2, comsData.NumPacketsPutInFnFQ);
-    concatenate3(temp, "AF", "000", "AN", dest, "NU", dest2);
+    concatenate3(temp, "AF", "000", "AN", "Te2", "NU", "Tes");
+   // void concatenate3(char dest[21], char type[2], char typeNum[3], char one[2], char oneNum[3], char two[2], char twoNum[3] )
     if (xQueueSend( comsData.xComsToFnFQueue, temp, 0))
     {
         if (comsData.NumPacketsPutInFnFQ == 999)
@@ -248,6 +249,7 @@ int TalkToFindAndFollow()
     }
     stringPointer = temp;
     WriteString();
+   * */
     return x;
 }
 
@@ -259,6 +261,8 @@ int TalkToSensors()
     char dest[3];
     char dest2[3];
     char temp[21];
+  
+
     if(xQueueReceive( sensorsData.xSensorsToComsQueue, &lo, 0)) // working one
     {
         if (comsData.NumPacketsRecvFromSensorsQ == 999)
@@ -300,9 +304,82 @@ int TalkToSensors()
     return x;
 }
 
+void checkreset()
+{
+         if(PLIB_USART_ReceiverDataIsAvailable(USART_ID_1))
+            {   
+            char x=PLIB_USART_ReceiverByteReceive(USART_ID_1);
+            if(x=='?')
+                {
+                 stringPointer="XXXXXX";
+                 WriteString();
+                 int i=0;
+                 while (i<1000)
+                 {
+                    i++;
+                 }
+                 SYS_RESET_SoftwareReset();   
+                }
+            else if(x=='w')
+                {// forward
+                    if(uxQueueSpacesAvailable(comsData.xComsToFnFQueue)==15)
+                    {
+                        char temp[21];
+                        concatenate3(temp, "ww", "000", "FF", "001", "FF", "001");
+                        xQueueSend( comsData.xComsToFnFQueue, temp, 0);
+                    }
+                }
+            else if(x=='s')
+                {// back
+                    if(uxQueueSpacesAvailable(comsData.xComsToFnFQueue)==15)
+                    {
+                        char temp[21];
+                        concatenate3(temp, "ss", "000", "FF", "001", "FF", "001");
+                        xQueueSend( comsData.xComsToFnFQueue, temp, 0);
+                    }
+                }
+            else if(x=='d')
+                {// fr
+                    if(uxQueueSpacesAvailable(comsData.xComsToFnFQueue)==15)
+                    {
+                        char temp[21];
+                        concatenate3(temp, "dd", "000", "FF", "001", "FF", "001");
+                        xQueueSend( comsData.xComsToFnFQueue, temp, 0);
+                    }
+                }
+            else if (x=='a')
+                {// FL
+                    if(uxQueueSpacesAvailable(comsData.xComsToFnFQueue)==15)
+                    {
+                        char temp[21];
+                        concatenate3(temp, "aa", "000", "FF", "001", "FF", "001");
+                        xQueueSend( comsData.xComsToFnFQueue, temp, 0);
+                    }               
+                }
+            else if(x=='2')
+                {//right
+                if(uxQueueSpacesAvailable(comsData.xComsToFnFQueue)==15)
+                    {
+                        char temp[21];
+                        concatenate3(temp, "22", "000", "FF", "001", "FF", "001");
+                        xQueueSend( comsData.xComsToFnFQueue, temp, 0);
+                    }        
+                }
+            else if(x=='3')
+                {//left
+                if(uxQueueSpacesAvailable(comsData.xComsToFnFQueue)==15)
+                    {
+                        char temp[21];
+                        concatenate3(temp, "33", "000", "FF", "001", "FF", "001");
+                        xQueueSend( comsData.xComsToFnFQueue, temp, 0);
+                    }
+                }
+            }
+}
 
 bool PutCharacter(const char character)
 {
+   
     //char *pcString;
     //char lValueToSend[10]={'a','b','c','d','e','f','g','h','i','j'};
     //unsigned long lo;
@@ -340,8 +417,8 @@ bool PutCharacter(const char character)
 //                   myPrintf(thetest);
        //if(WriteString())
                   TalkToFindAndFollow();
-                  PLIB_USART_TransmitterByteSend(USART_ID_1, ' ');
-                  TalkToSensors();
+                 // PLIB_USART_TransmitterByteSend(USART_ID_1, ' ');
+         //works         TalkToSensors();
                   
                  //  PLIB_USART_TransmitterByteSend(USART_ID_1, 'x');     
                   // PLIB_USART_TransmitterByteSend(USART_ID_1, pcString[0]);
@@ -371,8 +448,8 @@ void COMS_Initialize ( void )
      * parameters.
      */
     //comsData.xFakeSensorDataQueue3 = xQueueCreate( 10, sizeof( char ) );
-    comsData.xComsToFnFQueue = xQueueCreate( 10, LENGTH_PACKET_MAX );
-    comsData.xComsToSensorsQueue = xQueueCreate( 10, LENGTH_PACKET_MAX );
+    comsData.xComsToFnFQueue = xQueueCreate( 15, 42 );
+    comsData.xComsToSensorsQueue = xQueueCreate( 15, 42 );
     
     comsData.NumPacketsPutInFnFQ = 0;
     comsData.NumPacketsPutInSensorsQ = 0;
@@ -395,8 +472,7 @@ void COMS_Tasks ( void )
 {
     int ackFF;
     int ackSR;
-    char dest[3];
-    char temp[21];
+ 
     /* Check the application's current state. */
     switch ( comsData.state )
     {
@@ -413,11 +489,12 @@ void COMS_Tasks ( void )
         /* The default state should never be executed. */
         case COMS_STATE_RUN:
         {
+            //calls functions that run the Coms thread
             ackFF = TalkToFindAndFollow();
+        //    ackSR = TalkToSensors();
+            // checks to see if the system reset button ( '?' ) has been pressed
+            checkreset();
             
-            ackSR = TalkToSensors();
-            
-            // Toggle pin for visual assurance
             //PLIB_PORTS_PinToggle(PORTS_ID_0, PORT_CHANNEL_C, PORTS_BIT_POS_1);
             /* TODO: Handle error in application's state machine. */
             break;

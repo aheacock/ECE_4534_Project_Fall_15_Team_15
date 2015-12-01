@@ -69,7 +69,7 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 /*** DEVCFG1 ***/
 
 #pragma config FNOSC =      PRIPLL
-#pragma config FSOSCEN =    ON
+#pragma config FSOSCEN =    OFF
 #pragma config IESO =       ON
 #pragma config POSCMOD =    XT
 #pragma config OSCIOFNC =   OFF
@@ -112,6 +112,9 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 // *****************************************************************************
 // *****************************************************************************
 
+//<editor-fold defaultstate="collapsed" desc="DRV_Timer Initialization Data">
+
+// </editor-fold>
 //<editor-fold defaultstate="collapsed" desc="DRV_USART Initialization Data">
 
 const DRV_USART_INIT drvUsart0InitData =
@@ -177,8 +180,6 @@ const SYS_DEVCON_INIT sysDevconInit =
 // *****************************************************************************
 // *****************************************************************************
 
-QueueHandle_t xFakeSensorDataQueue2;
-
 /*******************************************************************************
   Function:
     void SYS_Initialize ( SYS_INIT_DATA *data )
@@ -202,10 +203,36 @@ void SYS_Initialize ( void* data )
     /* Initialize Drivers */
     /* Initialize ADC */
     DRV_ADC_Initialize();
-    sysObj.drvUsart0 = DRV_USART_Initialize(DRV_USART_INDEX_0, (SYS_MODULE_INIT *)&drvUsart0InitData);
+    /*Initialize TMR0 */
+    DRV_TMR0_Initialize();
+ 
+     sysObj.drvUsart0 = DRV_USART_Initialize(DRV_USART_INDEX_0, (SYS_MODULE_INIT *)&drvUsart0InitData);
+
+
+    /*Initialize OC0 */
+    DRV_OC0_Initialize();
+
+    /*Initialize OC1 */
+    DRV_OC1_Initialize();
 
     /* Initialize System Services */
     SYS_INT_Initialize();  
+	
+    /*Setup the INT_SOURCE_EXTERNAL_1 and Enable it*/
+    SYS_INT_VectorPrioritySet(INT_VECTOR_INT1, INT_PRIORITY_LEVEL1);
+    SYS_INT_VectorSubprioritySet(INT_VECTOR_INT1, INT_SUBPRIORITY_LEVEL0);
+    SYS_INT_ExternalInterruptTriggerSet(INT_EXTERNAL_INT_SOURCE1,INT_EDGE_TRIGGER_RISING);
+    SYS_INT_SourceEnable(INT_SOURCE_EXTERNAL_1);
+
+    /*Setup the INT_SOURCE_EXTERNAL_2 and Enable it*/
+    SYS_INT_VectorPrioritySet(INT_VECTOR_INT2, INT_PRIORITY_LEVEL1);
+    SYS_INT_VectorSubprioritySet(INT_VECTOR_INT2, INT_SUBPRIORITY_LEVEL0);
+    SYS_INT_ExternalInterruptTriggerSet(INT_EXTERNAL_INT_SOURCE2,INT_EDGE_TRIGGER_RISING);
+    SYS_INT_SourceEnable(INT_SOURCE_EXTERNAL_2);
+
+
+
+
 
     /* Initialize Middleware */
 
@@ -214,8 +241,6 @@ void SYS_Initialize ( void* data )
     FINDANDFOLLOW_Initialize();
     SENSORS_Initialize();
     MOTORS_Initialize();
-    
-    xFakeSensorDataQueue2 = xQueueCreate( 10, sizeof( char ) );
 }
 
 

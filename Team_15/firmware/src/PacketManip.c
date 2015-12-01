@@ -454,25 +454,17 @@ int isValidPacket(char* packettocheck)
 //returns true or false on whether the packet is a error packet
 int isErrorPacket(char* packettocheck)
 {
-    int x = 0;
+    int x;
     if(packettocheck[0]=='E')
     {
         x = 1;
     }
-    return x;
-}
-
-// Returns 1 if the packet is an ACK packet
-int isAckPacket(char* packettocheck)
-{
-    int x = 0;
-    if(packettocheck[0]=='A')
+    else
     {
-        x = 1;
+         x = 0;
     }
     return x;
 }
-
 
 // Parses the last part of the packet to get the sequence number
 // Returns int and changes dest

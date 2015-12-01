@@ -63,7 +63,6 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 #include <string.h>
 #include "PacketManip.h"
 #include "Coms.h"
-#include "math.h"
 
 // DOM-IGNORE-BEGIN
 #ifdef __cplusplus  // Provide C++ Compatibility
@@ -93,15 +92,8 @@ extern "C" {
 typedef enum
 {
 	/* Application's state machine's initial state. */
-    SENSORS_STATE_INIT=0,
-    
-    APP_STATE_INIT,
-    
-    APP_STATE_WAIT,
+	SENSORS_STATE_INIT=0,
 
-    APP_STATE_SEND_RESULTS,
-
-    APP_STATE_SPIN
 	/* TODO: Define states used by the application state machine. */
 
 } SENSORS_STATES;
@@ -136,48 +128,6 @@ typedef struct
     int index3;
     int NUMBEROFPACKETSPLACEDINTHEQ;
     int NUMBEROFPACKETSDROPPEDBEFOREQ;
-    
-    int NumPacketsPutInComsQ;
-    //int NumPacketsPutInSensorsQ;
-    int NumPacketsRecvFromComsQ;
-    //int NumPacketsRecvFromSensorsQ;
-    int NumBadPacketsRecvFromComsQ;
-    //int NumBadPacketsRecvFromSensorsQ;
-    
-    int tempSensor;
-    int tempDegC;
-    
-    int xAxis;
-    int yAxis;
-    int zAxis;
-    
-    float fltxAxis;
-    float fltyAxis;
-    float fltzAxis;
-    
-    float fltxAxisSqr;
-    float fltyAxisSqr;
-    float fltzAxisSqr;
-    
-    float xySqr;
-    float yzSqr;
-    float zxSqr;
-    
-    float xRatio;
-    float yRatio;
-    float zRatio;
-
-    
-    float xAngle;
-    float yAngle;
-    float zAngle;
-    
-    bool dataReady;
-    
-    bool tick;
-
-    bool wrComplete;
-    bool rdComplete;
 } SENSORS_DATA;
 
 
