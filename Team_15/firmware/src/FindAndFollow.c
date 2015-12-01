@@ -76,9 +76,11 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
     Application strings and buffers are be defined outside this structure.
 */
 
+
 FINDANDFOLLOW_DATA findandfollowData;
-MOTORS_DATA motorsData;
 COMS_DATA comsData;
+SENSORS_DATA sensorsData;
+MOTORS_DATA motorsData;
 // *****************************************************************************
 // *****************************************************************************
 // Section: Application Callback Functions
@@ -154,9 +156,16 @@ int recievefrommotors()
     char lo[42];
     if(xQueueReceive(motorsData.xMotorsToFnFQueue, &lo, 0)) // working one
     {   
+          if(uxQueueSpacesAvailable(findandfollowData.xFnFToComsQueue)>10)
+                {       
+                    xQueueSend( findandfollowData.xFnFToComsQueue, &lo, 0 );
+             
+                }
+        
+    }
       //  stringPointer=lo;
         
-        if(isValidPacket(lo))
+     /*   if(isValidPacket(lo))
         {
                 if(xQueueSend( findandfollowData.xFnFToComsQueue, &lo, 0 ))
                 {
@@ -177,6 +186,7 @@ int recievefrommotors()
                         }
                 }
     }
+      */
     return x;
 }
 
@@ -190,7 +200,59 @@ int recievefrommotors()
   Remarks:
     See prototype in findandfollow.h.
  */
-
+int sensorstofnf()
+{  
+      int rightsensor=0;
+        int leftsensor=0;
+        int forwardsensor=0;
+        int backsensor =0;
+    
+    int x = 0;
+    char lo[42];
+    if(xQueueReceive(sensorsData.xSensorsToFnFQueue, &lo, 0)) // working one
+    {   
+      //  stringPointer=lo;       
+           // lo is sensor data
+           // deconstruct here
+           //alg for mode
+            
+           // 4 for left
+           // 8 for right
+           // +1 for forward 
+           // -1 for back   
+           rightsensor=((lo[10]-'0')*100)+((lo[11]-'0')*10)+(lo[12]-'0');
+           leftsensor=((lo[17]-'0')*100)+((lo[18]-'0')*10)+(lo[19]-'0');
+           forwardsensor=((lo[24]-'0')*100)+((lo[25]-'0')*10)+(lo[26]-'0');
+           backsensor=((lo[31]-'0')*100)+((lo[32]-'0')*10)+(lo[33]-'0');
+          
+           if(rightsensor>25)
+           {
+               // turn left
+               x=4;
+           }
+           if(leftsensor>25)
+           {
+               // turn right
+               x=8;
+           }
+           if(forwardsensor>20)
+           {
+               // move forward
+               x=x+1;   
+           }
+           else if(forwardsensor<7)
+           { //move back
+               x=7;
+           }  
+          // {SR:000,RS:266,LS:167,FS:000,BS:123,NP:010}
+       if(uxQueueSpacesAvailable(findandfollowData.xFnFToComsQueue)==15)
+                {
+                    // debug send: sends Sensor data to Coms 
+                    xQueueSend( findandfollowData.xFnFToComsQueue, &lo, 0 );           
+                }
+    }
+    return x;
+}
 void FINDANDFOLLOW_Tasks ( void )
 {
     /* Check the application's current state. */
@@ -199,6 +261,139 @@ void FINDANDFOLLOW_Tasks ( void )
         /* Application's initial state. */
         case FINDANDFOLLOW_STATE_INIT:
         {
+            char b='b';
+          int x=sensorstofnf();
+          
+           // 4 for left
+           // 8 for right
+           // +1 for forward 
+           // -1 for back
+          if(x!=0)
+          {
+              if(x==1)
+              {  // send move forward +
+                  if(uxQueueSpacesAvailable(findandfollowData.xFnFToMotorsQueue)==15)
+                {
+                    char temp[21];
+                    concatenate3(temp, "FF", "000", "FF", "001", "FF", "001");
+                    xQueueSend( findandfollowData.xFnFToMotorsQueue, temp, 0);
+                }
+              }
+              else if(x==8)
+              {
+                  if(uxQueueSpacesAvailable(findandfollowData.xFnFToMotorsQueue)==15)
+                {//TURN RIGHT
+                    char temp[21];
+                    concatenate3(temp, "ES", "000", "RR", "002", "NU", "002");
+                    xQueueSend( findandfollowData.xFnFToMotorsQueue, temp, 0);
+                }
+              }
+            else if(x==9)
+              {
+               if(uxQueueSpacesAvailable(findandfollowData.xFnFToMotorsQueue)==15)
+                {//TURN RIGHT and Forward
+                    char temp[21];
+                    concatenate3(temp, "EF", "000", "RR", "002", "NU", "000");
+                    xQueueSend( findandfollowData.xFnFToMotorsQueue, temp, 0);
+                }            
+              }
+            else if (x==4)
+               { // just left
+                 if(uxQueueSpacesAvailable(findandfollowData.xFnFToMotorsQueue)==15)
+                {
+                    char temp[21];
+                    concatenate3(temp, "ES", "000", "LL", "003", "NU", "000");
+                    xQueueSend( findandfollowData.xFnFToMotorsQueue, temp, 0);
+                }               
+               }
+              else if(x==5)
+              {
+                  // forward and left
+                if(uxQueueSpacesAvailable(findandfollowData.xFnFToMotorsQueue)==15)
+                {
+                    char temp[21];
+                    concatenate3(temp, "EF", "000", "LL", "003", "NU", "000");
+                    xQueueSend( findandfollowData.xFnFToMotorsQueue, temp, 0);
+                }               
+                  
+              }
+              else if(x==9)
+              {
+                if(uxQueueSpacesAvailable(findandfollowData.xFnFToMotorsQueue)==15)
+                {
+                    char temp[21];
+                    concatenate3(temp, "EM", "000", "AN", "002", "NU", "000");
+                    xQueueSend( findandfollowData.xFnFToMotorsQueue, temp, 0);
+                }
+                  // forward and right
+              }
+              
+            }
+               else if(x==3 || x==7 || x==-1)
+              {
+                if(uxQueueSpacesAvailable(findandfollowData.xFnFToMotorsQueue)==15)
+                {//"MT:111,CO:002,NU:001
+                    char temp[21];
+                    concatenate3(temp, "EB", "000", "BB", "011", "BB", "000");
+                    xQueueSend( findandfollowData.xFnFToMotorsQueue, temp, 0);
+                }
+             // move back 
+              //(reverse is not a priority)
+              }
+          recievefrommotors();
+          
+          
+            // 2 kinds of rovers leaders and followers
+            // three basic states are implemented turn left turn right and move forward
+            // for the sake of simplicity this basic alg will assume the following
+            // the first rover and followers are limited to the same speed and turn options
+            
+        //coms channels need for alg
+            //Send: FnFtoMotors, FnFtoComs
+            //Recieves: SensorstoFnF
+            // functions: ackSensorstoFnF(),sendFnFtoMotors({speed, direction}), sendtoFnFtoComs()
+            
+            
+            //SensorstoFnF
+            
+         /*   
+            if(SensorstoRover>threshhold)
+            { // emergency 
+                if(Front>threshhold)
+                {
+                    sendtomotor();
+                    //full reverse
+                    
+                }
+                else(Back>threshhold)
+                {
+                    // forward
+                }
+                else(Lside>threshhold)
+                {
+                    // turn right
+                }
+                else(Rside>threshhold)
+                {
+                    // turn left
+                }     
+            }    
+            else if(ComtoRover[1]=='L')
+            {
+                
+            
+            }
+            else if(ComtoRover[1]=='F')
+            {
+                
+            }
+            else
+            {
+                FnFtoComsErrorsend(111);
+            }
+            
+          
+            
             char ello[42];
             int RF = 234;
             int LF = 125;
@@ -220,11 +415,11 @@ void FINDANDFOLLOW_Tasks ( void )
                 { 
                     recievefrommotors();      
                     concatenate6(ello,"FF","___","RF",RF_c,"LF",LF_c,"CF",CF_c,"NF",NumofPackets,"FF", "XXX");
-                    if(xQueueSend( findandfollowData.xFnFToComsQueue, &ello, 0 ))
+                 //   if(xQueueSend( findandfollowData.xFnFToComsQueue, &ello, 0 ))
                     {
                         findandfollowData.NUMBEROFPACKETSPLACEDINTHEQ=findandfollowData.NUMBEROFPACKETSPLACEDINTHEQ+1;
                     }
-                    else 
+              //      else 
                     {
                         findandfollowData.NUMBEROFPACKETSDROPPEDBEFOREQ =findandfollowData.NUMBEROFPACKETSDROPPEDBEFOREQ+1;
                     }
@@ -241,22 +436,19 @@ void FINDANDFOLLOW_Tasks ( void )
                         snprintf(NumofPackets, 4,"%d",findandfollowData.NUMBEROFPACKETSPLACEDINTHEQ);
                         concatenate6(ello,"EF","XXX","FD",RF_c,"XA","000","XB","XXX","PP",PP,"XD", NumofPackets);
                        
-                        if ( xQueueSend( findandfollowData.xFnFToComsQueue, &ello, 0 ))
+                  //      if ( xQueueSend( findandfollowData.xFnFToComsQueue, &ello, 0 ))
                         { // adds 1 packet to the Q counter 
                             findandfollowData.NUMBEROFPACKETSPLACEDINTHEQ=findandfollowData.NUMBEROFPACKETSPLACEDINTHEQ+1;
                         }
                     }
            
                 }
-        
+        */
             }
                 
-            // Third queue. Fill with fake data
-           
-           //     xStatus = xQueueSend( findandfollowData.xFnFToSensorsQueue, &data[findandfollowData.index3], 0 );
-           
+  
             break;
-        }
+       }
 
         /* TODO: implement your application state machine.*/
 

@@ -78,7 +78,11 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 
 SENSORS_DATA sensorsData;
 COMS_DATA comsData;
-
+// vars for testing
+    int RS;
+    int LS;
+    int FS;
+    int BS;
 // *****************************************************************************
 // *****************************************************************************
 // Section: Application Callback Functions
@@ -121,13 +125,17 @@ void SENSORS_Initialize ( void )
      * parameters.
      */
     //sensorsData.xFakeSensorDataQueue = xQueueCreate( 10, sizeof( float ) );
-    sensorsData.xSensorsToComsQueue = xQueueCreate( 10, 51);//sizeof( float ) );
-    sensorsData.xSensorsToFnFQueue = xQueueCreate( 10, 51 );
-    sensorsData.xSensorsToMotorsQueue = xQueueCreate( 10, 51 );
+    sensorsData.xSensorsToComsQueue = xQueueCreate( 15, 51);//sizeof( float ) );
+    sensorsData.xSensorsToFnFQueue = xQueueCreate( 15, 51 );
+    sensorsData.xSensorsToMotorsQueue = xQueueCreate( 15, 51 );
     /* Enable the software interrupt and set its priority. */
     //prvSetupSoftwareInterrupt();
     sensorsData.index = 0;
     sensorsData.index2 = 0;
+       RS = 10;
+       LS = 10;
+       FS = 5;
+       BS = 123;
 }
 
 
@@ -162,26 +170,98 @@ void SENSORS_Tasks ( void )
            char ello[42];
            char lo[51];
                 
-           //Grabs data from the 4 sensors
-                int RS = 266;
-                int LS = 167;
-                int FS = 168;
-                int BS = 123;
+           //____ Forward
+           /*
+             RS = 19;
+             LS = 19;
+             FS = 29;
+            */ 
+            
+           //____ Backward
+             
+            // RS = 10;
+           //  LS = 10;
+           //  FS = 5;
+           
+           //____ Forward Right
+             /*
+             RS = 23;
+             LS = 27;
+             FS = 21;
+           */
+           //____ Forward Left
+             /*
+             RS = 27;
+             LS = 24;
+             FS = 21;
+           */
+           //____ Right
+               /*
+             RS = 10;
+             LS = 30;
+             FS = 10;
+           */
+           //____ Left
+             /*
+             RS = 30;
+             LS = 10;
+             FS = 10;
+          */
+           //Needs to grab the data from the 4 sensors here--------------------------
+                //Turn Right Check
+                FS++;
+                if(FS>15)
+                {
+                    
+                    if(LS>25)
+                    {
+                        LS=0;
+                        
+                    }
+                    if(LS==0)
+                    {
+                        RS=RS+1;
+                    }
+                    else
+                    {
+                        LS++;
+                    }
+                }
+                if(FS>30)
+                {
+                    RS = 10;
+                    LS = 23;
+                    FS = 11;
+                }
+                   
+                //----------------------------------------------------------
+                
                 
                char RS_c[3];
                char LS_c[3];
                char FS_c[3];
                char BS_c[3];
                char NumofPackets[3];
-                
-                snprintf(RS_c, 4,"%d", RS);
-                snprintf(LS_c, 4,"%d", LS);
-                snprintf(FS_c, 4,"%d", FS);
-                snprintf(BS_c, 4,"%d", BS);
-                
+               // converts ints to 3 bite char arrays 
+                snprintf(RS_c, 4,"%03d", RS);
+                snprintf(LS_c, 4,"%03d", LS);
+                snprintf(FS_c, 4,"%03d", FS);
+                snprintf(BS_c, 4,"%03d", BS);
                 snprintf(NumofPackets, 4,"%03d",sensorsData.NUMBEROFPACKETSPLACEDINTHEQ);
-               concatenate6(ello,"SR","000","RS",RS_c,"LS",LS_c,"FS","000","BS",BS_c,"NP", NumofPackets);
-               //if(isValidPacket(ello))
+               // builds packet
+                concatenate6(ello,"SR","000","RS",RS_c,"LS",LS_c,"FS",FS_c,"BS",BS_c,"NP", NumofPackets);
+             
+              //------------------------------------------------------------------------
+               //Greg's Test Code
+                if(uxQueueSpacesAvailable(sensorsData.xSensorsToFnFQueue)==15)
+                {
+                 xQueueSend( sensorsData.xSensorsToFnFQueue, &ello, 0 );
+                 sensorsData.NUMBEROFPACKETSPLACEDINTHEQ=sensorsData.NUMBEROFPACKETSPLACEDINTHEQ+1;
+                }
+                //-----------------------------------------
+               /*    
+            
+               if(isValidPacket(ello))
                {
             
                     if(xQueueSend( sensorsData.xSensorsToComsQueue, &ello, 0 ))
@@ -195,7 +275,7 @@ void SENSORS_Tasks ( void )
                }
                //else
                {
-                /*   int i=0;
+                int i=0;
                    for(i=0; i<42; i++)
                     ello[i]='9';
                         // malformed packet exception
@@ -207,7 +287,7 @@ void SENSORS_Tasks ( void )
                         {
                           sensorsData.NUMBEROFPACKETSDROPPEDBEFOREQ=sensorsData.NUMBEROFPACKETSDROPPEDBEFOREQ+1;
                         }
-               */
+              
                }
 
             // Second queue. Fill with fake data
@@ -225,7 +305,7 @@ void SENSORS_Tasks ( void )
                 {
                     xQueueSend( sensorsData.xSensorsToComsQueue, &lo, 0 );
                 }
-               
+                */
             break;
         }
 

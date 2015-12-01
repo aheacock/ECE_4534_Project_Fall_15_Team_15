@@ -162,7 +162,7 @@ static void _COMS_Tasks(void)
     while(1)
     {
         COMS_Tasks();
-        vTaskDelay(100 / portTICK_PERIOD_MS);
+        vTaskDelay(1000 / portTICK_PERIOD_MS);
     }
 }
 
@@ -180,7 +180,7 @@ static void _FINDANDFOLLOW_Tasks(void)
     while(1)
     {
         FINDANDFOLLOW_Tasks();
-        vTaskDelay(100 / portTICK_PERIOD_MS);
+ //       vTaskDelay(1000 / portTICK_PERIOD_MS);
     }
 }
 
@@ -198,7 +198,7 @@ static void _SENSORS_Tasks(void)
     while(1)
     {
         SENSORS_Tasks();
-        vTaskDelay(100 / portTICK_PERIOD_MS);
+       vTaskDelay(1000 / portTICK_PERIOD_MS);
     }
 }
 
@@ -216,7 +216,7 @@ static void _MOTORS_Tasks(void)
     while(1)
     {
         MOTORS_Tasks();
-        vTaskDelay(100 / portTICK_PERIOD_MS);
+    //    vTaskDelay(1000 / portTICK_PERIOD_MS);
     }
 }
 

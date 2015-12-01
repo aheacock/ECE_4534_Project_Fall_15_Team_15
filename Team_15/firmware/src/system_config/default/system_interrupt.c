@@ -80,9 +80,31 @@ void IntHandlerDrvAdc(void)
 }
 
 
+/*
 
 
+void IntHandlerExternalInterruptInstance0(void)
+{           
+    PLIB_INT_SourceFlagClear(INT_ID_0, INT_SOURCE_EXTERNAL_1);
+
+}
+
+void IntHandlerExternalInterruptInstance1(void)
+{           
+    PLIB_INT_SourceFlagClear(INT_ID_0, INT_SOURCE_EXTERNAL_2);
+
+}
+
+*/
+void IntHandlerDrvTmrInstance0(void)
+
+{
+
+    PLIB_INT_SourceFlagClear(INT_ID_0,INT_SOURCE_TIMER_3);
+
+}
   
+ 
 /*******************************************************************************
  End of File
 */
