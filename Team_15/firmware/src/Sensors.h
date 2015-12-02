@@ -93,10 +93,10 @@ extern "C" {
 typedef enum
 {
 	/* Application's state machine's initial state. */
-    SENSORS_STATE_INIT=0,
+    APP_STATE_INIT=0,
     
-    APP_STATE_INIT,
-    
+    APP_STATE_START,
+            
     APP_STATE_WAIT,
 
     APP_STATE_SEND_RESULTS,
@@ -144,37 +144,18 @@ typedef struct
     int NumBadPacketsRecvFromComsQ;
     //int NumBadPacketsRecvFromSensorsQ;
     
-    int tempSensor;
-    int tempDegC;
+    int frontRightEdgeSensor;
+    int frontLeftEdgeSensor;
+    int backRightEdgeSensor;
+    int backLeftEdgeSensor;
+    int leftWhiskerSensor;
+    int centerWhiskerSensor;
+    int rightWhiskerSensor;
     
-    int xAxis;
-    int yAxis;
-    int zAxis;
-    
-    float fltxAxis;
-    float fltyAxis;
-    float fltzAxis;
-    
-    float fltxAxisSqr;
-    float fltyAxisSqr;
-    float fltzAxisSqr;
-    
-    float xySqr;
-    float yzSqr;
-    float zxSqr;
-    
-    float xRatio;
-    float yRatio;
-    float zRatio;
-
-    
-    float xAngle;
-    float yAngle;
-    float zAngle;
     
     bool dataReady;
     
-    bool tick;
+    int tick;
 
     bool wrComplete;
     bool rdComplete;
