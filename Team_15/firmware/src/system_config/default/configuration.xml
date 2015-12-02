@@ -176,7 +176,7 @@
       <Template>
         <Name>drv_adc_static.c</Name>
         <Path>Source Files/app/system_config/default/framework/driver/adc/src</Path>
-        <Checksum>6DF47D2F926969A0114E5CEFE9A5897F</Checksum>
+        <Checksum>63C478E6F25064CA951D06396584DBA5</Checksum>
       </Template>
       <Template>
         <Name>system_config.h</Name>
@@ -223,7 +223,7 @@
       <Template>
         <Name>drv_adc_static.h</Name>
         <Path>Header Files/app/system_config/default/framework/driver/adc</Path>
-        <Checksum>0E5F4EBD0AD16835B26C0FA9D3217E12</Checksum>
+        <Checksum>F9A4E193E7100DF525AB2E817AA15294</Checksum>
       </Template>
       <Template>
         <Name>FindAndFollow.h</Name>
