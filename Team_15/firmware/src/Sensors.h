@@ -94,6 +94,13 @@ typedef enum
 	/* Application's state machine's initial state. */
 	SENSORS_STATE_INIT=0,
 
+    APP_STATE_START,
+            
+    APP_STATE_WAIT,
+
+    APP_STATE_SEND_RESULTS,
+
+    APP_STATE_SPIN
 	/* TODO: Define states used by the application state machine. */
 
 } SENSORS_STATES;
@@ -121,6 +128,7 @@ typedef struct
     //QueueHandle_t xFakeSensorDataQueue;
     QueueHandle_t xSensorsToComsQueue;
     QueueHandle_t xSensorsToFnFQueue;
+    QueueHandle_t xSensorsToFnFQueueE;
     QueueHandle_t xSensorsToMotorsQueue;    // For ACK messages
     
     int index;
@@ -128,6 +136,22 @@ typedef struct
     int index3;
     int NUMBEROFPACKETSPLACEDINTHEQ;
     int NUMBEROFPACKETSDROPPEDBEFOREQ;
+    
+    int frontRightEdgeSensor;
+    int frontLeftEdgeSensor;
+    int backRightEdgeSensor;
+    int backLeftEdgeSensor;
+    int leftWhiskerSensor;
+    int centerWhiskerSensor;
+    int rightWhiskerSensor;
+    
+    
+    bool dataReady;
+    
+    int tick;
+
+    bool wrComplete;
+    bool rdComplete;
 } SENSORS_DATA;
 
 

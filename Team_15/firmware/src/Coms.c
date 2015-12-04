@@ -322,7 +322,7 @@ void checkreset()
                 }
             else if(x=='w')
                 {// forward
-                    if(uxQueueSpacesAvailable(comsData.xComsToFnFQueue)==15)
+                    if(uxQueueSpacesAvailable(comsData.xComsToFnFQueue)>13)
                     {
                         char temp[21];
                         concatenate3(temp, "ww", "000", "FF", "001", "FF", "001");
@@ -331,7 +331,7 @@ void checkreset()
                 }
             else if(x=='s')
                 {// back
-                    if(uxQueueSpacesAvailable(comsData.xComsToFnFQueue)==15)
+                    if(uxQueueSpacesAvailable(comsData.xComsToFnFQueue)>13)
                     {
                         char temp[21];
                         concatenate3(temp, "ss", "000", "FF", "001", "FF", "001");
@@ -340,7 +340,7 @@ void checkreset()
                 }
             else if(x=='d')
                 {// fr
-                    if(uxQueueSpacesAvailable(comsData.xComsToFnFQueue)==15)
+                    if(uxQueueSpacesAvailable(comsData.xComsToFnFQueue)>13)
                     {
                         char temp[21];
                         concatenate3(temp, "dd", "000", "FF", "001", "FF", "001");
@@ -349,7 +349,7 @@ void checkreset()
                 }
             else if (x=='a')
                 {// FL
-                    if(uxQueueSpacesAvailable(comsData.xComsToFnFQueue)==15)
+                    if(uxQueueSpacesAvailable(comsData.xComsToFnFQueue)>13)
                     {
                         char temp[21];
                         concatenate3(temp, "aa", "000", "FF", "001", "FF", "001");
@@ -358,7 +358,7 @@ void checkreset()
                 }
             else if(x=='2')
                 {//right
-                if(uxQueueSpacesAvailable(comsData.xComsToFnFQueue)==15)
+                if(uxQueueSpacesAvailable(comsData.xComsToFnFQueue)>13)
                     {
                         char temp[21];
                         concatenate3(temp, "22", "000", "FF", "001", "FF", "001");
@@ -367,7 +367,7 @@ void checkreset()
                 }
             else if(x=='3')
                 {//left
-                if(uxQueueSpacesAvailable(comsData.xComsToFnFQueue)==15)
+                if(uxQueueSpacesAvailable(comsData.xComsToFnFQueue)>13)
                     {
                         char temp[21];
                         concatenate3(temp, "33", "000", "FF", "001", "FF", "001");

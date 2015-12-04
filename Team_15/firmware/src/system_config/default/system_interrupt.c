@@ -73,10 +73,28 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 // Section: System Interrupt Vector Functions
 // *****************************************************************************
 // *****************************************************************************
+extern SENSORS_DATA sensorsData;
+
 void IntHandlerDrvAdc(void)
 {
     /* Clear ADC Interrupt Flag */
+    PLIB_PORTS_PinToggle(PORTS_ID_0, PORT_CHANNEL_E, PORTS_BIT_POS_3);
     PLIB_INT_SourceFlagClear(INT_ID_0, INT_SOURCE_ADC_1);
+
+        
+    sensorsData.frontRightEdgeSensor = DRV_ADC_SamplesRead(0);
+    sensorsData.frontLeftEdgeSensor = DRV_ADC_SamplesRead(1);
+    sensorsData.backRightEdgeSensor = DRV_ADC_SamplesRead(2);
+    sensorsData.backLeftEdgeSensor = DRV_ADC_SamplesRead(3);
+
+    sensorsData.leftWhiskerSensor = DRV_ADC_SamplesRead(4);
+    sensorsData.centerWhiskerSensor = DRV_ADC_SamplesRead(5);
+    sensorsData.rightWhiskerSensor = DRV_ADC_SamplesRead(6);
+        
+    sensorsData.dataReady = true;
+    PLIB_PORTS_PinToggle(PORTS_ID_0, PORT_CHANNEL_E, PORTS_BIT_POS_6);
+    /* Clear ADC Interrupt Flag */
+//    DRV_ADC_Stop();
 }
 
 

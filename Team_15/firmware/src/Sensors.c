@@ -101,12 +101,30 @@ COMS_DATA comsData;
 /* TODO:  Add any necessary local functions.
 */
 
-
 // *****************************************************************************
 // *****************************************************************************
 // Section: Application Initialization and State Machine Functions
 // *****************************************************************************
 // *****************************************************************************
+
+
+
+void APP_ReadComplete (void *handle)
+{
+    sensorsData.rdComplete = true;
+}
+
+void APP_WriteComplete (void *handle)
+{
+    sensorsData.wrComplete = true;
+}
+
+void APP_Reset ()
+{
+    sensorsData.rdComplete = true;
+    sensorsData.wrComplete = true;
+}
+
 
 /*******************************************************************************
   Function:
@@ -121,21 +139,37 @@ void SENSORS_Initialize ( void )
     /* Place the App state machine in its initial state. */
     sensorsData.state = SENSORS_STATE_INIT;
     
-    /* TODO: Initialize your application's state machine and other
-     * parameters.
-     */
+    // Set up the queues
     //sensorsData.xFakeSensorDataQueue = xQueueCreate( 10, sizeof( float ) );
     sensorsData.xSensorsToComsQueue = xQueueCreate( 15, 51);//sizeof( float ) );
     sensorsData.xSensorsToFnFQueue = xQueueCreate( 15, 51 );
     sensorsData.xSensorsToMotorsQueue = xQueueCreate( 15, 51 );
+    
     /* Enable the software interrupt and set its priority. */
     //prvSetupSoftwareInterrupt();
+    
+    //Sensor Data Acquisition
+    sensorsData.wrComplete = true;
+    sensorsData.rdComplete = true; 
+    
+    //sensorsData.xFakeSensorDataQueue = xQueueCreate( 10, sizeof( float ) );
+    sensorsData.xSensorsToComsQueue = xQueueCreate( 10, 51);//sizeof( float ) );
+    sensorsData.xSensorsToFnFQueue = xQueueCreate( 10, 51 );
+    sensorsData.xSensorsToFnFQueueE = xQueueCreate( 10, 51 );
+    sensorsData.xSensorsToMotorsQueue = xQueueCreate( 10, 51 );    
+    
+    //May need to add channles to scan mode
+//    DRV_ADC_ChannelScanInputsAdd(ADC_INPUT_SCAN_AN0);
+//    DRV_ADC_ChannelScanInputsAdd(ADC_INPUT_SCAN_AN1);
+    DRV_ADC_Open();//Opens ADC
+    
+    // Fake sensor data vars
     sensorsData.index = 0;
     sensorsData.index2 = 0;
-       RS = 10;
-       LS = 10;
-       FS = 5;
-       BS = 123;
+    RS = 10;
+    LS = 10;
+    FS = 5;
+    BS = 123;
 }
 
 
@@ -166,6 +200,32 @@ void SENSORS_Tasks ( void )
     {
         /* Application's initial state. */
         case SENSORS_STATE_INIT:
+        {
+            SENSORS_Initialize();
+//            PLIB_ADC_SampleAcquisitionTimeSet(DRV_ADC_ID_1, 31);
+            sensorsData.state = APP_STATE_START;
+            break;
+        }
+        case APP_STATE_START:
+        {
+            DRV_ADC_Start();//Starts converting adc values
+//            DRV_ADC_Start();
+            sensorsData.state = APP_STATE_WAIT;
+            PLIB_PORTS_PinToggle(PORTS_ID_0, PORT_CHANNEL_E, PORTS_BIT_POS_1);
+            break;
+        }
+        case APP_STATE_WAIT:
+        {
+            PLIB_PORTS_PinToggle(PORTS_ID_0, PORT_CHANNEL_E, PORTS_BIT_POS_2);
+//            PLIB_ADC_ConversionStart(DRV_ADC_ID_1);
+            if (sensorsData.dataReady)
+            {
+                sensorsData.state = APP_STATE_SEND_RESULTS;
+                
+            }
+            break;
+        }
+        case APP_STATE_SEND_RESULTS:
         {
            char ello[42];
            char lo[51];
@@ -212,11 +272,9 @@ void SENSORS_Tasks ( void )
                 FS++;
                 if(FS>15)
                 {
-                    
                     if(LS>25)
                     {
                         LS=0;
-                        
                     }
                     if(LS==0)
                     {
@@ -235,8 +293,6 @@ void SENSORS_Tasks ( void )
                 }
                    
                 //----------------------------------------------------------
-                
-                
                char RS_c[3];
                char LS_c[3];
                char FS_c[3];
@@ -252,7 +308,8 @@ void SENSORS_Tasks ( void )
                 concatenate6(ello,"SR","000","RS",RS_c,"LS",LS_c,"FS",FS_c,"BS",BS_c,"NP", NumofPackets);
              
               //------------------------------------------------------------------------
-               //Greg's Test Code
+               // Greg's Test Code
+               // This code was written because 
                 if(uxQueueSpacesAvailable(sensorsData.xSensorsToFnFQueue)==15)
                 {
                  xQueueSend( sensorsData.xSensorsToFnFQueue, &ello, 0 );
@@ -306,11 +363,19 @@ void SENSORS_Tasks ( void )
                     xQueueSend( sensorsData.xSensorsToComsQueue, &lo, 0 );
                 }
                 */
+			sensorsData.dataReady = false;
+            sensorsData.state = APP_STATE_START;
             break;
         }
-
-        /* TODO: implement your application state machine.*/
-
+        case APP_STATE_SPIN:
+        {
+            if (sensorsData.tick > 1250)
+            {
+                sensorsData.tick = 0;
+                sensorsData.state = APP_STATE_START;
+            }
+            break;
+        }
         /* The default state should never be executed. */
         default:
         {
