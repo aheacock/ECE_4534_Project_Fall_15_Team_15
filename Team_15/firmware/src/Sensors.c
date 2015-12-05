@@ -196,28 +196,26 @@ typedef const struct
 ir_distance_sensor;
  
 // The object of the parameters of GP2Y0A21YK sensor
-const ir_distance_sensor SHORT_RANGE_SENSOR = { 1225, -17, 2 };
-const ir_distance_sensor MID_RANGE_SENSOR = { 5461, -17, 2 };
-const ir_distance_sensor LONG_RANGE_SENSOR = { 4772, -17, 2 };
+const ir_distance_sensor MID_RANGE_SENSOR = { 5461, -17, 3 };
+const ir_distance_sensor LONG_RANGE_SENSOR = { 10181, -17, -20 };
+
 
 // Converting the values of the IR distance sensor to centimeters
 // Returns -1, if the conversion did not succeed
-signed short ir_distance_calculate_cm(ir_distance_sensor sensor,
-	unsigned short adc_value)
+signed short ir_distance_calculate_cm(ir_distance_sensor sensor, unsigned short adc_value)
 {
 	if (adc_value + sensor.b <= 0)
 	{
 		return -1;
 	}
- 
 	return sensor.a / (adc_value + sensor.b) - sensor.k;
 }
 
 int edgeDetected(){
-    if(FrontRightSensorCM > 20 ||
-       FrontLeftSensorCM > 20  ||
-       BackRightSensorCM > 20  ||
-       BackLeftSensorCM > 20){
+    if(FrontRightSensorCM > 12 ||
+       FrontLeftSensorCM > 12  ||
+       BackRightSensorCM > 12  ||
+       BackLeftSensorCM > 12){
         return 1;
     }
     return 0;
@@ -263,26 +261,26 @@ void SENSORS_Tasks ( void )
         {
             char ello[42];
            //Needs to grab the data from the 4 sensors here--------------------------
-           FrontRightSensor = sensorsData.frontRightEdgeSensor*.2 + FrontRightSensor * .8;
-           FrontRightSensorCM = ir_distance_calculate_cm(SHORT_RANGE_SENSOR, FrontRightSensor);
+           FrontRightSensor = sensorsData.frontRightEdgeSensor*.5 + FrontRightSensor * .5;
+           FrontRightSensorCM = ir_distance_calculate_cm(MID_RANGE_SENSOR, FrontRightSensor);
            
-           FrontLeftSensor = sensorsData.frontLeftEdgeSensor*.2 + FrontLeftSensor * .8;
-           FrontLeftSensorCM = ir_distance_calculate_cm(SHORT_RANGE_SENSOR, FrontLeftSensor);
+           FrontLeftSensor = sensorsData.frontLeftEdgeSensor*.5 + FrontLeftSensor * .5;
+           FrontLeftSensorCM = ir_distance_calculate_cm(MID_RANGE_SENSOR, FrontLeftSensor);
            
-           BackRightSensor = sensorsData.backRightEdgeSensor*.2 + BackRightSensor * .8;
-           BackRightSensorCM = ir_distance_calculate_cm(SHORT_RANGE_SENSOR, BackRightSensor);
+           BackRightSensor = sensorsData.backRightEdgeSensor*.5 + BackRightSensor * .5;
+           BackRightSensorCM = ir_distance_calculate_cm(MID_RANGE_SENSOR, BackRightSensor);
            
-           BackLeftSensor = sensorsData.backLeftEdgeSensor*.2 + BackLeftSensor * .8;
-           BackLeftSensorCM = ir_distance_calculate_cm(SHORT_RANGE_SENSOR, BackLeftSensor);
+           BackLeftSensor = sensorsData.backLeftEdgeSensor*.5 + BackLeftSensor * .5;
+           BackLeftSensorCM = ir_distance_calculate_cm(MID_RANGE_SENSOR, BackLeftSensor);
            
 
-           ForwardLeftSensor = sensorsData.leftWhiskerSensor*.2 + ForwardLeftSensor * .8;
+           ForwardLeftSensor = sensorsData.leftWhiskerSensor*.5 + ForwardLeftSensor * .5;
            ForwardLeftSensorCM = ir_distance_calculate_cm(LONG_RANGE_SENSOR, ForwardLeftSensor);
            
-           ForwardCenterSensor = sensorsData.centerWhiskerSensor*.2 + ForwardCenterSensor * .8;
+           ForwardCenterSensor = sensorsData.centerWhiskerSensor*.5 + ForwardCenterSensor * .5;
            ForwardCenterSensorCM = ir_distance_calculate_cm(LONG_RANGE_SENSOR, ForwardCenterSensor);
            
-           ForwardRightSensor = sensorsData.rightWhiskerSensor*.2 + ForwardRightSensor * .8;
+           ForwardRightSensor = sensorsData.rightWhiskerSensor*.5 + ForwardRightSensor * .5;
            ForwardRightSensorCM = ir_distance_calculate_cm(LONG_RANGE_SENSOR, ForwardRightSensor);
            
                      

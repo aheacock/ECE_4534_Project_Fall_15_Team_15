@@ -102,11 +102,11 @@ void DRV_ADC_Initialize(void)
  
  
     /* Select Scan Input 4 */
-    PLIB_ADC_InputScanMaskAdd(DRV_ADC_ID_1, ADC_INPUT_SCAN_AN4);
+    PLIB_ADC_InputScanMaskAdd(DRV_ADC_ID_1, ADC_INPUT_SCAN_AN9);
  
  
     /* Select Scan Input 5 */
-    PLIB_ADC_InputScanMaskAdd(DRV_ADC_ID_1, ADC_INPUT_SCAN_AN5);
+    PLIB_ADC_InputScanMaskAdd(DRV_ADC_ID_1, ADC_INPUT_SCAN_AN10);
  
  
     /* Select Scan Input 6 */
@@ -117,6 +117,9 @@ void DRV_ADC_Initialize(void)
     PLIB_INT_SourceEnable(INT_ID_0, INT_SOURCE_ADC_1);
     PLIB_INT_VectorPrioritySet(INT_ID_0, INT_VECTOR_AD1, INT_PRIORITY_LEVEL3);
     PLIB_INT_VectorSubPrioritySet(INT_ID_0, INT_VECTOR_AD1, INT_SUBPRIORITY_LEVEL0);	
+    
+    //PLIB_INLINE_API void
+    PLIB_ADC_MuxAInputScanEnable(DRV_ADC_ID_1);
 }
 
 inline void DRV_ADC_DeInitialize(void)
