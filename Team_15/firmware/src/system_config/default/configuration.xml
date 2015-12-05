@@ -15,16 +15,16 @@
         <Path>Header Files/FreeRTOS</Path>
       </File>
       <File>
-        <Name>projdefs.h</Name>
-        <Path>Header Files/FreeRTOS</Path>
+        <Name>sys_common.h</Name>
+        <Path>Header Files/framework/system/common</Path>
       </File>
       <File>
         <Name>list.c</Name>
         <Path>Source Files/FreeRTOS</Path>
       </File>
       <File>
-        <Name>sys_common.h</Name>
-        <Path>Header Files/framework/system/common</Path>
+        <Name>projdefs.h</Name>
+        <Path>Header Files/FreeRTOS</Path>
       </File>
       <File>
         <Name>portable.h</Name>
@@ -39,20 +39,20 @@
         <Path>Source Files/framework/system/ports/src</Path>
       </File>
       <File>
-        <Name>ISR_Support.h</Name>
-        <Path>Header Files/FreeRTOS/portable/MPLAB/PIC32MX</Path>
-      </File>
-      <File>
-        <Name>port.c</Name>
-        <Path>Source Files/FreeRTOS/portable/MPLAB/PIC32MX</Path>
+        <Name>drv_usart.c</Name>
+        <Path>Source Files/framework/driver/usart/src/dynamic</Path>
       </File>
       <File>
         <Name>tasks.c</Name>
         <Path>Source Files/FreeRTOS</Path>
       </File>
       <File>
-        <Name>drv_usart.c</Name>
-        <Path>Source Files/framework/driver/usart/src/dynamic</Path>
+        <Name>port.c</Name>
+        <Path>Source Files/FreeRTOS/portable/MPLAB/PIC32MX</Path>
+      </File>
+      <File>
+        <Name>ISR_Support.h</Name>
+        <Path>Header Files/FreeRTOS/portable/MPLAB/PIC32MX</Path>
       </File>
       <File>
         <Name>event_groups.c</Name>
@@ -147,12 +147,12 @@
         <Path>Source Files/FreeRTOS/portable/MemMang</Path>
       </File>
       <File>
-        <Name>FreeRTOS.h</Name>
-        <Path>Header Files/FreeRTOS</Path>
-      </File>
-      <File>
         <Name>sys_int_pic32.c</Name>
         <Path>Source Files/framework/system/int/src</Path>
+      </File>
+      <File>
+        <Name>FreeRTOS.h</Name>
+        <Path>Header Files/FreeRTOS</Path>
       </File>
       <File>
         <Name>sys_devcon_pic32mx.c</Name>
@@ -173,13 +173,13 @@
     </Files>
     <Templates>
       <Template>
-        <Name>main.c</Name>
-        <Path>Source Files/app</Path>
-      </Template>
-      <Template>
         <Name>system_exceptions.c</Name>
         <Path>Source Files/app/system_config/default</Path>
         <Checksum>C111969CA43D6CEA1E9E33A6164E7AE0</Checksum>
+      </Template>
+      <Template>
+        <Name>main.c</Name>
+        <Path>Source Files/app</Path>
       </Template>
       <Template>
         <Name>drv_adc_static.c</Name>

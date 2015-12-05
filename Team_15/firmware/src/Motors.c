@@ -386,25 +386,36 @@ void MOTORS_Initialize ( void )
     strcpy(motorsData.listOfCommands[9], "MT:111,CO:002,NU:001");
     strcpy(motorsData.listOfCommands[10], "MT:111,CO:002,NU:001");   // 1
     strcpy(motorsData.listOfCommands[11], "MT:111,CO:002,NU:001");
-    strcpy(motorsData.listOfCommands[12], "MT:111,CO:002,NU:001");
-    strcpy(motorsData.listOfCommands[13], "MT:111,CO:002,NU:001");
-    strcpy(motorsData.listOfCommands[14], "MT:111,CO:002,NU:001");
-    strcpy(motorsData.listOfCommands[15], "MT:111,CO:002,NU:001");   // 6
-    strcpy(motorsData.listOfCommands[16], "MT:111,CO:003,NU:001");   // 1
-    strcpy(motorsData.listOfCommands[17], "MT:111,CO:003,NU:001");
-    strcpy(motorsData.listOfCommands[18], "MT:111,CO:003,NU:001");
-    strcpy(motorsData.listOfCommands[19], "MT:111,CO:003,NU:001");
-    strcpy(motorsData.listOfCommands[20], "MT:111,CO:003,NU:001");
+    strcpy(motorsData.listOfCommands[12], "MT:111,CO:001,NU:001");
+    strcpy(motorsData.listOfCommands[13], "MT:111,CO:001,NU:001");
+    strcpy(motorsData.listOfCommands[14], "MT:111,CO:001,NU:001");
+    strcpy(motorsData.listOfCommands[15], "MT:111,CO:004,NU:001");   // 6
+    strcpy(motorsData.listOfCommands[16], "MT:111,CO:004,NU:001");   // 1
+    strcpy(motorsData.listOfCommands[17], "MT:111,CO:004,NU:001");
+    strcpy(motorsData.listOfCommands[18], "MT:111,CO:004,NU:001");
+    strcpy(motorsData.listOfCommands[19], "MT:111,CO:004,NU:001");
+    strcpy(motorsData.listOfCommands[20], "MT:111,CO:004,NU:001");
     strcpy(motorsData.listOfCommands[21], "MT:111,CO:003,NU:001");   // 6
-    strcpy(motorsData.listOfCommands[22], "MT:111,CO:001,NU:001");
-    strcpy(motorsData.listOfCommands[23], "MT:111,CO:001,NU:001");
-    strcpy(motorsData.listOfCommands[24], "MT:111,CO:011,NU:001");
-    strcpy(motorsData.listOfCommands[25], "MT:111,CO:011,NU:001");
-    strcpy(motorsData.listOfCommands[26], "MT:111,CO:012,NU:001");
-    strcpy(motorsData.listOfCommands[27], "MT:111,CO:012,NU:001");
-    strcpy(motorsData.listOfCommands[28], "MT:111,CO:013,NU:001");
-    strcpy(motorsData.listOfCommands[29], "MT:111,CO:013,NU:001");
-    strcpy(motorsData.listOfCommands[30], "MT:111,CO:011,NU:001");
+    strcpy(motorsData.listOfCommands[22], "MT:111,CO:003,NU:001");
+    strcpy(motorsData.listOfCommands[23], "MT:111,CO:003,NU:001");
+    strcpy(motorsData.listOfCommands[24], "MT:111,CO:003,NU:001");
+    strcpy(motorsData.listOfCommands[25], "MT:111,CO:003,NU:001");
+    strcpy(motorsData.listOfCommands[26], "MT:111,CO:003,NU:001");
+    strcpy(motorsData.listOfCommands[27], "MT:111,CO:003,NU:001");
+    strcpy(motorsData.listOfCommands[28], "MT:111,CO:003,NU:001");
+    strcpy(motorsData.listOfCommands[29], "MT:111,CO:003,NU:001");
+    strcpy(motorsData.listOfCommands[30], "MT:111,CO:003,NU:001");
+    strcpy(motorsData.listOfCommands[31], "MT:111,CO:003,NU:001");
+    strcpy(motorsData.listOfCommands[32], "MT:111,CO:003,NU:001");
+    strcpy(motorsData.listOfCommands[33], "MT:111,CO:005,NU:001");
+    strcpy(motorsData.listOfCommands[34], "MT:111,CO:005,NU:001");
+    strcpy(motorsData.listOfCommands[35], "MT:111,CO:005,NU:001");
+    strcpy(motorsData.listOfCommands[36], "MT:111,CO:005,NU:001");
+    strcpy(motorsData.listOfCommands[37], "MT:111,CO:005,NU:001");
+    strcpy(motorsData.listOfCommands[38], "MT:111,CO:005,NU:001");
+    strcpy(motorsData.listOfCommands[39], "MT:111,CO:001,NU:001");
+    strcpy(motorsData.listOfCommands[40], "MT:111,CO:001,NU:001");
+    strcpy(motorsData.listOfCommands[41], "MT:111,CO:001,NU:001");
     //*/
     /*
     int ar[87] = {1,1,1,1,1,1,1,1,1,1,
@@ -425,6 +436,7 @@ void MOTORS_Initialize ( void )
         createPacket(motorsData.listOfCommands[i], ar[i]);
     */
     motorsData.indexCom = 0;
+    motorsData.test = 0;        // Change if want to test motors
     
     // For turning and moving forward
     motorsData.moveForwardNext = 0;
@@ -447,19 +459,21 @@ void MOTORS_Tasks ( void )
         /* Application's initial state. */
         case MOTORS_STATE_INIT:
         {
+            /*
             if(motorsData.shouldSendNow == 1)
             {
                 if (PLIB_USART_TransmitterIsEmpty(USART_ID_1))
                 {
-                    PLIB_USART_TransmitterByteSend(USART_ID_1, motorsData.nextPacketToSend[12]);
+                    PLIB_USART_TransmitterByteSend(USART_ID_1, 'a');//motorsData.nextPacketToSend[12]);
                 }
                 motorsData.shouldSendNow = 0;
             }
+            */
             //*
             // Send error and ack packets 
-            if(motorsData.shouldSendNow == 1 && uxQueueSpacesAvailable(motorsData.xMotorsToFnFQueue)==15)    // Check if queue is filled
+            if(motorsData.shouldSendNow == 1 && uxQueueSpacesAvailable(motorsData.xMotorsToFnFQueue)>=10)    // Check if queue is filled
             {
-                if(isValidPacket(motorsData.nextPacketToSend))
+                if(1)//(isValidPacket(motorsData.nextPacketToSend))
                 {
                     motorsData.shouldSendNow = 0;
                     // Send dummy data over uart for testing
@@ -520,17 +534,29 @@ void MOTORS_Tasks ( void )
             // Receive commands from FnF
             if (motorsData.motor1Counter == -1) // Motors aren't moving
             {
-                int x;
                 char lo[42];
-                //strcpy(lo, motorsData.listOfCommands[motorsData.indexCom]);
-                motorsData.indexCom++;
-                if (motorsData.indexCom == 31)
-                    motorsData.indexCom = 0;
+                int x;
+                int go = 0;
+
+                if (motorsData.test)
+                {
+                    strcpy(lo, motorsData.listOfCommands[motorsData.indexCom]);
+                    motorsData.indexCom++;
+                    if (motorsData.indexCom == 41)
+                        motorsData.indexCom = 0;
+                    go = 1;
+                }
+                
                 //char loo[42] = "MT:111,CO:002,NU:001";
                 if(xQueueReceive(findandfollowData.xFnFToMotorsQueue, &lo, 0))
                 {
+                    go = 1;
+                }
+                if (go==1)
+                {
+                    go = 0;
                     // Convert received packet to motor instruction
-                 //  if(isValidPacket(lo))
+                    //if(isValidPacket(lo))
                     {
                         x = getSecondPacketValue(lo);
                         /*
@@ -590,7 +616,8 @@ void MOTORS_Tasks ( void )
                         //*/
                     }
                     
-                    // Send Ack
+                    // Send 
+                    /*
                     if(uxQueueSpacesAvailable(motorsData.xMotorsToFnFQueue)==15)
                     {
                         char temp[21];
@@ -606,6 +633,7 @@ void MOTORS_Tasks ( void )
                             motorsData.NUMBEROFPACKETSDROPPEDBEFOREQ=motorsData.NUMBEROFPACKETSDROPPEDBEFOREQ+1;
                         }
                     }
+                    */
                 }
             }
             break;
