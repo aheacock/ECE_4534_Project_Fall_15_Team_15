@@ -270,7 +270,7 @@ int TalkToSensors()
         else
             comsData.NumPacketsRecvFromSensorsQ += 1;
         valid = isValidPacket(&lo);
-        if (comsData.NumPacketsRecvFromSensorsQ%10 == 0 && valid == 0)
+        if (valid == 0)
         {
             stringPointer=lo;
             if(WriteString())
@@ -299,8 +299,8 @@ int TalkToSensors()
         else
             comsData.NumPacketsPutInSensorsQ += 1;
     }
-    //stringPointer = temp;
-    //WriteString();
+    stringPointer = temp;
+    WriteString();
     return x;
 }
 
@@ -356,7 +356,7 @@ void checkreset()
                         xQueueSend( comsData.xComsToFnFQueue, temp, 0);
                     }               
                 }
-            else if(x=='e')
+            else if(x=='2')
                 {//right
                 if(uxQueueSpacesAvailable(comsData.xComsToFnFQueue)>13)
                     {
@@ -365,7 +365,7 @@ void checkreset()
                         xQueueSend( comsData.xComsToFnFQueue, temp, 0);
                     }        
                 }
-            else if(x=='q')
+            else if(x=='3')
                 {//left
                 if(uxQueueSpacesAvailable(comsData.xComsToFnFQueue)>13)
                     {
@@ -374,17 +374,6 @@ void checkreset()
                         xQueueSend( comsData.xComsToFnFQueue, temp, 0);
                     }
                 }
-            /*
-            else if(x=='t')
-                {// puts the motors in test mode. Have to reset to get out
-                    if(uxQueueSpacesAvailable(comsData.xComsToFnFQueue)>13)
-                    {
-                        char temp[21];
-                        concatenate3(temp, "99", "000", "FF", "001", "FF", "001");
-                        xQueueSend( comsData.xComsToFnFQueue, temp, 0);
-                    }
-                }
-             */
             }
 }
 
@@ -502,7 +491,7 @@ void COMS_Tasks ( void )
         {
             //calls functions that run the Coms thread
             ackFF = TalkToFindAndFollow();
-            ackSR = TalkToSensors();
+        //    ackSR = TalkToSensors();
             // checks to see if the system reset button ( '?' ) has been pressed
             checkreset();
             

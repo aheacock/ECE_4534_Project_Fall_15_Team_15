@@ -140,11 +140,10 @@ typedef struct
     int motor2Counter;
     
     // Testing vars
-    char listOfCommands[42][42];
+    char listOfCommands[31][42];
     int indexCom;
     
     int moveForwardNext ;
-    int test; // bool
     
 } MOTORS_DATA;
 

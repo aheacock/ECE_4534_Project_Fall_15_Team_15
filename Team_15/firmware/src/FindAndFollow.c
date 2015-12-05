@@ -230,48 +230,11 @@ int sensorstofnf()
         int leftsensor=0;
         int forwardsensor=0;
         int backsensor =0;
-        
-        int rightfloorsensor=0;
-        int leftfloorsensor=0;
-        int forwardfloorsensor=0;
-        int backfloorsensor =0;
     
     int x = 0;
     char lo[42];
-    // 3 Modes Emergency, Control, Sensor Modes 
-    if(xQueueReceive(sensorsData.xSensorsToFnFQueueE, &lo, 0)) 
-    {  
-        int nothingthereconst=12;
-        //Emergency mode
-        // takes the four sensors 
-           rightfloorsensor=((lo[10]-'0')*100)+((lo[11]-'0')*10)+(lo[12]-'0');
-           leftfloorsensor=((lo[17]-'0')*100)+((lo[18]-'0')*10)+(lo[19]-'0');
-           forwardfloorsensor=((lo[24]-'0')*100)+((lo[25]-'0')*10)+(lo[26]-'0');
-           backfloorsensor=((lo[31]-'0')*100)+((lo[32]-'0')*10)+(lo[33]-'0');
-           
-            // 4 for left
-           // 8 for right
-           // +1 for forward 
-           // -1 for back   
-           // brace for impact
-           if(rightfloorsensor>nothingthereconst)
-                x=4;
-           else if(leftfloorsensor>nothingtherefconst)    
-                x=8;
-           else if(forwardfloorsensor>nothingthereconst)
-                x=1;
-           else if(backfloorsensor>nothingthereconst)
-                x=7;
-                       
-               
-               
-        
-   
-    }
-    else(xQueueReceive(sensorsData.xSensorsToFnFQueue, &lo, 0)) // working one
+    if(xQueueReceive(sensorsData.xSensorsToFnFQueue, &lo, 0)) // working one
     {   
-        int nothingtherefrontsensors;
-        
            // lo is sensor data
            //packet deconstruction here       
            rightsensor=((lo[10]-'0')*100)+((lo[11]-'0')*10)+(lo[12]-'0');
@@ -279,30 +242,26 @@ int sensorstofnf()
            forwardsensor=((lo[24]-'0')*100)+((lo[25]-'0')*10)+(lo[26]-'0');
            backsensor=((lo[31]-'0')*100)+((lo[32]-'0')*10)+(lo[33]-'0');
            
-           
-         
-           
            // 4 for left
            // 8 for right
            // +1 for forward 
            // -1 for back   
-           if(rightsensor<45)
+           if(rightsensor>22 && leftsensor<20)
+           {
+               // turn left
+               x=4;
+           }
+           if(leftsensor>22 && rightsensor<20)
            {
                // turn right
                x=8;
            }
-           if(leftsensor<45)
-           {
-                // turn left
-               x=4;
-              
-           }
-           if(forwardsensor<45)
+           if(forwardsensor>20)
            {
                // move forward
                x=x+1;   
            }
-           else if(forwardsensor<35)
+           else if(forwardsensor<7)
            { //move back
                x=7;
            }  
@@ -324,7 +283,6 @@ void FINDANDFOLLOW_Tasks ( void )
         case FINDANDFOLLOW_STATE_INIT:
         {
             char b='b';
-          recievefrommotors();
           int x=sensorstofnf();
           char y=recievecommand();
           if (y=='X' && leadermodeflag==0)
@@ -463,7 +421,7 @@ void FINDANDFOLLOW_Tasks ( void )
                     }
                 }
             }
-                
+                recievefrommotors();
         }
                 
   
