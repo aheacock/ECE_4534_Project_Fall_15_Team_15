@@ -286,12 +286,12 @@ int sensorstofnf()
            // 8 for right
            // +1 for forward 
            // -1 for back   
-           if(rightsensor<35)
+           if(rightsensor<45)
            {
                // turn right
                x=8;
            }
-           if(leftsensor<35)
+           if(leftsensor<45)
            {
                 // turn left
                x=4;
