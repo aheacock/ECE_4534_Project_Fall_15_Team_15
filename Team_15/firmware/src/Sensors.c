@@ -83,6 +83,28 @@ COMS_DATA comsData;
     int LS;
     int FS;
     int BS;
+    
+    float FrontRightSensor = 0;
+    int   FrontRightSensorCM = 0;
+    
+    float FrontLeftSensor = 0;
+    int   FrontLeftSensorCM = 0;
+    
+    float BackRightSensor = 0;
+    int   BackRightSensorCM = 0;
+    
+    float BackLeftSensor = 0;
+    int   BackLeftSensorCM = 0;
+    
+    float ForwardLeftSensor = 0;
+    int   ForwardLeftSensorCM = 0;
+    
+    float ForwardCenterSensor = 0;
+    int   ForwardCenterSensorCM = 0;
+    
+    float ForwardRightSensor = 0;
+    int   ForwardRightSensorCM = 0;
+    
 // *****************************************************************************
 // *****************************************************************************
 // Section: Application Callback Functions
@@ -140,39 +162,66 @@ void SENSORS_Initialize ( void )
     sensorsData.state = SENSORS_STATE_INIT;
     
     // Set up the queues
-    //sensorsData.xFakeSensorDataQueue = xQueueCreate( 10, sizeof( float ) );
     sensorsData.xSensorsToComsQueue = xQueueCreate( 15, 51);//sizeof( float ) );
     sensorsData.xSensorsToFnFQueue = xQueueCreate( 15, 51 );
     sensorsData.xSensorsToMotorsQueue = xQueueCreate( 15, 51 );
-    
-    /* Enable the software interrupt and set its priority. */
-    //prvSetupSoftwareInterrupt();
     
     //Sensor Data Acquisition
     sensorsData.wrComplete = true;
     sensorsData.rdComplete = true; 
     
-    //sensorsData.xFakeSensorDataQueue = xQueueCreate( 10, sizeof( float ) );
     sensorsData.xSensorsToComsQueue = xQueueCreate( 10, 51);//sizeof( float ) );
     sensorsData.xSensorsToFnFQueue = xQueueCreate( 10, 51 );
     sensorsData.xSensorsToFnFQueueE = xQueueCreate( 10, 51 );
     sensorsData.xSensorsToMotorsQueue = xQueueCreate( 10, 51 );    
     
-    //May need to add channles to scan mode
-//    DRV_ADC_ChannelScanInputsAdd(ADC_INPUT_SCAN_AN0);
-//    DRV_ADC_ChannelScanInputsAdd(ADC_INPUT_SCAN_AN1);
     DRV_ADC_Open();//Opens ADC
     
-    // Fake sensor data vars
-    sensorsData.index = 0;
-    sensorsData.index2 = 0;
-    RS = 10;
-    LS = 10;
-    FS = 5;
-    BS = 123;
+//    // Fake sensor data vars
+//    sensorsData.index = 0;
+//    sensorsData.index2 = 0;
+//    RS = 10;
+//    LS = 10;
+//    FS = 5;
+//    BS = 123;
 }
 
+// The structure of the parameters of the IR distance sensors
+typedef const struct
+{
+	const signed short a;
+	const signed short b;
+	const signed short k;
+}
+ir_distance_sensor;
+ 
+// The object of the parameters of GP2Y0A21YK sensor
+const ir_distance_sensor SHORT_RANGE_SENSOR = { 1225, -17, 2 };
+const ir_distance_sensor MID_RANGE_SENSOR = { 5461, -17, 2 };
+const ir_distance_sensor LONG_RANGE_SENSOR = { 4772, -17, 2 };
 
+// Converting the values of the IR distance sensor to centimeters
+// Returns -1, if the conversion did not succeed
+signed short ir_distance_calculate_cm(ir_distance_sensor sensor,
+	unsigned short adc_value)
+{
+	if (adc_value + sensor.b <= 0)
+	{
+		return -1;
+	}
+ 
+	return sensor.a / (adc_value + sensor.b) - sensor.k;
+}
+
+int edgeDetected(){
+    if(FrontRightSensorCM > 20 ||
+       FrontLeftSensorCM > 20  ||
+       BackRightSensorCM > 20  ||
+       BackLeftSensorCM > 20){
+        return 1;
+    }
+    return 0;
+}
 /******************************************************************************
   Function:
     void SENSORS_Tasks ( void )
@@ -183,18 +232,6 @@ void SENSORS_Initialize ( void )
 
 void SENSORS_Tasks ( void )
 {
-  
-   // char t[2] = "MT";
-   // char t2[3] = "220";
-   // char a[2] = "DA";
-   // char a2[3] = "978";
-   // char b[2] = "NU";
-   // char b2[3] = "001";    
-    
-   // concatenate3(wkki, t, t2, a, a2, b, "222");
-
- 
-           
     /* Check the application's current state. */
     switch ( sensorsData.state )
     {
@@ -202,14 +239,12 @@ void SENSORS_Tasks ( void )
         case SENSORS_STATE_INIT:
         {
             SENSORS_Initialize();
-//            PLIB_ADC_SampleAcquisitionTimeSet(DRV_ADC_ID_1, 31);
             sensorsData.state = APP_STATE_START;
             break;
         }
         case APP_STATE_START:
         {
             DRV_ADC_Start();//Starts converting adc values
-//            DRV_ADC_Start();
             sensorsData.state = APP_STATE_WAIT;
             PLIB_PORTS_PinToggle(PORTS_ID_0, PORT_CHANNEL_E, PORTS_BIT_POS_1);
             break;
@@ -217,7 +252,6 @@ void SENSORS_Tasks ( void )
         case APP_STATE_WAIT:
         {
             PLIB_PORTS_PinToggle(PORTS_ID_0, PORT_CHANNEL_E, PORTS_BIT_POS_2);
-//            PLIB_ADC_ConversionStart(DRV_ADC_ID_1);
             if (sensorsData.dataReady)
             {
                 sensorsData.state = APP_STATE_SEND_RESULTS;
@@ -227,153 +261,76 @@ void SENSORS_Tasks ( void )
         }
         case APP_STATE_SEND_RESULTS:
         {
-           char ello[42];
-           char lo[51];
-                
-           //____ Forward
-           /*
-             RS = 19;
-             LS = 19;
-             FS = 29;
-            */ 
-            
-           //____ Backward
-             
-            // RS = 10;
-           //  LS = 10;
-           //  FS = 5;
-           
-           //____ Forward Right
-             /*
-             RS = 23;
-             LS = 27;
-             FS = 21;
-           */
-           //____ Forward Left
-             /*
-             RS = 27;
-             LS = 24;
-             FS = 21;
-           */
-           //____ Right
-               /*
-             RS = 10;
-             LS = 30;
-             FS = 10;
-           */
-           //____ Left
-             /*
-             RS = 30;
-             LS = 10;
-             FS = 10;
-          */
+            char ello[42];
            //Needs to grab the data from the 4 sensors here--------------------------
-                //Turn Right Check
-                FS++;
-                if(FS>15)
+           FrontRightSensor = sensorsData.frontRightEdgeSensor*.2 + FrontRightSensor * .8;
+           FrontRightSensorCM = ir_distance_calculate_cm(SHORT_RANGE_SENSOR, FrontRightSensor);
+           
+           FrontLeftSensor = sensorsData.frontLeftEdgeSensor*.2 + FrontLeftSensor * .8;
+           FrontLeftSensorCM = ir_distance_calculate_cm(SHORT_RANGE_SENSOR, FrontLeftSensor);
+           
+           BackRightSensor = sensorsData.backRightEdgeSensor*.2 + BackRightSensor * .8;
+           BackRightSensorCM = ir_distance_calculate_cm(SHORT_RANGE_SENSOR, BackRightSensor);
+           
+           BackLeftSensor = sensorsData.backLeftEdgeSensor*.2 + BackLeftSensor * .8;
+           BackLeftSensorCM = ir_distance_calculate_cm(SHORT_RANGE_SENSOR, BackLeftSensor);
+           
+
+           ForwardLeftSensor = sensorsData.leftWhiskerSensor*.2 + ForwardLeftSensor * .8;
+           ForwardLeftSensorCM = ir_distance_calculate_cm(LONG_RANGE_SENSOR, ForwardLeftSensor);
+           
+           ForwardCenterSensor = sensorsData.centerWhiskerSensor*.2 + ForwardCenterSensor * .8;
+           ForwardCenterSensorCM = ir_distance_calculate_cm(LONG_RANGE_SENSOR, ForwardCenterSensor);
+           
+           ForwardRightSensor = sensorsData.rightWhiskerSensor*.2 + ForwardRightSensor * .8;
+           ForwardRightSensorCM = ir_distance_calculate_cm(LONG_RANGE_SENSOR, ForwardRightSensor);
+           
+                     
+           if(edgeDetected()){
+               char RFS_c[3];
+               char LFS_c[3];
+               char RBS_c[3];
+               char LBS_c[3];
+               char NumofPackets[3];
+               // converts ints to 3 bite char arrays 
+                snprintf(RFS_c, 4,"%03d", FrontRightSensorCM);
+                snprintf(LFS_c, 4,"%03d", FrontLeftSensorCM);
+                snprintf(RBS_c, 4,"%03d", BackRightSensorCM);
+                snprintf(LBS_c, 4,"%03d", BackLeftSensorCM);
+                snprintf(NumofPackets, 4,"%03d",sensorsData.NUMBEROFPACKETSPLACEDINTHEQ);
+               // builds packet
+                concatenate6(ello,"SR","000","RS",RFS_c,"LS",LFS_c,"FS",RBS_c,"BS",LBS_c,"NP", NumofPackets);
+                
+                if(uxQueueSpacesAvailable(sensorsData.xSensorsToFnFQueue)==15)
                 {
-                    if(LS>25)
-                    {
-                        LS=0;
-                    }
-                    if(LS==0)
-                    {
-                        RS=RS+1;
-                    }
-                    else
-                    {
-                        LS++;
-                    }
+                 xQueueSend( sensorsData.xSensorsToFnFQueueE, &ello, 0 );
+                 sensorsData.NUMBEROFPACKETSPLACEDINTHEQ=sensorsData.NUMBEROFPACKETSPLACEDINTHEQ+1;
                 }
-                if(FS>30)
-                {
-                    RS = 10;
-                    LS = 23;
-                    FS = 11;
-                }
-                   
-                //----------------------------------------------------------
+           }
+           else{       
                char RS_c[3];
                char LS_c[3];
                char FS_c[3];
-               char BS_c[3];
+               char BS_c[3]; // unused
                char NumofPackets[3];
                // converts ints to 3 bite char arrays 
-                snprintf(RS_c, 4,"%03d", RS);
-                snprintf(LS_c, 4,"%03d", LS);
-                snprintf(FS_c, 4,"%03d", FS);
+                snprintf(RS_c, 4,"%03d", ForwardRightSensorCM);
+                snprintf(LS_c, 4,"%03d", ForwardLeftSensorCM);
+                snprintf(FS_c, 4,"%03d", ForwardCenterSensorCM);
                 snprintf(BS_c, 4,"%03d", BS);
                 snprintf(NumofPackets, 4,"%03d",sensorsData.NUMBEROFPACKETSPLACEDINTHEQ);
-               // builds packet
+                
+                // builds packet
                 concatenate6(ello,"SR","000","RS",RS_c,"LS",LS_c,"FS",FS_c,"BS",BS_c,"NP", NumofPackets);
-             
-              //------------------------------------------------------------------------
-               // Greg's Test Code
-               // This code was written because 
+                
                 if(uxQueueSpacesAvailable(sensorsData.xSensorsToFnFQueue)==15)
                 {
                  xQueueSend( sensorsData.xSensorsToFnFQueue, &ello, 0 );
                  sensorsData.NUMBEROFPACKETSPLACEDINTHEQ=sensorsData.NUMBEROFPACKETSPLACEDINTHEQ+1;
                 }
-                //-----------------------------------------
-               /*    
-            
-               if(isValidPacket(ello))
-               {
-            
-                    if(xQueueSend( sensorsData.xSensorsToComsQueue, &ello, 0 ))
-                    {
-                        sensorsData.NUMBEROFPACKETSPLACEDINTHEQ=sensorsData.NUMBEROFPACKETSPLACEDINTHEQ+1;
-                    }
-                    else 
-                    {
-                        sensorsData.NUMBEROFPACKETSDROPPEDBEFOREQ=sensorsData.NUMBEROFPACKETSDROPPEDBEFOREQ+1;
-                    }
-               }
-               //else
-               {
-                int i=0;
-                   for(i=0; i<42; i++)
-                    ello[i]='9';
-                        // malformed packet exception
-                    if(xQueueSend( sensorsData.xSensorsToComsQueue, &ello, 0 ))
-                        {
-                         sensorsData.NUMBEROFPACKETSPLACEDINTHEQ=sensorsData.NUMBEROFPACKETSPLACEDINTHEQ+1;
-                        }
-                    else 
-                        {
-                          sensorsData.NUMBEROFPACKETSDROPPEDBEFOREQ=sensorsData.NUMBEROFPACKETSDROPPEDBEFOREQ+1;
-                        }
-              
-               }
-
-            // Second queue. Fill with fake data
-        
-        //        xStatus2 = xQueueSend( sensorsData.xSensorsToFnFQueue, &data[sensorsData.index2], 0 );
-            
-            
-            
-            // Third queue. Fill with fake data
-          
-          //      xStatus2 = xQueueSend( sensorsData.xSensorsToMotorsQueue, &data[sensorsData.index3], 0 );
-          
-                // Receive data from coms and forward back
-                if(xQueueReceive( comsData.xComsToSensorsQueue, &lo, 0))
-                {
-                    xQueueSend( sensorsData.xSensorsToComsQueue, &lo, 0 );
-                }
-                */
+           }
 			sensorsData.dataReady = false;
             sensorsData.state = APP_STATE_START;
-            break;
-        }
-        case APP_STATE_SPIN:
-        {
-            if (sensorsData.tick > 1250)
-            {
-                sensorsData.tick = 0;
-                sensorsData.state = APP_STATE_START;
-            }
             break;
         }
         /* The default state should never be executed. */
