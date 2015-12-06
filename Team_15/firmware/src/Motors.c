@@ -364,7 +364,7 @@ void MOTORS_Initialize ( void )
     motorsData.motor2Counter = -1;
     
     // Set constant value
-    NUM_ENCODER_TICKS = 110;
+    NUM_ENCODER_TICKS = 55;
     // 540 ticks per 90 degrees, so 90 ticks per 15 degrees
     // Without 1000 task delay in system_tasks.c
     // 660 ticks per 90 degrees, so 110 ticks per 15 degrees

@@ -241,7 +241,7 @@ int sensorstofnf()
     // 3 Modes Emergency, Control, Sensor Modes 
     if(xQueueReceive(sensorsData.xSensorsToFnFQueueE, &lo, 0)) 
     {  
-        int nothingthereconst=12;
+        int nothingthereconst=40;
         //Emergency mode
         // takes the four sensors 
            rightfloorsensor=((lo[10]-'0')*100)+((lo[11]-'0')*10)+(lo[12]-'0');
@@ -282,6 +282,7 @@ int sensorstofnf()
         // working one
            // lo is sensor data
            //packet deconstruction here       
+        x=0;
            rightsensor=((lo[10]-'0')*100)+((lo[11]-'0')*10)+(lo[12]-'0');
            leftsensor=((lo[17]-'0')*100)+((lo[18]-'0')*10)+(lo[19]-'0');
            forwardsensor=((lo[24]-'0')*100)+((lo[25]-'0')*10)+(lo[26]-'0');
@@ -294,23 +295,29 @@ int sensorstofnf()
            // 8 for right
            // +1 for forward 
            // -1 for back   
-           if(rightsensor<35)
+           if(rightsensor>63 && rightsensor<65)
            {
-               // turn right
-         //      x=8;
+              //  turn right
+              x=8;
            }
-           if(leftsensor<35)
+           if(leftsensor>63 && leftsensor<65)
            {
                 // turn left
-        //       x=4;
+               
+                x=4;
               
            }
-           if(forwardsensor>45 && forwardsensor<100)
+           if ((rightsensor>50 && rightsensor<65)&&(leftsensor>50 && leftsensor<65))
+           {
+           
+               x=0;
+           }
+           if(forwardsensor>60 && forwardsensor<100)
            {
                // move forward
                x=x+1;   
            }
-           else if(forwardsensor<35)
+           else if(forwardsensor<40 && forwardsensor>20)
            { //move back
                x=-1;
            }  

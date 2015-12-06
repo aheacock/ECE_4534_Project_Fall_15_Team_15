@@ -184,7 +184,7 @@
       <Template>
         <Name>drv_adc_static.c</Name>
         <Path>Source Files/app/system_config/default/framework/driver/adc/src</Path>
-        <Checksum>1B978B3864D39C0CA0F615C0BB378A57</Checksum>
+        <Checksum>8FF8FB76EF2CEE61087E4D05101D1982</Checksum>
       </Template>
       <Template>
         <Name>system_config.h</Name>
@@ -212,7 +212,7 @@
       <Template>
         <Name>drv_adc_static.h</Name>
         <Path>Header Files/app/system_config/default/framework/driver/adc</Path>
-        <Checksum>295FE02082E9D4E40DEF620782B778B9</Checksum>
+        <Checksum>1BF4ED02A178F1ADAB7EBBCD75B78950</Checksum>
       </Template>
       <Template>
         <Name>Motors.c</Name>

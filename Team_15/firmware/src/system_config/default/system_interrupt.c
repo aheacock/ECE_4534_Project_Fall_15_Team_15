@@ -87,7 +87,7 @@ void IntHandlerDrvAdc(void)
     sensorsData.frontLeftEdgeSensor = DRV_ADC_SamplesRead(1);
     sensorsData.backRightEdgeSensor = DRV_ADC_SamplesRead(2);
     sensorsData.backLeftEdgeSensor = DRV_ADC_SamplesRead(3);
-
+//9 10 8
     sensorsData.leftWhiskerSensor = DRV_ADC_SamplesRead(4);
     sensorsData.centerWhiskerSensor = DRV_ADC_SamplesRead(5);
     sensorsData.rightWhiskerSensor = DRV_ADC_SamplesRead(6);

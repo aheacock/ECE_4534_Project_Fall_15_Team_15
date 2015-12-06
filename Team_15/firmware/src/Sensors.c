@@ -274,13 +274,13 @@ void SENSORS_Tasks ( void )
            BackLeftSensorCM = ir_distance_calculate_cm(MID_RANGE_SENSOR, BackLeftSensor);
            
 
-           ForwardLeftSensor = sensorsData.leftWhiskerSensor*.5 + ForwardLeftSensor * .5;
+           ForwardLeftSensor = sensorsData.leftWhiskerSensor*.8 + ForwardLeftSensor * .2;
            ForwardLeftSensorCM = ir_distance_calculate_cm(LONG_RANGE_SENSOR, ForwardLeftSensor);
            
-           ForwardCenterSensor = sensorsData.centerWhiskerSensor*.5 + ForwardCenterSensor * .5;
+           ForwardCenterSensor = sensorsData.centerWhiskerSensor*.8 + ForwardCenterSensor * .2;
            ForwardCenterSensorCM = ir_distance_calculate_cm(LONG_RANGE_SENSOR, ForwardCenterSensor);
            
-           ForwardRightSensor = sensorsData.rightWhiskerSensor*.5 + ForwardRightSensor * .5;
+           ForwardRightSensor = sensorsData.rightWhiskerSensor*.8 + ForwardRightSensor * .2;
            ForwardRightSensorCM = ir_distance_calculate_cm(LONG_RANGE_SENSOR, ForwardRightSensor);
            
                      
