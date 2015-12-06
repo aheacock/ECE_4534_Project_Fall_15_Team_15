@@ -230,11 +230,56 @@ int sensorstofnf()
         int leftsensor=0;
         int forwardsensor=0;
         int backsensor =0;
+        
+        int rightfloorsensor=0;
+        int leftfloorsensor=0;
+        int rightback=0;
+        int leftback =0;
     
     int x = 0;
     char lo[42];
-    if(xQueueReceive(sensorsData.xSensorsToFnFQueue, &lo, 0)) // working one
+    // 3 Modes Emergency, Control, Sensor Modes 
+    if(xQueueReceive(sensorsData.xSensorsToFnFQueueE, &lo, 0)) 
+    {  
+        int nothingthereconst=12;
+        //Emergency mode
+        // takes the four sensors 
+           rightfloorsensor=((lo[10]-'0')*100)+((lo[11]-'0')*10)+(lo[12]-'0');
+           leftfloorsensor=((lo[17]-'0')*100)+((lo[18]-'0')*10)+(lo[19]-'0');
+           rightback=((lo[24]-'0')*100)+((lo[25]-'0')*10)+(lo[26]-'0');
+           leftback=((lo[31]-'0')*100)+((lo[32]-'0')*10)+(lo[33]-'0');
+           
+            // 4 for left
+           // 8 for right
+           // +1 for forward 
+           // -1 for back   
+           // brace for impact
+           if(rightfloorsensor>nothingthereconst)
+                x=4;
+           else if(leftfloorsensor>nothingthereconst)    
+                x=8;
+           else if(rightback>nothingthereconst)
+                x=4;
+           else if(leftback>nothingthereconst)
+                x=8;
+            else if(leftfloorsensor>nothingthereconst && rightfloorsensor>nothingthereconst)
+               x=-1;
+           else if(rightback>nothingthereconst && leftback>nothingthereconst)
+               x=1;
+           else if(leftfloorsensor>nothingthereconst && leftback>nothingthereconst)
+               x=9;
+           else if(rightfloorsensor>nothingthereconst && rightback>nothingthereconst)
+               x=5;
+                       
+               
+               
+        
+   
+    }
+    else if(xQueueReceive(sensorsData.xSensorsToFnFQueue, &lo, 0)) 
     {   
+        int nothingtherefrontsensors;
+        // working one
            // lo is sensor data
            //packet deconstruction here       
            rightsensor=((lo[10]-'0')*100)+((lo[11]-'0')*10)+(lo[12]-'0');
@@ -242,28 +287,32 @@ int sensorstofnf()
            forwardsensor=((lo[24]-'0')*100)+((lo[25]-'0')*10)+(lo[26]-'0');
            backsensor=((lo[31]-'0')*100)+((lo[32]-'0')*10)+(lo[33]-'0');
            
+           
+         
+           
            // 4 for left
            // 8 for right
            // +1 for forward 
            // -1 for back   
-           if(rightsensor>22 && leftsensor<20)
-           {
-               // turn left
-               x=4;
-           }
-           if(leftsensor>22 && rightsensor<20)
+           if(rightsensor<35)
            {
                // turn right
-               x=8;
+         //      x=8;
            }
-           if(forwardsensor>20)
+           if(leftsensor<35)
+           {
+                // turn left
+        //       x=4;
+              
+           }
+           if(forwardsensor>45 && forwardsensor<100)
            {
                // move forward
                x=x+1;   
            }
-           else if(forwardsensor<7)
+           else if(forwardsensor<35)
            { //move back
-               x=7;
+               x=-1;
            }  
           // {SR:000,RS:266,LS:167,FS:000,BS:123,NP:010}
        if(uxQueueSpacesAvailable(findandfollowData.xFnFToComsQueue)==15)
@@ -283,6 +332,7 @@ void FINDANDFOLLOW_Tasks ( void )
         case FINDANDFOLLOW_STATE_INIT:
         {
             char b='b';
+          recievefrommotors();
           int x=sensorstofnf();
           char y=recievecommand();
           if (y=='X' && leadermodeflag==0)
@@ -306,7 +356,7 @@ void FINDANDFOLLOW_Tasks ( void )
                   if(uxQueueSpacesAvailable(findandfollowData.xFnFToMotorsQueue)==15)
                 {//TURN RIGHT
                     char temp[20];
-                    concatenate3(temp, "ES", "000", "RR", "002", "NU", "002");
+                    concatenate3(temp, "ES", "000", "RR", "004", "NU", "002");
                     xQueueSend( findandfollowData.xFnFToMotorsQueue, temp, 0);
                 }
               }
@@ -315,7 +365,7 @@ void FINDANDFOLLOW_Tasks ( void )
                if(uxQueueSpacesAvailable(findandfollowData.xFnFToMotorsQueue)==15)
                 {//TURN RIGHT and Forward
                     char temp[20];
-                    concatenate3(temp, "EF", "000", "RR", "002", "NU", "000");
+                    concatenate3(temp, "EF", "000", "RR", "004", "NU", "000");
                     xQueueSend( findandfollowData.xFnFToMotorsQueue, temp, 0);
                 }            
               }
@@ -334,7 +384,7 @@ void FINDANDFOLLOW_Tasks ( void )
                 if(uxQueueSpacesAvailable(findandfollowData.xFnFToMotorsQueue)==15)
                 {
                     char temp[20];
-                    concatenate3(temp, "EF", "000", "LL", "003", "NU", "000");
+                    concatenate3(temp, "EF", "000", "LL", "005", "NU", "000");
                     xQueueSend( findandfollowData.xFnFToMotorsQueue, temp, 0);
                 }               
                   
@@ -344,14 +394,12 @@ void FINDANDFOLLOW_Tasks ( void )
                 if(uxQueueSpacesAvailable(findandfollowData.xFnFToMotorsQueue)==15)
                 {
                     char temp[20];
-                    concatenate3(temp, "EM", "000", "AN", "002", "NU", "000");
+                    concatenate3(temp, "EM", "000", "AN", "004", "NU", "000");
                     xQueueSend( findandfollowData.xFnFToMotorsQueue, temp, 0);
                 }
                   // forward and right
               }
-              
-            }
-               else if(x==3 || x==7 || x==-1)
+              else if(x==3 || x==7 || x==-1)
               {
                 if(uxQueueSpacesAvailable(findandfollowData.xFnFToMotorsQueue)==15)
                 {//"MT:111,CO:002,NU:001
@@ -362,6 +410,9 @@ void FINDANDFOLLOW_Tasks ( void )
              // move back 
               //(reverse is not a priority)
               }
+              
+            }
+
     }
     else 
     {
@@ -421,7 +472,7 @@ void FINDANDFOLLOW_Tasks ( void )
                     }
                 }
             }
-                recievefrommotors();
+                
         }
                 
   

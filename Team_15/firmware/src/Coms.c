@@ -356,7 +356,7 @@ void checkreset()
                         xQueueSend( comsData.xComsToFnFQueue, temp, 0);
                     }               
                 }
-            else if(x=='2')
+            else if(x=='e')
                 {//right
                 if(uxQueueSpacesAvailable(comsData.xComsToFnFQueue)>13)
                     {
@@ -365,7 +365,7 @@ void checkreset()
                         xQueueSend( comsData.xComsToFnFQueue, temp, 0);
                     }        
                 }
-            else if(x=='3')
+            else if(x=='q')
                 {//left
                 if(uxQueueSpacesAvailable(comsData.xComsToFnFQueue)>13)
                     {

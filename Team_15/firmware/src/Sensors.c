@@ -170,10 +170,10 @@ void SENSORS_Initialize ( void )
     sensorsData.wrComplete = true;
     sensorsData.rdComplete = true; 
     
-    sensorsData.xSensorsToComsQueue = xQueueCreate( 10, 51);//sizeof( float ) );
-    sensorsData.xSensorsToFnFQueue = xQueueCreate( 10, 51 );
-    sensorsData.xSensorsToFnFQueueE = xQueueCreate( 10, 51 );
-    sensorsData.xSensorsToMotorsQueue = xQueueCreate( 10, 51 );    
+   // sensorsData.xSensorsToComsQueue = xQueueCreate( 15, 51);//sizeof( float ) );
+   // sensorsData.xSensorsToFnFQueue = xQueueCreate( 15, 51 );
+    sensorsData.xSensorsToFnFQueueE = xQueueCreate( 15, 51 );
+   // sensorsData.xSensorsToMotorsQueue = xQueueCreate( 15, 51 );    
     
     DRV_ADC_Open();//Opens ADC
     

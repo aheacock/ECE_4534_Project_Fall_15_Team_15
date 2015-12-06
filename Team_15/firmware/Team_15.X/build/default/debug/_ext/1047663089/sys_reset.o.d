@@ -1,0 +1,36 @@
+build/default/debug/_ext/1047663089/sys_reset.o:  \
+ ../../../../../../../microchip/harmony/v1_06/framework/system/reset/src/sys_reset.c  \
+ ../../../../../../../microchip/harmony/v1_06/framework/system/system.h  \
+ ../../../../../../../microchip/harmony/v1_06/framework/system/common/sys_common.h  \
+ ../../../../../../../microchip/harmony/v1_06/framework/system/common/sys_module.h  \
+ ../../../../../../../microchip/harmony/v1_06/framework/system/devcon/sys_devcon.h  \
+ ../../../../../../../microchip/harmony/v1_06/framework/system/reset/src/sys_reset_local.h  \
+ ../../../../../../../microchip/harmony/v1_06/framework/peripheral/devcon/plib_devcon.h  \
+ ../../../../../../../microchip/harmony/v1_06/framework/peripheral/devcon/processor/devcon_processor.h  \
+ ../../../../../../../microchip/harmony/v1_06/framework/peripheral/devcon/processor/devcon_p32xxxx.h  \
+ ../../../../../../../microchip/harmony/v1_06/framework/peripheral/devcon/processor/devcon_p32mx795f512l.h  \
+ ../../../../../../../microchip/harmony/v1_06/framework/peripheral/peripheral_common_32bit.h  \
+ ../../../../../../../microchip/harmony/v1_06/framework/peripheral/peripheral_common.h  \
+ ../../../../../../../microchip/harmony/v1_06/framework/peripheral/devcon/processor/../templates/devcon_AlternateClock_Unsupported.h  \
+ ../../../../../../../microchip/harmony/v1_06/framework/peripheral/devcon/processor/../templates/devcon_DeviceRegsLockUnlock_Unsupported.h  \
+ ../../../../../../../microchip/harmony/v1_06/framework/peripheral/devcon/processor/../templates/devcon_USB_PHY_SleepModeSet_Unsupported.h  \
+ ../../../../../../../microchip/harmony/v1_06/framework/peripheral/devcon/processor/../templates/devcon_ECCModes_Unsupported.h  \
+ ../../../../../../../microchip/harmony/v1_06/framework/peripheral/devcon/processor/../templates/devcon_JTAGEnable_Default.h  \
+ ../../../../../../../microchip/harmony/v1_06/framework/peripheral/devcon/processor/../templates/devcon_AnalogChargePumpControl_Unsupported.h  \
+ ../../../../../../../microchip/harmony/v1_06/framework/peripheral/devcon/processor/../templates/devcon_TraceOutput_Default.h  \
+ ../../../../../../../microchip/harmony/v1_06/framework/peripheral/devcon/processor/../templates/devcon_JTAGUsesTDO_Default.h  \
+ ../../../../../../../microchip/harmony/v1_06/framework/peripheral/devcon/processor/../templates/devcon_IgnoreDebugFreeze_Unsupported.h  \
+ ../../../../../../../microchip/harmony/v1_06/framework/peripheral/devcon/processor/../templates/devcon_DeviceVerAndId_Default.h  \
+ ../../../../../../../microchip/harmony/v1_06/framework/peripheral/devcon/processor/../templates/devcon_SysLockUnlock_Default.h  \
+ ../../../../../../../microchip/harmony/v1_06/framework/system/reset/sys_reset.h  \
+ ../../../../../../../microchip/harmony/v1_06/framework/peripheral/reset/plib_reset.h  \
+ ../../../../../../../microchip/harmony/v1_06/framework/peripheral/reset/processor/reset_processor.h  \
+ ../../../../../../../microchip/harmony/v1_06/framework/peripheral/reset/processor/reset_p32xxxx.h  \
+ ../../../../../../../microchip/harmony/v1_06/framework/peripheral/reset/processor/reset_p32mx795f512l.h  \
+ ../../../../../../../microchip/harmony/v1_06/framework/peripheral/reset/processor/../templates/reset_ResetReasonStatus_MX.h  \
+ ../../../../../../../microchip/harmony/v1_06/framework/peripheral/reset/processor/../templates/reset_SoftwareResetTrigger_Default.h  \
+ ../../../../../../../microchip/harmony/v1_06/framework/peripheral/reset/processor/../templates/reset_ConfigRegReadError_Unsupported.h  \
+ ../../../../../../../microchip/harmony/v1_06/framework/peripheral/reset/processor/../templates/reset_NmiControl_Unsupported.h  \
+ ../../../../../../../microchip/harmony/v1_06/framework/peripheral/reset/processor/../templates/reset_WdtoInSleep_Unsupported.h  \
+ ../../../../../../../microchip/harmony/v1_06/framework/peripheral/reset/processor/../templates/reset_NmiCounter_Unsupported.h  \
+ ../../../../../../../microchip/harmony/v1_06/framework/system/reset/src/sys_reset_mapping.h 
